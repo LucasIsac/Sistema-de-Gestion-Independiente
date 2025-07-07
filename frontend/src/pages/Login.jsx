@@ -1,5 +1,6 @@
 // src/pages/Login.jsx
 import LoginForm from '../components/LoginForm';
+import Header from '../components/Header';
 import '../assets/styles/login.css';
 
 function Login() {
@@ -8,8 +9,11 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <LoginForm onLogin={handleLogin} />
+   <div className="login-page">
+      <Header />
+      <div className="login-container">
+        <LoginForm onLogin={handleLogin} />
+      </div>
     </div>
   );
 }
