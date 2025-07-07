@@ -4,8 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 5rem;
-  background-color: #d9dde0; /* fondo claro general */
+  margin-top: 1rem;
   min-height: 100vh;
 }
 
@@ -13,13 +12,14 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 300px;
-  background-color: #fefefe; /* blanco o muy claro */
-  padding: 2rem;
+  width: 420px;           
+  background-color: #fefefe;
+  padding: 3rem 2.5rem;    /* Más espacio interno */
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(30, 49, 27, 0.2); /* sombra con el verde más oscuro */
+  box-shadow: 0 4px 8px rgba(30, 49, 27, 0.2);
   border: 1px solid #a9c3ba;
 }
+
 
 .login-form h2 {
   margin: 0;
