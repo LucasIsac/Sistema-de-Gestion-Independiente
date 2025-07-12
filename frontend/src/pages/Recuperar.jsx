@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header'; // Si quieres mantener el Header aquí
 import '../assets/styles/login.css'; // Puedes reutilizar el CSS o crear uno específico
 
+
 function Recuperar() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -54,7 +55,7 @@ function Recuperar() {
           {error && <p className="error-message">{error}</p>}
         </form>
       </div>
-    </div>
+    </>
   );
 }
 
