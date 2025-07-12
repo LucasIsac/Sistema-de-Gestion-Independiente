@@ -3,7 +3,9 @@
 .login-container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
   margin-top: 1rem;
   min-height: 100vh;
 }
@@ -14,7 +16,7 @@
   gap: 1rem;
   width: 420px;           
   background-color: #fefefe;
-  padding: 3rem 2.5rem;    /* Más espacio interno */
+  padding: 2.5rem;    /* Más espacio interno */
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(30, 49, 27, 0.2);
   border: 1px solid #a9c3ba;

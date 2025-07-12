@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 4px rgba(40, 68, 35, 0.1);
+  box-shadow: 0 2px 4px rgba(40, 68, 35, 0.15);
   border-bottom: 2px solid #a9c3ba;
 }
 
