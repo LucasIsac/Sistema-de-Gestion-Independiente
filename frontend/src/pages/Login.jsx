@@ -12,7 +12,7 @@ function Login() {
     try {
       console.log('🔄 Enviando credenciales:', credentials);
       
-      const response = await fetch('http://localhost:5000/login', {
+      const response = await fetch('http://localhost:5000/api/auth/login', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ function Login() {
           password: credentials.password
         }),
       });
-      
+
       const data = await response.json();
       
       console.log('📡 Respuesta del servidor:', data);
