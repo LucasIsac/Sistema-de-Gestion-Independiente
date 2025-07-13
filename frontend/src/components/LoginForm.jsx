@@ -1,15 +1,16 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../assets/styles/login.css';
 
 function LoginForm({ onLogin }) {
-  const [usuario, setUsuario] = useState('');
-  const [clave, setClave] = useState('');
+  // Cambiado 'usuario' a 'email' y 'clave' a 'password'
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin({ usuario, clave });
+    // Asegúrate de que las propiedades del objeto coincidan con lo que espera handleLogin
+    onLogin({ email, password }); // <-- ¡CAMBIO AQUÍ!
   };
 
   return (
@@ -17,21 +18,21 @@ function LoginForm({ onLogin }) {
       <h2>Iniciar sesión</h2>
       <input
         type="text"
-        placeholder="Usuario"
-        value={usuario}
-        onChange={(e) => setUsuario(e.target.value)}
+        placeholder="Email" // Cambiado el placeholder para que sea más claro
+        value={email} // Usar el estado 'email'
+        onChange={(e) => setEmail(e.target.value)} // Actualizar el estado 'email'
         required
       />
       <input
         type="password"
         placeholder="Contraseña"
-        value={clave}
-        onChange={(e) => setClave(e.target.value)}
+        value={password} // Usar el estado 'password'
+        onChange={(e) => setPassword(e.target.value)} // Actualizar el estado 'password'
         required
       />
       <button type="submit">Entrar</button>
 
-       <div className="login-options">
+      <div className="login-options">
         <Link to="/recuperar" className="link-recuperar">
           ¿Olvidaste tu contraseña?
         </Link>
