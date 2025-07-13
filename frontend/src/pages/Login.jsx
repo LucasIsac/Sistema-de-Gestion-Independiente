@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import Header from '../components/Header';
+import Navbar from '../components/Navbar';
 import '../assets/styles/login.css';
 
 function Login() {

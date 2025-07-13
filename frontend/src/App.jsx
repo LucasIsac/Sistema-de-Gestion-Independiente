@@ -3,13 +3,15 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Recuperar from './pages/Recuperar';
-import ResetPassword from './pages/ResetPassword'; 
+import ResetPassword from './pages/ResetPassword';
+import Presentacion from './pages/Presentacion';
+
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Presentacion />} />
         <Route path="/login" element={<Login />} />
         <Route path="/recuperar" element={<Recuperar />} />
         <Route path="/reset-password" element={<ResetPassword />} /> {}

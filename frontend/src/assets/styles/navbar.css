@@ -1,0 +1,28 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #102412; /* Verde oscuro */
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+}
+
+.navbar-logo img {
+  height: 40px;
+}
+
+.navbar-links a {
+  margin: 0 1rem;
+  color: #d9dde0;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar-links a:hover {
+  color: #809f39; /* Verde claro */
+}
+
+.navbar-user {
+  font-size: 0.95rem;
+}
