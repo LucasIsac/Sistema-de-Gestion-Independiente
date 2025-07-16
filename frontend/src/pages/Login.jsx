@@ -47,7 +47,6 @@ function Login() {
 
   return (
     <div className="login-page">
-      <Header />
       <div className="login-container">
         {error && <div className="error-message">{error}</div>}
         <LoginForm onLogin={handleLogin} />

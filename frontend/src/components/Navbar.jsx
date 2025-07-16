@@ -1,50 +1,54 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import '../assets/styles/navbar.css'; 
+import AuthContext from '../context/AuthContext.js';
 import logo from '../assets/imagenes/logo.png';
+import '../assets/styles/navbar.css';
 
-function Navbar({ user }) {
-  const categoria = user?.categoria;
+export default function Navbar() {
+  const { usuario, logout } = useContext(AuthContext);
 
-  // Opciones según el rol del usuario
-  const renderLinks = () => {
-    switch (categoria) {
-      case 'periodista':
-        return (
-          <>
-            <Link to="/notas">Mis notas</Link>
-            <Link to="/mensajes">Mensajes</Link>
-          </>
-        );
-      case 'fotografo':
-        return (
-          <>
-            <Link to="/galeria">Subir fotos</Link>
-            <Link to="/mensajes">Mensajes</Link>
-          </>
-        );
-      case 'editor':
-        return (
-          <>
-            <Link to="/revisiones">Revisar publicaciones</Link>
-            <Link to="/notificaciones">Notificaciones</Link>
-          </>
-        );
-      default:
-        return null;
-    }
+  // --- Links por categoría -----------------------------
+  const linksPorCategoria = {
+    periodista: [
+      { to: '/notas', texto: 'Mis Notas' },
+      { to: '/mensajes', texto: 'Mensajes' },
+    ],
+    fotografo: [
+      { to: '/galeria', texto: 'Subir Fotos' },
+      { to: '/mensajes', texto: 'Mensajes' },
+    ],
+    editor: [
+      { to: '/revisiones', texto: 'Revisiones' },
+      { to: '/notificaciones', texto: 'Notificaciones' },
+    ],
   };
+
+  const links = usuario ? linksPorCategoria[usuario.categoria] ?? [] : [];
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">
-        <img src={logo} alt="Logo Diario" />
+      <div className="nav-logo">
+        <img src={logo} alt="Logo" />
       </div>
-      <div className="navbar-links">
-        {renderLinks()}
-      </div>
-      <div className="navbar-user">
-        {user ? (
-          <span>{user.nombre} {user.apellido}</span>
+
+      <ul className="nav-links">
+        {links.map((l) => (
+          <li key={l.to}>
+            <Link to={l.to}>{l.texto}</Link>
+          </li>
+        ))}
+      </ul>
+
+      <div className="nav-user">
+        {usuario ? (
+          <>
+            <span className="nav-name">
+              {usuario.nombre} {usuario.apellido}
+            </span>
+            <button onClick={logout} className="btn-logout">
+              Cerrar sesión
+            </button>
+          </>
         ) : (
           <Link to="/login">Iniciar sesión</Link>
         )}
@@ -52,5 +56,3 @@ function Navbar({ user }) {
     </nav>
   );
 }
-
-export default Navbar;
