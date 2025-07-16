@@ -1,3 +1,4 @@
+//Registrar usuario
 import bcrypt from 'bcryptjs';
 import {
   findByUsuario,

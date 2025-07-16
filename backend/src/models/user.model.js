@@ -1,3 +1,4 @@
+//Registrar usuario
 import { pool } from '../config/db.js';
 
 export async function findByUsuario(oUsuario) {
