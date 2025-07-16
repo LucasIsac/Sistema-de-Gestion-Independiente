@@ -55,7 +55,7 @@ function Recuperar() {
           {error && <p className="error-message">{error}</p>}
         </form>
       </div>
-    </>
+    </div>
   );
 }
 
