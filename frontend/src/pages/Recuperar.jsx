@@ -15,7 +15,7 @@ function Recuperar() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/forgot-password', {
+      const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,7 +38,6 @@ function Recuperar() {
 
   return (
     <div className="login-page"> {/* Reutilizo la clase para centrar/estilizar */}
-      <Header />
       <div className="login-container">
         <form className="login-form" onSubmit={handleSubmit}>
           <h2>Recuperar contraseña</h2>

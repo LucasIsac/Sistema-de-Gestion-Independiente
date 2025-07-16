@@ -2,7 +2,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { pool } from '../config/db.js';
-import { transporter } from '../services/mail.service.js';
+import { transporter } from '../service/mail.service.js';
 const JWT_SECRET = process.env.JWT_SECRET || 'un_secreto_muy_seguro_para_jwt';
 const saltRounds = 10;
 
