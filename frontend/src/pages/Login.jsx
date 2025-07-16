@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
-import Header from '../components/Header';
-import Navbar from '../components/Navbar';
 import '../assets/styles/login.css';
 
 function Login() {
@@ -13,7 +11,7 @@ function Login() {
     try {
       console.log('🔄 Enviando credenciales:', credentials);
       
-      const response = await fetch('http://localhost:5000/login', {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,14 +26,14 @@ function Login() {
       
       console.log('📡 Respuesta del servidor:', data);
       
-      if (data.success) {
+      if (response.ok) {
         console.log('✅ Login exitoso:', data.user);
         // Guardar token en localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         
-        // Redirigir al dashboard
-        navigate('/dashboard');
+        // Redirigir a notas
+        navigate('/notas');
       } else {
         setError(data.message || 'Credenciales incorrectas');
       }
