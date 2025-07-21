@@ -5,7 +5,6 @@ import Navbar from '../components/Navbar';
 function Presentacion() {
   return (
     <>
-      <Navbar user={null} />
       <div className="presentacion-container">
         <div className="contenido">
           <img src={logo} alt="Logo Diario" className="logo-presentacion" />
