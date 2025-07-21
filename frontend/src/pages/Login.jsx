@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import '../assets/styles/login.css';
+import AuthContext from '../context/AuthContext.js';
 
 function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // Obtener función login del contexto
 
   const handleLogin = async (credentials) => {
     try {
@@ -28,12 +30,22 @@ function Login() {
       
       if (response.ok) {
         console.log('✅ Login exitoso:', data.user);
-        // Guardar token en localStorage
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        // Redirigir a notas
-        navigate('/notas');
+        // Actualizar contexto (y localStorage dentro del provider)
+        login(data.user);
+
+        // Redirigir según el rol del usuario
+        const rol = data.user.categoria;
+        console.log('Redirigiendo según el rol:', rol);
+
+        if (rol === 'periodista') {
+          navigate('/notas');
+        } else if (rol === 'fotografo') {
+          navigate('/galeria');
+        } else if (rol === 'editor') {
+          navigate('/editor');
+        } else {
+          navigate('/dashboard'); // ruta por defecto
+        }
       } else {
         setError(data.message || 'Credenciales incorrectas');
       }
