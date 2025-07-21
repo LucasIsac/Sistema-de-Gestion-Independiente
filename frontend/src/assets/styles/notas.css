@@ -1,0 +1,110 @@
+.contenedor-notas {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 20px auto; /* Agregué un margen superior para que no esté pegado si hay un navbar */
+  background-color: #a9c3ba; /* Fondo verde grisáceo claro para el contenedor */
+  border: 1px solid #274a2a; /* Borde sutil verde oscuro */
+  border-radius: 8px; /* Esquinas ligeramente redondeadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para darle profundidad */
+}
+
+.contenedor-notas h2 { /* Selector específico para el h2 dentro de este contenedor */
+  color: #1e311b; /* Verde muy oscuro para el título */
+  margin-bottom: 25px; /* Espacio debajo del título */
+  text-align: center; /* Centrar el título */
+  font-size: 2em; /* Hacer el título un poco más grande */
+}
+
+.tabla-notas {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff; /* Fondo blanco para la tabla, mejora la legibilidad */
+  border-radius: 6px;
+  overflow: hidden; /* Asegura que las esquinas redondeadas se vean bien */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra sutil para la tabla */
+}
+
+.tabla-notas th,
+.tabla-notas td {
+  padding: 14px 16px; /* Aumenté un poco el padding para más espacio */
+  border-bottom: 1px solid #d9dde0; /* Borde inferior más claro */
+  text-align: left;
+}
+
+.tabla-notas th {
+  background-color: #1e311b; /* Verde muy oscuro para el encabezado */
+  color: #d9dde0; /* Blanco hueso para el texto del encabezado */
+  font-weight: bold;
+  text-transform: uppercase; /* Convertir a mayúsculas para mayor énfasis */
+}
+
+/* Eliminar el border-bottom de la última fila para una apariencia más limpia */
+.tabla-notas tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-notas td {
+  color: #274a2a; /* Verde oscuro para el texto de las celdas */
+}
+
+.tabla-notas tr:nth-child(even) { /* Color de fondo para filas pares, efecto cebra */
+    background-color: #f8f8f8; /* Gris muy claro para las filas pares */
+}
+
+
+.tabla-notas select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #a9c3ba; /* Borde verde grisáceo claro */
+  border-radius: 4px;
+  background-color: #ffffff; /* Fondo blanco para el select */
+  color: #274a2a; /* Color de texto verde oscuro */
+  cursor: pointer;
+}
+
+.tabla-notas select:focus {
+  outline: none;
+  border-color: #809f39; /* Borde verde medio al enfocar */
+  box-shadow: 0 0 0 2px rgba(128, 159, 57, 0.2); /* Sombra de enfoque */
+}
+
+.btn-descargar,
+.btn-ver {
+  margin-right: 8px; /* Un poco más de espacio entre botones */
+  padding: 8px 14px; /* Aumenté el padding para botones más cómodos */
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  color: white; /* Texto blanco en los botones */
+  transition: background-color 0.3s ease, transform 0.1s ease; /* Transiciones para hover y click */
+}
+
+.btn-descargar {
+  background-color: #809f39; /* Verde medio para el botón Descargar */
+}
+
+.btn-descargar:hover {
+  background-color: #6b842e; /* Un tono más oscuro al pasar el ratón */
+  transform: translateY(-1px); /* Ligero efecto de elevación */
+}
+
+.btn-descargar:active {
+  background-color: #5c722a; /* Tono aún más oscuro al hacer click */
+  transform: translateY(0);
+}
+
+.btn-ver {
+  background-color: #274a2a; /* Verde oscuro para el botón Ver */
+}
+
+.btn-ver:hover {
+  background-color: #1e311b; /* Un tono más oscuro al pasar el ratón */
+  transform: translateY(-1px);
+}
+
+.btn-ver:active {
+  background-color: #152213; /* Tono aún más oscuro al hacer click */
+  transform: translateY(0);
+}
