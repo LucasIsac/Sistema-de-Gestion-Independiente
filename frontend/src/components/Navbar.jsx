@@ -9,12 +9,18 @@ export default function Navbar() {
 
   // --- Links por categoría -----------------------------
   const linksPorCategoria = {
-    periodista: [
-      { to: '/notas', texto: 'Mis Notas' },
+    periodista: [ 
+      { to: '/notas', texto: 'Mis Artículos' },
+      { to: '/enviados-revision', texto: 'Enviados a Revisión' },
+      { to: '/notificaciones', texto: 'Notificaciones' },
+      { to: '/ajustes', texto: 'Ajustes' },
       { to: '/mensajes', texto: 'Mensajes' },
+      { to: '/periodista-upload', texto:'Archivo' }, // si querés mensajes también para periodista
     ],
     fotografo: [
-      { to: '/galeria', texto: 'Subir Fotos' },
+      { to: '/galeria', texto: 'Galería' },
+      { to: '/notificaciones', texto: 'Notificaciones' },
+      { to: '/ajustes', texto: 'Ajustes' },
       { to: '/mensajes', texto: 'Mensajes' },
     ],
     editor: [

@@ -1,5 +1,3 @@
-// src/App.jsx (o donde tengas tus rutas)
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Recuperar from './pages/Recuperar';
@@ -10,19 +8,30 @@ import ProtectedRoute from './routes/ProtectedRoutes';
 import Notas from './pages/Notas';
 import Galeria from './pages/Galeria';
 import Mensajes from './pages/Mensajes';
-
+import FotografoUpload from './pages/FotografoUpload';
+import PeriodistaUpload from './pages/PeriodistaUpload';
+import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
 
 function App() {
   return (
-     <>
-      <Navbar /> {/* visible siempre */}
+    <>
+      <Navbar />
       <Routes>
-        {/* Define tus rutas aquí sin envolverlas en Router */}
+
         <Route path="/" element={<Presentacion />} />
         <Route path="/login" element={<Login />} />
         <Route path="/recuperar" element={<Recuperar />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/configuracion" element={<ConfiguracionUsuario />} />
 
+
+        <Route element={<ProtectedRoute allow={['periodista']} />}>
+          <Route path="/periodista-upload" element={<PeriodistaUpload />} />
+        </Route>
+
+        <Route element={<ProtectedRoute allow={['fotografo']} />}>
+          <Route path="/fotografo-upload" element={<FotografoUpload />} />
+        </Route>
         <Route element={<ProtectedRoute allow={['periodista']} />}>
           <Route path="/notas" element={<Notas />} />
         </Route>
