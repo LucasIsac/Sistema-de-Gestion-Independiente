@@ -10,11 +10,12 @@ import ProtectedRoute from './routes/ProtectedRoutes';
 import Notas from './pages/Notas';
 import Galeria from './pages/Galeria';
 import Mensajes from './pages/Mensajes';
+import RevisionEditor from './pages/RevisionEditor';
 
 
 function App() {
   return (
-     <>
+    <>
       <Navbar /> {/* visible siempre */}
       <Routes>
         {/* Define tus rutas aquí sin envolverlas en Router */}
@@ -33,6 +34,10 @@ function App() {
 
         <Route element={<ProtectedRoute allow={['periodista', 'fotografo', 'editor']} />}>
           <Route path="/mensajes" element={<Mensajes />} />
+        </Route>
+
+        <Route element={<ProtectedRoute allow={['editor']} />}>
+          <Route path="/revisiones" element={<RevisionEditor />} />
         </Route>
 
         <Route path="/no-autorizado" element={<h2>No autorizado</h2>} />

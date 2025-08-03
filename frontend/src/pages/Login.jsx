@@ -42,7 +42,7 @@ function Login() {
         } else if (rol === 'fotografo') {
           navigate('/galeria');
         } else if (rol === 'editor') {
-          navigate('/editor');
+          navigate('/revisiones');
         } else {
           navigate('/dashboard'); // ruta por defecto
         }
