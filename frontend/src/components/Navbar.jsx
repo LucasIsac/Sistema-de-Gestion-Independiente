@@ -24,9 +24,12 @@ export default function Navbar() {
       { to: '/mensajes', texto: 'Mensajes' },
     ],
     editor: [
-      { to: '/revisiones', texto: 'Revisiones' },
-      { to: '/notificaciones', texto: 'Notificaciones' },
-    ],
+  { to: '/revisiones', texto: 'Revisiones' },
+  { to: '/gestion-roles', texto: 'Gestión de Roles' },
+  { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
+  { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
+  { to: '/notificaciones', texto: 'Notificaciones' },
+     ],
   };
 
   const links = usuario ? linksPorCategoria[usuario.categoria] ?? [] : [];
