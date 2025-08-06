@@ -15,15 +15,13 @@ function Recuperar() {
     setError('');
 
     try {
-      
-    const response = await fetch('http://localhost:5000/api/auth/forgot-password', { 
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
-    
+      const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
 
       const data = await response.json();
 
@@ -40,7 +38,6 @@ function Recuperar() {
 
   return (
     <div className="login-page"> {/* Reutilizo la clase para centrar/estilizar */}
-      <Header />
       <div className="login-container">
         <form className="login-form" onSubmit={handleSubmit}>
           <h2>Recuperar contraseña</h2>
@@ -57,7 +54,7 @@ function Recuperar() {
           {error && <p className="error-message">{error}</p>}
         </form>
       </div>
-    </>
+    </div>
   );
 }
 

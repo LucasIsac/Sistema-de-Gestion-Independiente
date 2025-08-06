@@ -1,4 +1,4 @@
-// src/App.jsx (o donde tengas tus rutas)
+// src/App.jsx 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
@@ -8,16 +8,16 @@ import Presentacion from './pages/Presentacion';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './routes/ProtectedRoutes';
 import Notas from './pages/Notas';
-import Galeria from './pages/Galeria';
-import Mensajes from './pages/Mensajes';
 import PeriodistaUpload from './pages/PeriodistaUpload';
 
 
 function App() {
   return (
-    <Router>
+     <>
+      <Navbar /> {/* visible siempre */}
       <Routes>
-        <Route path="/" element={<Login />} />
+        {/* Define tus rutas aquí sin envolverlas en Router */}
+        <Route path="/" element={<Presentacion />} />
         <Route path="/login" element={<Login />} />
         <Route path="/recuperar" element={<Recuperar />} />
         <Route path="/reset-password" element={<ResetPassword />} />
@@ -28,17 +28,9 @@ function App() {
 
         </Route>
 
-        <Route element={<ProtectedRoute allow={['fotografo']} />}>
-          <Route path="/galeria" element={<Galeria />} />
-        </Route>
-
-        <Route element={<ProtectedRoute allow={['periodista', 'fotografo', 'editor']} />}>
-          <Route path="/mensajes" element={<Mensajes />} />
-        </Route>
-
         <Route path="/no-autorizado" element={<h2>No autorizado</h2>} />
       </Routes>
-    </Router>
+    </>
   );
 }
 

@@ -1,7 +1,7 @@
 //src/routes/ProtectedRoutes.jsx
 import { Navigate, Outlet } from 'react-router-dom';
 import { useContext } from 'react';
-import AuthContext from '../context/AuthContext.js';
+import { AuthContext } from '../context/AuthContext';  // ✅ Correcto
 
 export default function ProtectedRoute({ allow }) {
   const { usuario } = useContext(AuthContext);

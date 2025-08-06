@@ -1,6 +1,6 @@
 // src/context/AuthProvider.jsx
 import { useState, useEffect } from 'react';
-import AuthContext from './AuthContext.js';
+import { AuthContext } from '../context/AuthContext';  // ✅ Correcto
 
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
