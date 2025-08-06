@@ -1,23 +1,24 @@
-const express = require('express');
-const cors = require('cors');
-const authRoutes = require('./routes/authRoutes'); // Importa tus rutas de autenticación
+// src/app.js
+import express from 'express';
+import cors from 'cors';
+import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
+import errorHandler from './middlewares/error.middleware.js';
+import articleRoutes from './routes/article.routes.js';
 
 const app = express();
 
 // Middlewares globales
 app.use(cors());
+app.use('/api/articles',articleRoutes);
+
+app.get('/', (_req, res) => res.send('Backend Diario Virtual funcionando 👌'));
+
 app.use(express.json());
+app.use('/api/auth', authRoutes);
+app.use('/api', userRoutes);
 
-// Ruta de prueba
-app.get('/', (req, res) => {
-    res.send('Servidor backend funcionando 👌');
-});
+app.get('/test', (req, res) => res.json({ message: 'Test OK' }));
 
-// Rutas de la API
-app.use('/api/auth', authRoutes); // Todas las rutas de autenticación irán bajo /api/auth
-
-// Si tienes más rutas, las añadirías aquí:
-// app.use('/api/users', userRoutes);
-// app.use('/api/articles', articleRoutes);
-
-module.exports = app;
+app.use(errorHandler);   // siempre al final
+export default app;
