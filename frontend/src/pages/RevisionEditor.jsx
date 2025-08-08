@@ -78,10 +78,10 @@ function RevisionEditor() {
                 />
                 <button onClick={() => guardarComentario(art.id_articulo)}>💾 Guardar</button>
               </td>
-              <td>{art.periodista_nombre} {art.periodista_apellido}</td>
+              <td>{art.nombre_periodista} {art.apellido_periodista}</td>
               <td>
-                <button onClick={() => verArchivo(art.ruta)}>👁 Ver</button>
-                <a href={art.ruta} download>
+                <button onClick={() => verArchivo(art.ruta_archivo)}>👁 Ver</button>
+                <a href={art.ruta_archivo} download>
                   <button>📥 Descargar</button>
                 </a>
               </td>
