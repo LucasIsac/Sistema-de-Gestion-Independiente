@@ -1,23 +1,22 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-
 import Navbar from './components/Navbar';
 import Mensajes from './pages/Mensajes';
 import FotografoUpload from './pages/FotografoUpload';
 import PeriodistaUpload from './pages/PeriodistaUpload';
-
 import Presentacion from './pages/Presentacion';
 import Login from './pages/Login';
 import Recuperar from './pages/Recuperar';
 import ResetPassword from './pages/ResetPassword';
 import Notas from './pages/Notas';
 import Galeria from './pages/Galeria';
-import ConfiguracionUsuario from './pages/ConfiguracionUsuario'; // ✅ NUEVO
+import ConfiguracionUsuario from './pages/ConfiguracionUsuario'; 
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 import GestionRoles from './pages/GestionRoles';
 import GestionCategorias from './pages/GestionCategorias';
 import NotificacionesInternas from './pages/NotificacionesInternas';
+import GestionUsuario from './pages/GestionUsuario';
 
 function App() {
   return (
@@ -46,11 +45,21 @@ function App() {
           <Route path="/mensajes" element={<Mensajes />} />
         </Route>
 
-        <Route element={<ProtectedRoute allow={['editor']} />}>
-           <Route path="/gestion-roles" element={<GestionRoles />} />
-           <Route path="/gestion-categorias" element={<GestionCategorias />} />
-           <Route path="/notificaciones-internas" element={<NotificacionesInternas />} />
-        </Route>
+          <Route element={<ProtectedRoute allow={['administrador']} />}>
+         <Route path="/gestion-roles" element={<GestionRoles />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allow={['administrador']} />}>
+         <Route path="/gestion-categorias" element={<GestionCategorias />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allow={['administrador']} />}>
+         <Route path="/notificaciones-internas" element={<NotificacionesInternas />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allow={['administrador']} />}>
+         <Route path="/gestion-usuario" element={<GestionUsuario />} />
+          </Route>
 
 
         <Route path="/no-autorizado" element={<h2>No autorizado</h2>} />

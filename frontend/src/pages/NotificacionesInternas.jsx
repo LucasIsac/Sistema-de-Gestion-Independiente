@@ -1,80 +1,66 @@
-import React, { useState } from 'react';
-import '../assets/styles/notificaciones-internas.css';
+import React, { useState } from "react";
+import "../assets/styles/notificaciones.css";
 
 export default function NotificacionesInternas() {
-  const [titulo, setTitulo] = useState('');
-  const [descripcion, setDescripcion] = useState('');
-  const [destinatario, setDestinatario] = useState('');
+  const [titulo, setTitulo] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [destinatario, setDestinatario] = useState("");
 
-  const generarNotificacion = () => {
-    const tituloLimpio = titulo.trim();
-    const descripcionLimpia = descripcion.trim();
-    const destinatarioLimpio = destinatario.trim();
+  const generarNotificacion = async () => {
+    if (!titulo || !descripcion || !destinatario) {
+      alert("Por favor complete todos los campos");
+      return;
+    }
 
-    if (tituloLimpio && descripcionLimpia && destinatarioLimpio) {
-      console.log('🔔 Notificación generada:', {
-        titulo: tituloLimpio,
-        descripcion: descripcionLimpia,
-        destinatario: destinatarioLimpio,
+    try {
+      const response = await fetch("http://localhost:5000/api/notificaciones", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ titulo, descripcion, destinatario })
       });
 
-      // Aquí podrías hacer un POST a un backend si lo necesitás.
-
-      // Limpiar campos:
-      setTitulo('');
-      setDescripcion('');
-      setDestinatario('');
+      if (response.ok) {
+        alert("Notificación generada con éxito");
+        setTitulo("");
+        setDescripcion("");
+        setDestinatario("");
+      } else {
+        alert("Error al generar la notificación");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error de conexión con el servidor");
     }
   };
 
   return (
-    <div className="notificaciones-internas-container">
-      <div className="upload-header">NOTIFICACIONES INTERNAS</div>
-      <div className="upload-wrapper">
-        <aside className="sidebar">{/* Sidebar vacía */}</aside>
+    <div className="notificaciones-container">
+      <h1>Notificaciones Internas</h1>
 
-        <main className="upload-main">
-          <div className="upload-form">
-            <div className="left-section">
-              <label htmlFor="titulo">Título</label>
-              <input
-                type="text"
-                id="titulo"
-                value={titulo}
-                onChange={(e) => setTitulo(e.target.value)}
-                placeholder="Título de la notificación"
-              />
+      <label>Título:</label>
+      <input
+        type="text"
+        value={titulo}
+        onChange={(e) => setTitulo(e.target.value)}
+        placeholder="Ingrese el título"
+      />
 
-              <label htmlFor="descripcion">Descripción</label>
-              <textarea
-                id="descripcion"
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                placeholder="Descripción detallada"
-              />
+      <label>Descripción:</label>
+      <textarea
+        value={descripcion}
+        onChange={(e) => setDescripcion(e.target.value)}
+        placeholder="Ingrese la descripción"
+      />
 
-              <label htmlFor="destinatario">Destinatario</label>
-              <input
-                type="text"
-                id="destinatario"
-                value={destinatario}
-                onChange={(e) => setDestinatario(e.target.value)}
-                placeholder="Nombre o rol del destinatario"
-              />
+      <label>Destinatario:</label>
+      <input
+        type="text"
+        value={destinatario}
+        onChange={(e) => setDestinatario(e.target.value)}
+        placeholder="Ingrese el destinatario"
+      />
 
-              <button className="upload-button" onClick={generarNotificacion}>
-                Generar notificación
-              </button>
-            </div>
-
-            <div className="right-section">
-              {/* Podrías mostrar historial de notificaciones aquí si querés */}
-              <h2>Panel de notificaciones</h2>
-              <p className="preview-placeholder">Aquí podrían mostrarse las notificaciones generadas.</p>
-            </div>
-          </div>
-        </main>
-      </div>
+      <button onClick={generarNotificacion}>Generar Notificación</button>
     </div>
   );
 }

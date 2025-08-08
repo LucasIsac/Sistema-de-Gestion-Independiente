@@ -1,87 +1,57 @@
-import React, { useState } from 'react';
-import '../assets/styles/gestion-categorias.css';
+import React, { useEffect, useState } from 'react';
+import CategoriaForm from '../components/CategoriaForm';
+import CategoriaTable from '../components/CategoriaTable';
+import '../assets/styles/gestionCategorias.css';
 
 export default function GestionCategorias() {
-  const [nombre, setNombre] = useState('');
-  const [descripcion, setDescripcion] = useState('');
   const [categorias, setCategorias] = useState([]);
 
-  const agregarCategoria = () => {
-    const nombreLimpio = nombre.trim();
-    const descripcionLimpia = descripcion.trim();
-
-    if (nombreLimpio !== '' && descripcionLimpia !== '') {
-      const nuevaCategoria = {
-        id: Date.now(),
-        nombre: nombreLimpio,
-        descripcion: descripcionLimpia,
-      };
-
-      setCategorias([...categorias, nuevaCategoria]);
-      setNombre('');
-      setDescripcion('');
+  // Cargar categorías desde el backend
+  const fetchCategorias = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/api/categorias'); // tu endpoint
+      const data = await res.json();
+      setCategorias(data);
+    } catch (error) {
+      console.error('Error cargando categorías:', error);
     }
   };
 
-  const eliminarCategoria = (id) => {
-    const nuevasCategorias = categorias.filter(cat => cat.id !== id);
-    setCategorias(nuevasCategorias);
+  // Agregar categoría
+  const addCategoria = async (categoria) => {
+    try {
+      const res = await fetch('http://localhost:3000/api/categorias', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(categoria)
+      });
+      if (res.ok) fetchCategorias();
+    } catch (error) {
+      console.error('Error agregando categoría:', error);
+    }
   };
+
+  // Eliminar categoría
+  const deleteCategoria = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/categorias/${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) fetchCategorias();
+    } catch (error) {
+      console.error('Error eliminando categoría:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategorias();
+  }, []);
 
   return (
     <div className="gestion-categorias-container">
-      <div className="upload-header">GESTIÓN DE CATEGORÍAS</div>
-      <div className="upload-wrapper">
-        <aside className="sidebar">{/* Espacio lateral */}</aside>
-
-        <main className="upload-main">
-          <div className="upload-form">
-            <div className="left-section">
-              <label htmlFor="nombre">Nombre</label>
-              <input
-                type="text"
-                id="nombre"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                placeholder="Nombre de la categoría"
-              />
-
-              <label htmlFor="descripcion">Descripción</label>
-              <textarea
-                id="descripcion"
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                placeholder="Descripción breve"
-              />
-
-              <button className="upload-button" onClick={agregarCategoria}>
-                Agregar categoría
-              </button>
-            </div>
-
-            <div className="right-section">
-              <h2>Acciones</h2>
-              <div className="acciones-box">
-                {categorias.length > 0 ? (
-                  categorias.map((cat) => (
-                    <div key={cat.id} className="categoria-item">
-                      <div>
-                        <strong>{cat.nombre}</strong><br />
-                        <span>{cat.descripcion}</span>
-                      </div>
-                      <button className="delete-btn" onClick={() => eliminarCategoria(cat.id)}>
-                        Eliminar
-                      </button>
-                    </div>
-                  ))
-                ) : (
-                  <span className="preview-placeholder">No hay categorías cargadas</span>
-                )}
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
+      <h1>Gestión de Categorías</h1>
+      <CategoriaForm onAdd={addCategoria} />
+      <CategoriaTable categorias={categorias} onDelete={deleteCategoria} />
     </div>
   );
 }

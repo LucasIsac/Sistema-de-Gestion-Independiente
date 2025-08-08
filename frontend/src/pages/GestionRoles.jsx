@@ -1,58 +1,38 @@
-import React, { useState } from 'react';
-import '../assets/styles/gestion-roles.css';
+import React, { useState, useEffect } from 'react';
+import RoleForm from '../components/RoleForm';
+import RoleList from '../components/RoleList';
+import '../assets/styles/gestionRoles.css';
 
 export default function GestionRoles() {
-  const [nuevoRol, setNuevoRol] = useState('');
   const [roles, setRoles] = useState([]);
 
-  const handleAgregarRol = () => {
-    const rolLimpio = nuevoRol.trim();
-    if (rolLimpio !== '' && !roles.includes(rolLimpio)) {
-      setRoles([...roles, rolLimpio]);
-      setNuevoRol('');
-    }
+  // Simulamos carga inicial desde backend
+  useEffect(() => {
+    fetch('/api/roles')
+      .then((res) => res.json())
+      .then((data) => setRoles(data))
+      .catch((err) => console.error('Error cargando roles', err));
+  }, []);
+
+  const agregarRol = (nuevoRol) => {
+    // Enviar al backend
+    fetch('/api/roles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(nuevoRol),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setRoles([...roles, data]);
+      })
+      .catch((err) => console.error('Error agregando rol', err));
   };
 
   return (
     <div className="gestion-roles-container">
-      <div className="upload-header">GESTIÓN DE ROLES</div>
-      <div className="upload-wrapper">
-        <aside className="sidebar">{/* Barra lateral vacía */}</aside>
-
-        <main className="upload-main">
-          <div className="upload-form">
-            <div className="left-section">
-              <label htmlFor="rol">Nombre del rol</label>
-              <input
-                type="text"
-                id="rol"
-                value={nuevoRol}
-                onChange={(e) => setNuevoRol(e.target.value)}
-                placeholder="Ej: Administrador, Editor, etc."
-              />
-
-              <button className="upload-button" onClick={handleAgregarRol}>
-                Cargar rol
-              </button>
-            </div>
-
-            <div className="right-section">
-              <h2>Roles existentes</h2>
-              <div className="roles-list-box">
-                {roles.length > 0 ? (
-                  <ul className="roles-list">
-                    {roles.map((rol, index) => (
-                      <li key={index} className="rol-item">{rol}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <span className="preview-placeholder">No hay roles cargados</span>
-                )}
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
+      <h2>Gestión de Roles</h2>
+      <RoleForm onAddRole={agregarRol} />
+      <RoleList roles={roles} />
     </div>
   );
 }
