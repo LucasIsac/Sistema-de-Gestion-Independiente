@@ -146,3 +146,12 @@
   position: relative;
   display: inline-block;
 }
+
+.avatar-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #6b8d7d;
+}
+

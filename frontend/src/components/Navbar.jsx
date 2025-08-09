@@ -10,18 +10,15 @@ export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const linksPorCategoria = {
-    periodista: [ 
+    periodista: [
       { to: '/notas', texto: 'Mis Artículos' },
+      { to: '/subir-articulo', texto: 'Nuevo artículo' },
       { to: '/enviados-revision', texto: 'Enviados a Revisión' },
       { to: '/notificaciones', texto: 'Notificaciones' },
-      { to: '/ajustes', texto: 'Ajustes' },
-      { to: '/mensajes', texto: 'Mensajes' },
-      { to: '/periodista-upload', texto:'Archivo' },
     ],
     fotografo: [
       { to: '/galeria', texto: 'Galería' },
       { to: '/notificaciones', texto: 'Notificaciones' },
-      { to: '/ajustes', texto: 'Ajustes' },
       { to: '/mensajes', texto: 'Mensajes' },
     ],
     editor: [
@@ -49,17 +46,28 @@ export default function Navbar() {
       <div className="nav-user">
         {usuario ? (
           <div className="user-dropdown-container">
-            <div 
-              className="user-avatar" 
-              onClick={() => setDrawerOpen(!drawerOpen)}
+            <div
+              className="user-avatar"
+              onClick={() => setDrawerOpen(true)}
               title="Abrir/cerrar menú usuario"
             >
-              {usuario.nombre.charAt(0)}{usuario.apellido.charAt(0)}
+              {usuario?.avatar_url ? (
+                <img
+                  src={`http://localhost:5000${usuario.avatar_url}`}
+                  alt="Avatar"
+                  className="avatar-image"
+                />
+              ) : (
+                <div className="avatar-initials">
+                  {usuario?.nombre.charAt(0)}
+                  {usuario?.apellido.charAt(0)}
+                </div>
+              )}
             </div>
 
-            <UserDrawer 
-              isOpen={drawerOpen} 
-              onClose={() => setDrawerOpen(false)} 
+            <UserDrawer
+              isOpen={drawerOpen}
+              onClose={() => setDrawerOpen(false)}
             />
           </div>
         ) : (

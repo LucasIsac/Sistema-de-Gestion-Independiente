@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import '../assets/styles/configuracion-usuario.css';
 
 export default function ConfiguracionUsuario() {
-  const { usuario, token } = useContext(AuthContext);
+  const { usuario, token, setUsuario } = useContext(AuthContext);
   const [editMode, setEditMode] = useState(false);
   const [password, setPassword] = useState('');
   const [formData, setFormData] = useState({
@@ -15,93 +15,116 @@ export default function ConfiguracionUsuario() {
   });
   const [error, setError] = useState('');
   const [preview, setPreview] = useState(null);
-  const inputFotoRef = useRef();
+  const inputFotoRef = useRef(null);
   const navigate = useNavigate();
 
-  // Cargar datos del usuario al iniciar
+  // Cargar datos del usuario
   useEffect(() => {
-    if (usuario && usuario.id_usuario) {  // Verifica que usuario.id_usuario exista
+    if (usuario && usuario.id_usuario) {
       fetch(`http://localhost:5000/api/users/${usuario.id_usuario}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
-      .then(res => {
-        if (!res.ok) throw new Error('Error al cargar datos');
-        return res.json();
-      })
-      .then(data => {
-        if (data.usuario) {
-          setFormData({
-            nombre: data.usuario.nombre || '',
-            apellido: data.usuario.apellido || '',
-            telefono: data.usuario.telefono || '',
-            email: data.usuario.email || ''
-          });
-          setError('');
-        } else {
-          setError('No se encontró información del usuario');
-        }
-      })
-      .catch(err => {
-        console.error('Error:', err);
-        setError('Error al cargar datos del usuario');
-      });
+        .then(res => {
+          if (!res.ok) throw new Error('Error al cargar datos');
+          return res.json();
+        })
+        .then(data => {
+          if (data.usuario) {
+            setFormData({
+              nombre: data.usuario.nombre || '',
+              apellido: data.usuario.apellido || '',
+              telefono: data.usuario.telefono || '',
+              email: data.usuario.email || ''
+            });
+            setError('');
+          } else {
+            setError('No se encontró información del usuario');
+          }
+        })
+        .catch(err => {
+          console.error('Error:', err);
+          setError('Error al cargar datos del usuario');
+        });
     }
   }, [usuario, token]);
 
   const handleFotoClick = () => inputFotoRef.current.click();
 
-  const handleFotoChange = (e) => {
+  const handleFotoChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-      // Aquí podrías manejar subida del archivo si quieres subirlo inmediatamente o al guardar
+    if (!file) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      const response = await fetch('http://localhost:5000/api/upload-avatar', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setPreview(URL.createObjectURL(file));
+        setUsuario(prev => ({
+          ...prev,
+          avatar_url: data.avatarUrl
+        }));
+      } else {
+        throw new Error(data.message || 'Error al subir imagen');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Error al actualizar la foto de perfil');
     }
   };
 
   const handleUpdate = async () => {
-  try {
-    if (!usuario?.id_usuario) {
-      throw new Error('ID de usuario no disponible');
+    try {
+      if (!usuario?.id_usuario) {
+        throw new Error('ID de usuario no disponible');
+      }
+
+      const response = await fetch(`http://localhost:5000/api/users/${usuario.id_usuario}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          ...formData,
+          password
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al guardar');
+      }
+
+      await response.json();
+      alert('¡Datos actualizados correctamente!');
+      setEditMode(false);
+      setPassword('');
+    } catch (err) {
+      console.error('Error en handleUpdate:', err);
+      setError(err.message || 'Error al actualizar los datos');
     }
-
-    const response = await fetch(`http://localhost:5000/api/users/${usuario.id_usuario}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        ...formData,
-        password
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Error al guardar');
-    }
-
-    // Eliminamos la asignación innecesaria de 'data'
-    await response.json(); // Solo para verificar que la respuesta es válida
-    
-    alert('¡Datos actualizados correctamente!');
-    setEditMode(false);
-    setPassword('');
-  } catch (err) {
-    console.error('Error en handleUpdate:', err);
-    setError(err.message || 'Error al actualizar los datos');
-  }
-};
+  };
 
   return (
     <div className="configuracion-upload-container">
       <div className="upload-header">CONFIGURACIÓN DE USUARIO</div>
-      
+
       <div className="upload-wrapper">
         <aside className="sidebar">
-          {/* Espacio para posibles opciones laterales */}
+          {/* Espacio para opciones laterales */}
         </aside>
 
         <main className="upload-main">
@@ -110,9 +133,11 @@ export default function ConfiguracionUsuario() {
 
             {error && <div className="error-message">{error}</div>}
 
-            <div className="imagen-perfil-box" onClick={handleFotoClick} style={{cursor: 'pointer'}}>
+            <div className="imagen-perfil-box" onClick={handleFotoClick} style={{ cursor: 'pointer' }}>
               {preview ? (
                 <img src={preview} alt="Foto de perfil" className="imagen-perfil" />
+              ) : usuario?.avatar_url ? (
+                <img src={`http://localhost:5000${usuario.avatar_url}`} alt="Foto de perfil" className="imagen-perfil" />
               ) : (
                 <div className="imagen-perfil placeholder" />
               )}
@@ -142,7 +167,7 @@ export default function ConfiguracionUsuario() {
                   <input
                     type="text"
                     value={formData.nombre}
-                    onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
                   />
                 ) : (
                   <div className="info-value">{formData.nombre}</div>
@@ -155,7 +180,7 @@ export default function ConfiguracionUsuario() {
                   <input
                     type="text"
                     value={formData.apellido}
-                    onChange={(e) => setFormData({...formData, apellido: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, apellido: e.target.value })}
                   />
                 ) : (
                   <div className="info-value">{formData.apellido}</div>
@@ -168,7 +193,7 @@ export default function ConfiguracionUsuario() {
                   <input
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 ) : (
                   <div className="info-value">{formData.email}</div>
@@ -181,7 +206,7 @@ export default function ConfiguracionUsuario() {
                   <input
                     type="tel"
                     value={formData.telefono}
-                    onChange={(e) => setFormData({...formData, telefono: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
                   />
                 ) : (
                   <div className="info-value">{formData.telefono || 'No especificado'}</div>
@@ -197,44 +222,40 @@ export default function ConfiguracionUsuario() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Requerida para guardar cambios"
                   />
-                  <small className="password-note">*Debes ingresar tu contraseña actual para confirmar los cambios</small>
+                  <small className="password-note">
+                    *Debes ingresar tu contraseña actual para confirmar los cambios
+                  </small>
                 </div>
               )}
             </div>
 
             <div className="button-group">
               {!editMode ? (
-                <button 
-                  onClick={() => setEditMode(true)} 
-                  className="upload-button"
-                >
+                <button onClick={() => setEditMode(true)} className="upload-button">
                   Editar información
                 </button>
               ) : (
                 <>
-                  <button 
-                    onClick={handleUpdate} 
+                  <button
+                    onClick={handleUpdate}
                     className="upload-button guardar-btn"
                     disabled={!password}
                   >
                     Guardar cambios
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
                       setEditMode(false);
                       setPassword('');
                       setError('');
-                    }} 
+                    }}
                     className="upload-button cancel-btn"
                   >
                     Cancelar
                   </button>
                 </>
               )}
-              <button 
-                onClick={() => navigate('/recuperar')} 
-                className="upload-button"
-              >
+              <button onClick={() => navigate('/recuperar')} className="upload-button">
                 Cambiar contraseña
               </button>
             </div>
