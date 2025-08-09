@@ -9,6 +9,7 @@ import Navbar from './components/Navbar';
 import ProtectedRoute from './routes/ProtectedRoutes';
 import Notas from './pages/Notas';
 import PeriodistaUpload from './pages/PeriodistaUpload';
+import ConfiguracionUsuario from './pages/ConfiguracionUsuario.jsx'
 
 
 function App() {
@@ -22,9 +23,11 @@ function App() {
         <Route path="/recuperar" element={<Recuperar />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
+
         <Route element={<ProtectedRoute allow={['Periodista']} />}>
           <Route path="/notas" element={<Notas />} />
           <Route path="/subir-articulo" element={<PeriodistaUpload />} />
+          <Route path="/configuracion-usuario" element={<ConfiguracionUsuario />} />
 
         </Route>
 

@@ -1,3 +1,4 @@
+//src/context/AuthContext.js
 import { createContext } from 'react';
 
 // Exportación NOMBRADA (la que estás intentando usar)

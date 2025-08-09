@@ -1,6 +1,5 @@
-// src/context/AuthProvider.jsx
 import { useState, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext';  // ✅ Correcto
+import { AuthContext } from '../context/AuthContext';
 
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
@@ -14,10 +13,19 @@ export function AuthProvider({ children }) {
     if (storedToken) setToken(storedToken);
   }, []);
 
-  const login = (data, authToken) => {
-    localStorage.setItem('usuario', JSON.stringify(data));
+  const login = (userData, authToken) => {
+    // Asegúrate que userData incluya id_usuario
+    const userToStore = {
+      id_usuario: userData.id || userData.id_usuario, // Compatibilidad con ambos formatos
+      nombre: userData.nombre,
+      apellido: userData.apellido,
+      email: userData.email,
+      categoria: userData.categoria || userData.rol // Depende de tu backend
+    };
+
+    localStorage.setItem('usuario', JSON.stringify(userToStore));
     localStorage.setItem('token', authToken);
-    setUsuario(data);
+    setUsuario(userToStore);
     setToken(authToken);
   };
 

@@ -50,7 +50,7 @@ function Login() {
             navigate('/editor');
             break;
           default:
-            navigate('/dashboard'); // Cambié "Dashboard" a minúscula para consistencia
+            navigate('/'); // Cambié "Dashboard" a minúscula para consistencia
         }
       } else {
         setError(data.message || 'Credenciales incorrectas');

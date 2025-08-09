@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';  // ✅ Correcto
+import { AuthContext } from '../context/AuthContext';
 import '../assets/styles/notas.css';
 
 function Notas() {
@@ -21,9 +21,7 @@ function Notas() {
           }
         });
 
-        if (!response.ok) {
-          throw new Error('Error al cargar artículos');
-        }
+        if (!response.ok) throw new Error('Error al cargar artículos');
 
         const data = await response.json();
         setNotas(data);
@@ -45,10 +43,7 @@ function Notas() {
     }
 
     try {
-      const numericId = parseInt(id);
-      if (isNaN(numericId)) throw new Error("ID de artículo inválido");
-
-      const response = await fetch(`http://localhost:5000/api/articles/download/${numericId}`, {
+      const response = await fetch(`http://localhost:5000/api/articles/download/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Cache-Control': 'no-cache'
@@ -72,7 +67,7 @@ function Notas() {
       const url = window.URL.createObjectURL(new Blob([blob], { type: mimeTypes[fileExtension] || 'application/octet-stream' }));
       const link = document.createElement('a');
       link.href = url;
-      link.download = nota.nombre_original || `articulo_${numericId}.${fileExtension}`;
+      link.download = nota.nombre_original || `articulo_${id}.${fileExtension}`;
       document.body.appendChild(link);
       link.click();
       setTimeout(() => {
@@ -86,8 +81,6 @@ function Notas() {
   };
 
   const handleDelete = async (id, titulo = "este artículo") => {
-    if (typeof titulo !== 'string') titulo = "este artículo";
-
     if (!window.confirm(`¿Eliminar "${titulo}" permanentemente?`)) return;
 
     try {
@@ -107,21 +100,6 @@ function Notas() {
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
-
-    try {
-      const date = new Date(dateString);
-      return isNaN(date.getTime()) ? 'N/A' : date.toLocaleDateString('es-AR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
-    } catch {
-      return 'N/A';
-    }
-  };
-
   const handleView = async (id, nota) => {
     if (!nota?.ruta_archivo) {
       alert('⚠️ Este artículo no tiene archivo asociado');
@@ -129,10 +107,7 @@ function Notas() {
     }
 
     try {
-      const numericId = parseInt(id);
-      if (isNaN(numericId)) throw new Error("ID de artículo inválido");
-
-      const response = await fetch(`http://localhost:5000/api/articles/view/${numericId}`, {
+      const response = await fetch(`http://localhost:5000/api/articles/view/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Pragma': 'no-cache'
@@ -156,72 +131,66 @@ function Notas() {
     }
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+
+    try {
+      const date = new Date(dateString);
+      return isNaN(date.getTime()) ? 'N/A' : date.toLocaleDateString('es-AR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch {
+      return 'N/A';
+    }
+  };
+
   if (loading) return <div className="loading">Cargando artículos...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="contenedor-notas">
-      <div className="header-notas">
-        <h2>Mis Artículos</h2>
-        <button 
-          className="btn-nuevo" 
-          onClick={() => navigate('/subir-articulo')}
-        >
+    <div className="periodista-upload-container">
+      <div className="upload-header">
+        Mis Artículos
+        <button className="btn-nuevo" onClick={() => navigate('/subir-articulo')}>
           + Nuevo Artículo
         </button>
       </div>
 
       {notas.length > 0 ? (
-        <table className="tabla-notas">
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Estado</th>
-              <th>Fecha de creación</th>
-              <th>Última modificación</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {notas.map((nota) => (
-              <tr key={nota.id_articulo}>
-                <td>{nota.titulo}</td>
-                <td>{nota.estado || 'Borrador'}</td>
-                <td>{formatDate(nota.fecha_creacion)}</td>
-                <td>{formatDate(nota.fecha_modificacion)}</td>
-                <td>
-                  <button 
-                    onClick={() => handleDownload(nota.id_articulo, nota)} 
-                    disabled={!nota.ruta_archivo}
-                    className="btn-descargar"
-                  >
-                    📥 Descargar
-                  </button>
-                  <button
-                    onClick={() => handleView(nota.id_articulo, nota)}
-                    disabled={!nota.ruta_archivo}
-                    className="btn-ver"
-                  >
-                    👁 Ver
-                  </button>
-                  <button 
-                    onClick={() => handleDelete(nota.id_articulo, nota.titulo)}
-                    disabled={!nota.ruta_archivo}
-                    className="btn-eliminar"
-                  >
-                    🗑 Eliminar
-                  </button>
-                </td>
+        <div className="tabla-wrapper">
+          <table className="notas-table">
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Estado</th>
+                <th>Fecha de creación</th>
+                <th>Última modificación</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {notas.map((nota) => (
+                <tr key={nota.id_articulo}>
+                  <td>{nota.titulo}</td>
+                  <td>{nota.estado || 'Borrador'}</td>
+                  <td>{formatDate(nota.fecha_creacion)}</td>
+                  <td>{formatDate(nota.fecha_modificacion)}</td>
+                  <td className="acciones">
+                    <button onClick={() => handleDownload(nota.id_articulo, nota)} className="btn-accion">Descargar</button>
+                    <button onClick={() => handleView(nota.id_articulo, nota)} className="btn-accion">Leer</button>
+                    <button onClick={() => handleDelete(nota.id_articulo, nota.titulo)} className="btn-accion">Eliminar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <div className="no-notas">
-          No tienes artículos. 
-          <button onClick={() => navigate('/subir-articulo')} className="btn-nuevo">
-            ¡Crea uno nuevo!
-          </button>
+          No tienes artículos aún.
+          <button onClick={() => navigate('/subir-articulo')} className="btn-nuevo">¡Subí uno!</button>
         </div>
       )}
     </div>

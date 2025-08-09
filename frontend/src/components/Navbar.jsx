@@ -1,13 +1,14 @@
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';  // ✅ Correcto
+import { AuthContext } from '../context/AuthContext';
+import UserDrawer from './UserDrawer';
 import logo from '../assets/imagenes/logo.png';
 import '../assets/styles/navbar.css';
 
 export default function Navbar() {
-  const { usuario, logout } = useContext(AuthContext);
+  const { usuario } = useContext(AuthContext);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // --- Links por categoría -----------------------------
   const linksPorCategoria = {
     periodista: [ 
       { to: '/notas', texto: 'Mis Artículos' },
@@ -15,7 +16,7 @@ export default function Navbar() {
       { to: '/notificaciones', texto: 'Notificaciones' },
       { to: '/ajustes', texto: 'Ajustes' },
       { to: '/mensajes', texto: 'Mensajes' },
-      { to: '/periodista-upload', texto:'Archivo' }, // si querés mensajes también para periodista
+      { to: '/periodista-upload', texto:'Archivo' },
     ],
     fotografo: [
       { to: '/galeria', texto: 'Galería' },
@@ -47,14 +48,20 @@ export default function Navbar() {
 
       <div className="nav-user">
         {usuario ? (
-          <>
-            <span className="nav-name">
-              {usuario.nombre} {usuario.apellido}
-            </span>
-            <button onClick={logout} className="btn-logout">
-              Cerrar sesión
-            </button>
-          </>
+          <div className="user-dropdown-container">
+            <div 
+              className="user-avatar" 
+              onClick={() => setDrawerOpen(!drawerOpen)}
+              title="Abrir/cerrar menú usuario"
+            >
+              {usuario.nombre.charAt(0)}{usuario.apellido.charAt(0)}
+            </div>
+
+            <UserDrawer 
+              isOpen={drawerOpen} 
+              onClose={() => setDrawerOpen(false)} 
+            />
+          </div>
         ) : (
           <Link to="/login">Iniciar sesión</Link>
         )}
