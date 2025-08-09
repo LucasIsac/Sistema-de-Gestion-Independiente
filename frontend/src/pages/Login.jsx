@@ -7,7 +7,7 @@ import AuthContext from '../context/AuthContext.js';
 function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // Obtener función login del contexto
+  const { login } = useContext(AuthContext); 
 
   const handleLogin = async (credentials) => {
     try {
@@ -41,6 +41,8 @@ function Login() {
           navigate('/notas');
         } else if (rol === 'fotografo') {
           navigate('/galeria');
+        } else if (rol === 'administrador') {
+          navigate('/gestion-roles');
         } else if (rol === 'editor') {
           navigate('/editor');
         } else {
