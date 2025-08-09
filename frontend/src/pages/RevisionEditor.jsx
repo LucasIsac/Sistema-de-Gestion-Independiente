@@ -25,30 +25,33 @@ function RevisionEditor() {
     setComentarios({ ...comentarios, [id]: texto });
   };
 
-  const guardarComentario = async (articuloId) => {
-    try {
-      const comentario = comentarios[articuloId];
-      const res = await fetch('http://localhost:5000/api/comentarios-editor', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          articulo_id: articuloId,
-          editor_id: usuario.id,
-          comentario,
-        }),
-      });
+ const guardarComentario = async (articuloId) => {
+  try {
+    const comentario = comentarios[articuloId];
+    const res = await fetch('http://localhost:5000/api/comentarios-editor', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        articulo_id: articuloId,
+        editor_id: usuario.id, // o usuario.id_usuario según tu caso
+        comentario,
+      }),
+    });
 
-      if (res.ok) {
-        alert('Comentario guardado correctamente');
-      } else {
-        alert('Error al guardar el comentario');
-      }
-    } catch (error) {
-      console.error('Error al guardar comentario:', error);
+    if (res.ok) {
+      alert('Comentario guardado correctamente');
+      // Limpiar solo el comentario del artículo que se guardó
+      setComentarios((prev) => ({ ...prev, [articuloId]: '' }));
+    } else {
+      alert('Error al guardar el comentario');
     }
-  };
+  } catch (error) {
+    console.error('Error al guardar comentario:', error);
+  }
+};
+
 
   const verArchivo = (ruta) => {
     window.open(ruta, '_blank');
