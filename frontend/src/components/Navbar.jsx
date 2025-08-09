@@ -12,7 +12,7 @@ export default function Navbar() {
   const linksPorCategoria = {
     periodista: [
       { to: '/notas', texto: 'Mis Artículos' },
-      { to: '/subir-articulo', texto: 'Nuevo artículo' },
+      { to: '/periodista-upload', texto: 'Nuevo artículo' },
       { to: '/enviados-revision', texto: 'Enviados a Revisión' },
       { to: '/notificaciones', texto: 'Notificaciones' },
     ],

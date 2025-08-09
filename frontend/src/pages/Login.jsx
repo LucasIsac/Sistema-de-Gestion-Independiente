@@ -3,7 +3,6 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext'; // Importar AuthContext
 import LoginForm from '../components/LoginForm';
-import Header from '../components/Header';
 import '../assets/styles/login.css';
 
 function Login() {
@@ -63,7 +62,6 @@ function Login() {
 
   return (
     <div className="login-page">
-      <Header />
       <div className="login-container">
         {error && <div className="error-message">{error}</div>}
         <LoginForm onLogin={handleLogin} />

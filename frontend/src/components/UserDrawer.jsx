@@ -30,7 +30,7 @@ export default function UserDrawer({ isOpen, onClose }) {
 
       {/* Opciones */}
       <div className="dropdown-options">
-        <Link to="/configuracion-usuario" onClick={onClose} className="dropdown-item">
+        <Link to="/configuracion" onClick={onClose} className="dropdown-item">
           <span>⚙️</span> Preferencias
         </Link>
         <button onClick={() => { logout(); onClose(); }} className="dropdown-item">

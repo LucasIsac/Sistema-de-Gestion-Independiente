@@ -72,7 +72,6 @@ function ResetPassword() {
 
   return (
     <div className="login-page">
-      <Header />
       <div className="login-container">
         <form className="login-form" onSubmit={handleSubmit}>
           <h2>Establecer nueva contraseña</h2>
