@@ -1,13 +1,14 @@
+// src/pages/login.jsx
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext'; // Importar AuthContext
 import LoginForm from '../components/LoginForm';
 import '../assets/styles/login.css';
-import AuthContext from '../context/AuthContext.js';
 
 function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); 
+  const { login } = useContext(AuthContext); // Ahora sí está definido
 
   const handleLogin = async (credentials) => {
     try {
@@ -30,23 +31,25 @@ function Login() {
       
       if (response.ok) {
         console.log('✅ Login exitoso:', data.user);
-        // Actualizar contexto (y localStorage dentro del provider)
-        login(data.user);
-
+        // Guardar token y usuario
+        login(data.user, data.token);
+        
         // Redirigir según el rol del usuario
         const rol = data.user.categoria;
         console.log('Redirigiendo según el rol:', rol);
-
-        if (rol === 'periodista') {
-          navigate('/notas');
-        } else if (rol === 'fotografo') {
-          navigate('/galeria');
-        } else if (rol === 'administrador') {
-          navigate('/gestion-roles');
-        } else if (rol === 'editor') {
-          navigate('/revisiones');
-        } else {
-          navigate('/dashboard'); // ruta por defecto
+        
+        switch(rol) {
+          case 'Periodista':
+            navigate('/notas');
+            break;
+          case 'Fotografo':
+            navigate('/galeria');
+            break;
+          case 'Editor':
+            navigate('/editor');
+            break;
+          default:
+            navigate('/'); // Cambié "Dashboard" a minúscula para consistencia
         }
       } else {
         setError(data.message || 'Credenciales incorrectas');

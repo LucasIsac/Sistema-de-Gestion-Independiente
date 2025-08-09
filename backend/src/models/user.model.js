@@ -1,4 +1,4 @@
-//Registrar usuario
+//src/models/user.model.js
 import { pool } from '../config/db.js';
 
 export async function findByUsuario(oUsuario) {

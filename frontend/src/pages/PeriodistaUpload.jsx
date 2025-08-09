@@ -1,139 +1,164 @@
-import React, { useRef, useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';  // ✅ Correcto
 import '../assets/styles/periodista-upload.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function PeriodistaUpload() {
+  const { token } = useContext(AuthContext);
   const [title, setTitle] = useState('');
-  const [estado, setEstado] = useState('');
-  const [colaborador, setColaborador] = useState('');
-  const [preview, setPreview] = useState(null);
-  const [fileName, setFileName] = useState('');
-  const [archivoSubido, setArchivoSubido] = useState(false);
-  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
-  const inputFileRef = useRef();
-
-  const handleUploadClick = () => inputFileRef.current.click();
+  const [category, setCategory] = useState('1');
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null); // Corregí el typo de "preview" a "preview"
+  const [uploadStatus, setUploadStatus] = useState(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-      setFileName(title.trim() !== '' ? title.trim() : file.name);
-      setMostrarConfirmacion(true);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      if (selectedFile.type === 'application/pdf') {
+        setPreview(URL.createObjectURL(selectedFile));
+      } else {
+        setPreview(null);
+      }
     }
   };
 
-  const confirmarSubida = () => {
-    setArchivoSubido(true);
-    setMostrarConfirmacion(false);
-    setFileName(title.trim() !== '' ? title.trim() : fileName);
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!file || !title) {
+      setUploadStatus({ error: 'Debes completar todos los campos' });
+      return;
+    }
 
-  const cancelarSubida = () => {
-    setPreview(null);
-    setFileName('');
-    setArchivoSubido(false);
-    setMostrarConfirmacion(false);
-    setTitle('');
-    setEstado('');
-    setColaborador('');
-  };
+    setUploadStatus({ loading: true });
 
-  const editarEntrega = () => {
-    setArchivoSubido(false);
-    setMostrarConfirmacion(false);
-    inputFileRef.current.click();
+    const formData = new FormData();
+    formData.append('archivo', file);
+    formData.append('titulo', title);
+    formData.append('categoria_id', category);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/articles/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.message || 'Error al subir');
+
+      setUploadStatus({ success: 'Artículo subido correctamente' });
+      setIsSubmitted(true);
+    } catch (err) {
+      setUploadStatus({ error: err.message });
+    }
   };
 
   return (
-    <div className="fotografo-upload-container">
-      <div className="upload-header">PERIODISTA</div>
+    <div className="periodista-upload-container">
+      <div className="upload-header">SUBIR ARTÍCULO</div>
+      
       <div className="upload-wrapper">
-        <aside className="sidebar">{/* Barra verde sin texto */}</aside>
+        <aside className="sidebar">
+          {/* Opciones del sidebar si las necesitas */}
+        </aside>
 
         <main className="upload-main">
-          <div className="upload-form">
+          <form onSubmit={handleSubmit} className="upload-form">
             <div className="left-section">
-              <label htmlFor="title">Título</label>
-              <input
-                type="text"
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ingresar título"
-                disabled={archivoSubido}
-              />
+              <div className="form-group">
+                <label htmlFor="title">Título del artículo</label>
+                <input
+                  type="text"
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Ingresa un título descriptivo"
+                  disabled={isSubmitted}
+                />
+              </div>
 
-              <label htmlFor="estado">Estado</label>
-              <input
-                type="text"
-                id="estado"
-                value={estado}
-                onChange={(e) => setEstado(e.target.value)}
-                placeholder="Ej: Borrador, En revisión"
-                disabled={archivoSubido}
-              />
+              <div className="form-group">
+                <label htmlFor="category">Categoría</label>
+                <select
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  disabled={isSubmitted}
+                >
+                  <option value="1">Política</option>
+                  <option value="2">Economía</option>
+                  <option value="3">Deportes</option>
+                  <option value="4">Cultura</option>
+                </select>
+              </div>
 
-              <label htmlFor="colaborador">Colaborador</label>
-              <input
-                type="text"
-                id="colaborador"
-                value={colaborador}
-                onChange={(e) => setColaborador(e.target.value)}
-                placeholder="Nombre del colaborador"
-                disabled={archivoSubido}
-              />
-
-              <button className="upload-button" onClick={handleUploadClick}>
-                Subir archivo
-              </button>
-              <input
-                type="file"
-                accept=".pdf,.doc,.docx"
-                ref={inputFileRef}
-                onChange={handleFileChange}
-                hidden
-              />
-
-              {mostrarConfirmacion && (
-                <div className="confirm-box">
-                  <p>¿Está seguro de subir este archivo?</p>
-                  <div className="confirm-buttons">
-                    <button className="yes-btn" onClick={confirmarSubida}>Sí</button>
-                    <button className="no-btn" onClick={cancelarSubida}>No</button>
-                  </div>
+              <div className="form-group">
+                <label htmlFor="file">Archivo</label>
+                <div className="file-upload-wrapper">
+                  <input
+                    type="file"
+                    id="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleFileChange}
+                    disabled={isSubmitted}
+                  />
+                  <label htmlFor="file" className="file-upload-label">
+                    {file ? file.name : 'Seleccionar archivo'}
+                  </label>
                 </div>
+                <p className="file-hint">Formatos aceptados: PDF, DOC, DOCX</p>
+              </div>
+
+              {uploadStatus?.error && (
+                <div className="error-message">{uploadStatus.error}</div>
               )}
 
-              {archivoSubido && (
-                <div className="upload-box moodle-box">
-                  <div className="moodle-buttons">
-                    <button className="edit-btn" onClick={editarEntrega}>EDITAR ENTREGA</button>
-                    <button className="delete-btn" onClick={cancelarSubida}>BORRAR ENTREGA</button>
+              {!isSubmitted ? (
+                <div className="form-actions">
+                  <button type="submit" className="upload-button" disabled={uploadStatus?.loading}>
+                    {uploadStatus?.loading ? 'Subiendo...' : 'Subir artículo'}
+                  </button>
+                  <button 
+                    type="button" 
+                    className="cancel-button"
+                    onClick={() => navigate('/notas')}
+                    disabled={uploadStatus?.loading}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              ) : (
+                <div className="upload-success">
+                  <p>¡Artículo subido exitosamente!</p>
+                  <div className="success-actions">
+                    <button 
+                      type="button" 
+                      className="new-upload-button"
+                      onClick={() => {
+                        setTitle('');
+                        setFile(null);
+                        setPreview(null);
+                        setIsSubmitted(false);
+                        setUploadStatus(null);
+                      }}
+                    >
+                      Subir nuevo artículo
+                    </button>
+                    <button 
+                      type="button" 
+                      className="back-button"
+                      onClick={() => navigate('/notas')}
+                    >
+                      Volver a mis artículos
+                    </button>
                   </div>
-
-                  <table className="status-table">
-                    <tbody>
-                      <tr>
-                        <td><strong>Estado de la entrega</strong></td>
-                        <td className="success">Enviado</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Última modificación</strong></td>
-                        <td>{new Date().toLocaleString()}</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Archivos enviados</strong></td>
-                        <td>
-                          <a href={preview} target="_blank" rel="noreferrer">{fileName}</a><br />
-                          <span className="fecha-envio">{new Date().toLocaleString()}</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong>Comentarios de la entrega</strong></td>
-                        <td><a href="#">Comentarios (0)</a></td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
               )}
             </div>
@@ -145,16 +170,22 @@ export default function PeriodistaUpload() {
                   <iframe
                     src={preview}
                     title="Vista previa del documento"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 'none' }}
                   />
                 ) : (
-                  <span className="preview-placeholder">No hay archivo cargado</span>
+                  <div className="preview-placeholder">
+                    {file ? (
+                      <p>Vista previa no disponible para este tipo de archivo</p>
+                    ) : (
+                      <>
+                        <p>No hay archivo seleccionado</p>
+                        <p>Selecciona un archivo para ver la vista previa</p>
+                      </>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
-          </div>
+          </form>
         </main>
       </div>
     </div>
