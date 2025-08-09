@@ -13,7 +13,7 @@ function Notas() {
         estado: "Borrador",
         fechaCreacion: "2025-07-01",
         fechaModificacion: "2025-07-15",
-        url_archivo: "/archivos/archivo1.pdf", // En /public/archivos/nota1.pdf
+        url_archivo: "/archivos/Resumen prog 3 (2).pdf", // En /public/archivos/nota1.pdf
       },
       {
         id: 2,

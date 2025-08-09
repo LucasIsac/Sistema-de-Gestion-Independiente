@@ -10,18 +10,22 @@ import Recuperar from './pages/Recuperar';
 import ResetPassword from './pages/ResetPassword';
 import Notas from './pages/Notas';
 import Galeria from './pages/Galeria';
-import ConfiguracionUsuario from './pages/ConfiguracionUsuario'; 
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 import GestionRoles from './pages/GestionRoles';
 import GestionCategorias from './pages/GestionCategorias';
 import NotificacionesInternas from './pages/NotificacionesInternas';
 import GestionUsuario from './pages/GestionUsuario';
+import Mensajes from './pages/Mensajes';
+import FotografoUpload from './pages/FotografoUpload';
+import PeriodistaUpload from './pages/PeriodistaUpload';
+import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
+import RevisionEditor from './pages/RevisionEditor';
 
 function App() {
   return (
-    <>
-      <Navbar />
+     <>
+      <Navbar /> {/* visible siempre */}
       <Routes>
         <Route path="/" element={<Presentacion />} />
         <Route path="/login" element={<Login />} />
@@ -61,6 +65,9 @@ function App() {
          <Route path="/gestion-usuario" element={<GestionUsuario />} />
           </Route>
 
+        <Route element={<ProtectedRoute allow={['editor']} />}>
+          <Route path="/revisiones" element={<RevisionEditor />} />
+        </Route>
 
         <Route path="/no-autorizado" element={<h2>No autorizado</h2>} />
       </Routes>
