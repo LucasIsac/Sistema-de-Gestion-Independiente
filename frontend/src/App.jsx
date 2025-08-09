@@ -29,15 +29,14 @@ function App() {
           <Route path="/periodista-upload" element={<PeriodistaUpload />} />
         </Route>
 
-        <Route element={<ProtectedRoute allow={['fotografo']} />}>
-          <Route path="/fotografo-upload" element={<FotografoUpload />} />
-        </Route>
+
         <Route element={<ProtectedRoute allow={['periodista']} />}>
           <Route path="/notas" element={<Notas />} />
         </Route>
 
         <Route element={<ProtectedRoute allow={['fotografo']} />}>
           <Route path="/galeria" element={<Galeria />} />
+          <Route path="/fotografo-upload" element={<FotografoUpload />} />
         </Route>
 
         <Route element={<ProtectedRoute allow={['periodista', 'fotografo', 'editor']} />}>

@@ -21,6 +21,7 @@ export default function Navbar() {
       { to: '/galeria', texto: 'Galería' },
       { to: '/notificaciones', texto: 'Notificaciones' },
       { to: '/ajustes', texto: 'Ajustes' },
+      { to: '/fotografo-upload', texto: 'Subir Fotos' },
       { to: '/mensajes', texto: 'Mensajes' },
     ],
     editor: [
