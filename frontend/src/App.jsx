@@ -11,11 +11,13 @@ import Mensajes from './pages/Mensajes';
 import FotografoUpload from './pages/FotografoUpload';
 import PeriodistaUpload from './pages/PeriodistaUpload';
 import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
+import RevisionEditor from './pages/RevisionEditor';
+
 
 function App() {
   return (
-    <>
-      <Navbar />
+     <>
+      <Navbar /> {/* visible siempre */}
       <Routes>
 
         <Route path="/" element={<Presentacion />} />
@@ -42,6 +44,10 @@ function App() {
 
         <Route element={<ProtectedRoute allow={['periodista', 'fotografo', 'editor']} />}>
           <Route path="/mensajes" element={<Mensajes />} />
+        </Route>
+
+        <Route element={<ProtectedRoute allow={['editor']} />}>
+          <Route path="/revisiones" element={<RevisionEditor />} />
         </Route>
 
         <Route path="/no-autorizado" element={<h2>No autorizado</h2>} />
