@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Mensajes from './pages/Mensajes';
@@ -16,9 +15,7 @@ import GestionRoles from './pages/GestionRoles';
 import GestionCategorias from './pages/GestionCategorias';
 import NotificacionesInternas from './pages/NotificacionesInternas';
 import GestionUsuario from './pages/GestionUsuario';
-import Mensajes from './pages/Mensajes';
-import FotografoUpload from './pages/FotografoUpload';
-import PeriodistaUpload from './pages/PeriodistaUpload';
+
 import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
 import RevisionEditor from './pages/RevisionEditor';
 
