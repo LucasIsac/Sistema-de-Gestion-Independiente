@@ -14,6 +14,7 @@ app.get('/', (_req, res) => res.send('Backend Diario Virtual funcionando 👌'))
 app.use('/api/auth', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', editorRoutes);
+app.use('/archivos', express.static('archivos')); //archivos está en la raíz del proyecto
 
 
 app.use(errorHandler);   // siempre al final

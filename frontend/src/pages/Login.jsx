@@ -11,7 +11,6 @@ function Login() {
 
   const handleLogin = async (credentials) => {
     try {
-      console.log('🔄 Enviando credenciales:', credentials);
       
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
@@ -29,7 +28,6 @@ function Login() {
       console.log('📡 Respuesta del servidor:', data);
       
       if (response.ok) {
-        console.log('✅ Login exitoso:', data.user);
         // Actualizar contexto (y localStorage dentro del provider)
         login(data.user);
 

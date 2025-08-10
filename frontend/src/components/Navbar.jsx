@@ -28,7 +28,6 @@ export default function Navbar() {
     ],
     editor: [
       { to: '/revisiones', texto: 'Revisiones' },
-      { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
       { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
     ],
