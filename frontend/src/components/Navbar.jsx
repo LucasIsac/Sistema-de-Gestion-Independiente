@@ -9,7 +9,9 @@ export default function Navbar() {
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const [notificaciones, setNotificaciones] = useState([]);
   const [expandedNotificationId, setExpandedNotificationId] = useState(null);
+  const [menuAbierto, setMenuAbierto] = useState(false); // Nuevo estado para menú móvil
   const menuRef = useRef(null);
+  const navbarRef = useRef(null);
 
   const linksPorCategoria = {
     periodista: [
@@ -60,6 +62,27 @@ export default function Navbar() {
     }
   }, [usuario]);
 
+  // Marcar notificación como leída
+  const marcarComoLeida = async (id) => {
+    try {
+      await fetch("http://localhost:5000/api/notificaciones/marcar-leida", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_notificacion: id })
+      });
+
+      // Actualizar estado local para que se quite el "no-leída" visualmente
+      setNotificaciones((prev) =>
+        prev.map((n) =>
+          n.id_notificacion === id ? { ...n, leido: true } : n
+        )
+      );
+    } catch (error) {
+      console.error("Error al marcar como leída:", error);
+    }
+  };
+
+
   // Cerrar el menú al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -71,13 +94,23 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Función para alternar el menú móvil
+  const toggleMenu = () => {
+    setMenuAbierto((prev) => !prev);
+  };
+
   return (
-    <nav className="navbar">
+    <nav className="navbar" ref={navbarRef}>
+      {/* Botón de menú hamburguesa para móviles */}
+      <button className="menu-toggle" onClick={toggleMenu}>
+        ☰
+      </button>
+
       <div className="nav-logo">
         <img src={logo} alt="Logo" />
       </div>
 
-      <ul className="nav-links">
+      <ul className={`nav-links ${menuAbierto ? 'active' : ''}`}>
         {links.map((l) =>
           l.tipo === 'notificaciones' ? (
             <li key="notificaciones" className="notificaciones-wrapper" ref={menuRef}>
@@ -97,25 +130,23 @@ export default function Navbar() {
                 <div className="dropdown-notificaciones">
                   {notificaciones.length > 0 ? (
                     notificaciones.map((n) => (
-                      <div key={n.id_notificacion} className="notificacion-item">
+                      <div key={n.id_notificacion} className={`notificacion-item ${!n.leido ? 'no-leida' : ''}`}>
                         <strong
-                          onClick={() =>
+                          onClick={() => {
                             setExpandedNotificationId(
-                              expandedNotificationId === n.id_notificacion
-                                ? null
-                                : n.id_notificacion
-                            )
-                          }
-                          style={{ cursor: "pointer" }}
+                              expandedNotificationId === n.id_notificacion ? null : n.id_notificacion
+                            );
+                            if (!n.leido) {
+                              marcarComoLeida(n.id_notificacion);
+                            }
+                          }}
                         >
                           {n.titulo}
                         </strong>
                         {expandedNotificationId === n.id_notificacion && (
                           <div className="notificacion-contenido">
                             <p>{n.mensaje}</p>
-                            <small>
-                              {new Date(n.fecha_creacion).toLocaleString()}
-                            </small>
+                            <small>{n.fecha}</small>
                           </div>
                         )}
                       </div>
@@ -128,7 +159,7 @@ export default function Navbar() {
             </li>
           ) : (
             <li key={l.to}>
-              <Link to={l.to}>{l.texto}</Link>
+              <Link to={l.to} onClick={() => setMenuAbierto(false)}>{l.texto}</Link>
             </li>
           )
         )}

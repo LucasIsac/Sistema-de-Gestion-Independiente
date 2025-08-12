@@ -4,10 +4,11 @@ import "../assets/styles/notificaciones.css";
 export default function NotificacionesInternas() {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [destinatario, setDestinatario] = useState("");
+  const [tipoDestino, setTipoDestino] = useState("usuario"); // usuario, grupo, todos
+  const [valorDestino, setValorDestino] = useState("");
 
   const generarNotificacion = async () => {
-    if (!titulo || !descripcion || !destinatario) {
+    if (!titulo || !descripcion || (tipoDestino !== "todos" && !valorDestino)) {
       alert("Por favor complete todos los campos");
       return;
     }
@@ -16,14 +17,15 @@ export default function NotificacionesInternas() {
       const response = await fetch("http://localhost:5000/api/notificaciones", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ titulo, descripcion, destinatario })
+        body: JSON.stringify({ titulo, mensaje: descripcion, tipoDestino, valorDestino })
       });
 
       if (response.ok) {
         alert("Notificación generada con éxito");
         setTitulo("");
         setDescripcion("");
-        setDestinatario("");
+        setValorDestino("");
+        setTipoDestino("usuario");
       } else {
         alert("Error al generar la notificación");
       }
@@ -52,13 +54,30 @@ export default function NotificacionesInternas() {
         placeholder="Ingrese la descripción"
       />
 
-      <label>Destinatario:</label>
-      <input
-        type="text"
-        value={destinatario}
-        onChange={(e) => setDestinatario(e.target.value)}
-        placeholder="Ingrese el destinatario"
-      />
+      <label>Enviar a:</label>
+      <select value={tipoDestino} onChange={(e) => setTipoDestino(e.target.value)}>
+        <option value="usuario">Usuario específico</option>
+        <option value="grupo">Grupo de usuarios</option>
+        <option value="todos">Todos los usuarios</option>
+      </select>
+
+      {tipoDestino === "usuario" && (
+        <input
+          type="number"
+          value={valorDestino}
+          onChange={(e) => setValorDestino(e.target.value)}
+          placeholder="ID del usuario"
+        />
+      )}
+
+      {tipoDestino === "grupo" && (
+        <input
+          type="text"
+          value={valorDestino}
+          onChange={(e) => setValorDestino(e.target.value)}
+          placeholder="Nombre del rol (ej: periodista)"
+        />
+      )}
 
       <button onClick={generarNotificacion}>Generar Notificación</button>
     </div>

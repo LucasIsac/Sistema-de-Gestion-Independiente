@@ -1,34 +1,71 @@
+/* Estilos base del navbar - Versión centrada */
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Centramos todo el contenido */
   background-color: #274a2a;
   padding: 0.7rem 1.5rem;
   color: #ffffff;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  gap: 2rem; /* Espacio entre elementos */
+}
+
+.nav-logo {
+  position: absolute;
+  left: 1.5rem; /* Posicionamos el logo a la izquierda */
 }
 
 .nav-logo img {
   height: 42px;
+  max-width: 100%;
+  transition: transform 0.3s ease;
 }
 
+.nav-logo img:hover {
+  transform: scale(1.05);
+}
+
+/* Menú de navegación centrado */
 .nav-links {
   display: flex;
-  gap: 1.1rem;
+  gap: 1.5rem; /* Más espacio entre enlaces */
   list-style: none;
-  position: relative;
+  margin: 0 auto; /* Centramos los enlaces */
+  padding: 0;
+  transition: all 0.3s ease;
 }
 
 .nav-links a {
   color: #d9dde0;
   text-decoration: none;
   font-weight: 500;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: color 0.3s ease;
+  white-space: nowrap;
 }
 
 .nav-links a:hover {
   color: #809f39;
 }
 
-/* --- Notificaciones --- */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #809f39;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* Notificaciones */
 .notificaciones-wrapper {
   position: relative;
 }
@@ -43,96 +80,51 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .btn-notificaciones:hover {
   color: #297c3e;
+  transform: translateY(-1px);
 }
 
 .dropdown-notificaciones {
   position: absolute;
-  top: 28px;
-  right: 0;
-  background-color: #ffffff;
-  color: #000000;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 250px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-}
-
-.dropdown-notificaciones div {
-  padding: 0.5rem;
-  border-bottom: 1px solid #eee;
-  font-size: 0.9rem;
-}
-
-.dropdown-notificaciones div:last-child {
-  border-bottom: none;
-}
-
-.dropdown-notificaciones div:hover {
-  background: #f5f5f5;
-}
-
-.nav-user {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.btn-logout {
-  background: transparent;
-  border: 1px solid #a9c3ba;
-  border-radius: 4px;
-  padding: 0.25rem 0.8rem;
-  color: #a9c3ba;
-  cursor: pointer;
-}
-
-.btn-logout:hover {
-  background-color: #1e311b;
-  color: #fff;
-}
-
-/* Contador de notificaciones (badge rojo) */
-.badge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: #e53935;
-  color: white;
-  font-size: 0.7rem;
-  font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 50%;
-}
-
-/* Contenedor de notificaciones */
-.dropdown-notificaciones {
-  position: absolute;
-  top: 32px;
+  top: 100%;
   right: 0;
   background-color: #ffffff;
   color: #000000;
   border: 1px solid #ccc;
   border-radius: 6px;
   width: 280px;
-  max-height: 300px; /* Máximo alto */
-  overflow-y: auto; /* Scroll si hay muchas */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  max-height: 70vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   z-index: 1000;
+  transform-origin: top right;
+  animation: fadeIn 0.2s ease-out;
 }
 
-/* Ítems de notificación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .notificacion-item {
-  padding: 0.6rem;
+  padding: 0.8rem;
   border-bottom: 1px solid #eee;
   font-size: 0.9rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  transition: background-color 0.2s ease;
 }
 
 .notificacion-item:last-child {
@@ -142,13 +134,15 @@
 .notificacion-item strong {
   cursor: pointer;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .notificacion-item:hover {
   background: #f5f5f5;
 }
 
-/* Estilo para no leídas */
 .notificacion-item.no-leida {
   background-color: #eef7ee;
   font-weight: bold;
@@ -164,7 +158,7 @@
 }
 
 .notificacion-contenido p {
-  margin: 0;
+  margin: 0 0 8px 0;
   font-size: 0.85rem;
   color: #333;
 }
@@ -172,4 +166,189 @@
 .notificacion-contenido small {
   font-size: 0.75rem;
   color: #777;
+  display: block;
+  text-align: right;
+}
+
+/* Badge de notificaciones */
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #e53935;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+}
+
+/* Área de usuario */
+.nav-user {
+  position: absolute;
+  right: 1.5rem; /* Posicionamos el usuario a la derecha */
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.nav-name {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #a9c3ba;
+  border-radius: 4px;
+  padding: 0.4rem 1rem;
+  color: #a9c3ba;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.btn-logout:hover {
+  background-color: #1e311b;
+  color: #fff;
+  border-color: #1e311b;
+}
+
+/* Menú hamburguesa para móviles */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .navbar {
+    gap: 1rem;
+    padding: 0.7rem 1rem;
+    justify-content: space-between; /* Cambiamos en tablet */
+  }
+  
+  .nav-logo {
+    position: static;
+    order: 1;
+  }
+  
+  .nav-links {
+    order: 3;
+    margin: 0;
+  }
+  
+  .nav-user {
+    position: static;
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    padding: 0.5rem 1rem;
+    justify-content: space-between;
+  }
+  
+  .nav-logo {
+    order: 1;
+  }
+  
+  .nav-user {
+    order: 2;
+  }
+  
+  .nav-links {
+    order: 4;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1rem;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    background-color: #274a2a;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+  
+  .nav-links.active {
+    max-height: 500px;
+    padding: 1rem 0;
+  }
+  
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .nav-links a {
+    padding: 0.8rem 1rem;
+    display: block;
+    white-space: normal;
+  }
+  
+  .dropdown-notificaciones {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  .menu-toggle {
+    display: block;
+    order: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-user {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-end;
+  }
+  
+  .nav-name {
+    font-size: 0.9rem;
+  }
+  
+  .btn-logout {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .nav-logo img {
+    height: 36px;
+  }
+  
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    justify-content: center;
+  }
+  
+  .nav-links li {
+    flex: 1 0 auto;
+    text-align: center;
+  }
+  
+  .nav-links a {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
 }
