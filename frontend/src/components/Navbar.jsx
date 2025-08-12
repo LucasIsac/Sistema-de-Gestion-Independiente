@@ -8,9 +8,9 @@ export default function Navbar() {
   const { usuario, logout } = useContext(AuthContext);
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const [notificaciones, setNotificaciones] = useState([]);
+  const [expandedNotificationId, setExpandedNotificationId] = useState(null);
   const menuRef = useRef(null);
 
-  // --- Links por categoría -----------------------------
   const linksPorCategoria = {
     periodista: [
       { to: '/notas', texto: 'Mis Artículos' },
@@ -36,26 +36,31 @@ export default function Navbar() {
       { to: '/gestion-usuario', texto: 'Gestión de Usuario' },
       { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
       { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
-      { tipo: 'notificaciones', texto: '' },
+      { tipo: 'notificaciones', texto: 'Notificaciones' },
       { to: '/ajustes', texto: 'Ajustes' },
     ],
   };
 
   const links = usuario ? linksPorCategoria[usuario.categoria] ?? [] : [];
 
-  // --- Cargar notificaciones (simulado, luego lo conectás al backend) ---
   useEffect(() => {
     if (usuario) {
-      // Simulación: después lo reemplazás con fetch a tu API
-      setNotificaciones([
-        'Nueva revisión asignada',
-        'Tu artículo fue aprobado',
-        'Mensaje de un editor',
-      ]);
+      const cargarNotificaciones = async () => {
+        try {
+          const res = await fetch(`http://localhost:5000/api/notificaciones/${usuario.id_usuario}`);
+          if (!res.ok) throw new Error('Error al cargar notificaciones');
+          const data = await res.json();
+          setNotificaciones(data);
+        } catch (err) {
+          console.error("❌ Error al obtener notificaciones:", err);
+        }
+      };
+
+      cargarNotificaciones();
     }
   }, [usuario]);
 
-  // --- Cerrar el menú al hacer clic fuera ---
+  // Cerrar el menú al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -80,12 +85,41 @@ export default function Navbar() {
                 className="btn-notificaciones"
                 onClick={() => setMostrarNotificaciones(!mostrarNotificaciones)}
               >
-                {l.texto} 🔔
+                🔔
+                {notificaciones.filter(n => !n.leido).length > 0 && (
+                  <span className="badge">
+                    {notificaciones.filter(n => !n.leido).length}
+                  </span>
+                )}
               </button>
+
               {mostrarNotificaciones && (
                 <div className="dropdown-notificaciones">
                   {notificaciones.length > 0 ? (
-                    notificaciones.map((n, i) => <div key={i}>{n}</div>)
+                    notificaciones.map((n) => (
+                      <div key={n.id_notificacion} className="notificacion-item">
+                        <strong
+                          onClick={() =>
+                            setExpandedNotificationId(
+                              expandedNotificationId === n.id_notificacion
+                                ? null
+                                : n.id_notificacion
+                            )
+                          }
+                          style={{ cursor: "pointer" }}
+                        >
+                          {n.titulo}
+                        </strong>
+                        {expandedNotificationId === n.id_notificacion && (
+                          <div className="notificacion-contenido">
+                            <p>{n.mensaje}</p>
+                            <small>
+                              {new Date(n.fecha_creacion).toLocaleString()}
+                            </small>
+                          </div>
+                        )}
+                      </div>
+                    ))
                   ) : (
                     <div>No tienes notificaciones</div>
                   )}
