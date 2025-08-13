@@ -35,7 +35,7 @@ export async function login(req, res) {
         id_usuario: user.id_usuario,
         nombre: user.nombre,
         apellido: user.apellido,
-        categoria: user.categoria,
+        categoria: user.categoria.toLowerCase(),
       },
     });
   } catch (err) {
