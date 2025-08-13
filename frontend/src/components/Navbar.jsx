@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import AuthContext from '../context/AuthContext.js';
+import { AuthContext } from '../context/AuthContext.js';
 import logo from '../assets/imagenes/logo.png';
 import '../assets/styles/navbar.css';
 
@@ -9,7 +9,8 @@ export default function Navbar() {
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const [notificaciones, setNotificaciones] = useState([]);
   const [expandedNotificationId, setExpandedNotificationId] = useState(null);
-  const [menuAbierto, setMenuAbierto] = useState(false); // Nuevo estado para menú móvil
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
 
@@ -71,7 +72,6 @@ export default function Navbar() {
         body: JSON.stringify({ id_notificacion: id })
       });
 
-      // Actualizar estado local para que se quite el "no-leída" visualmente
       setNotificaciones((prev) =>
         prev.map((n) =>
           n.id_notificacion === id ? { ...n, leido: true } : n
@@ -82,19 +82,70 @@ export default function Navbar() {
     }
   };
 
-
-  // Cerrar el menú al hacer clic fuera
+  // Cerrar menús al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setMostrarNotificaciones(false);
+      }
+      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+        setDrawerOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Función para alternar el menú móvil
+  // Componente UserDrawer
+  const UserDrawer = ({ isOpen, onClose }) => {
+    return (
+      <>
+        <div className={`user-drawer-overlay ${isOpen ? 'open' : ''}`} onClick={onClose} />
+        
+        <div className={`user-drawer ${isOpen ? 'open' : ''}`}>
+          <div className="user-drawer-header">
+            {usuario?.foto ? (
+              <img 
+                src={usuario.foto}
+                alt="Avatar"
+                className="user-drawer-avatar"
+              />
+            ) : (
+              <div className="user-drawer-avatar">
+                {usuario?.nombre.charAt(0)}
+                {usuario?.apellido.charAt(0)}
+              </div>
+            )}
+            <div className="user-drawer-info">
+              <h3>{usuario?.nombre} {usuario?.apellido}</h3>
+              <p>{usuario?.email}</p>
+            </div>
+          </div>
+
+          <div className="user-drawer-options">
+            <Link to="/perfil" className="user-drawer-item" onClick={onClose}>
+              <span>👤</span> Mi perfil
+            </Link>
+            <Link to="/ajustes" className="user-drawer-item" onClick={onClose}>
+              <span>⚙️</span> Configuración
+            </Link>
+            <Link to="/notificaciones" className="user-drawer-item" onClick={onClose}>
+              <span>🔔</span> Notificaciones
+            </Link>
+          </div>
+
+          <button className="user-drawer-logout" onClick={() => {
+            logout();
+            onClose();
+          }}>
+            Cerrar sesión
+          </button>
+        </div>
+      </>
+    );
+  };
+
+  // Función para alternar el menú hamburguesa
   const toggleMenu = () => {
     setMenuAbierto((prev) => !prev);
   };
@@ -167,14 +218,31 @@ export default function Navbar() {
 
       <div className="nav-user">
         {usuario ? (
-          <>
-            <span className="nav-name">
-              {usuario.nombre} {usuario.apellido}
-            </span>
-            <button onClick={logout} className="btn-logout">
-              Cerrar sesión
-            </button>
-          </>
+          <div className="user-dropdown-container">
+            <div
+              className="user-avatar"
+              onClick={() => setDrawerOpen(true)}
+              title="Abrir/cerrar menú usuario"
+            >
+              {usuario?.foto ? (
+                <img
+                  src={usuario.foto}
+                  alt="Avatar"
+                  className="avatar-image"
+                />
+              ) : (
+                <div className="avatar-initials">
+                  {usuario?.nombre.charAt(0)}
+                  {usuario?.apellido.charAt(0)}
+                </div>
+              )}
+            </div>
+
+            <UserDrawer
+              isOpen={drawerOpen}
+              onClose={() => setDrawerOpen(false)}
+            />
+          </div>
         ) : (
           <Link to="/login">Iniciar sesión</Link>
         )}

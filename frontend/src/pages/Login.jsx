@@ -1,7 +1,7 @@
 // src/pages/login.jsx
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext'; // Importar AuthContext
+import { AuthContext } from '../context/AuthContext.js'; // Importar AuthContext
 import LoginForm from '../components/LoginForm';
 import '../assets/styles/login.css';
 
