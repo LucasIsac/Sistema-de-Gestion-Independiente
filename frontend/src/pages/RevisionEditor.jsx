@@ -25,37 +25,69 @@ function RevisionEditor() {
     setComentarios({ ...comentarios, [id]: texto });
   };
 
- const guardarComentario = async (articuloId) => {
-  try {
-    const comentario = comentarios[articuloId];
-    const res = await fetch('http://localhost:5000/api/comentarios-editor', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        articulo_id: articuloId,
-        editor_id: usuario.id, // o usuario.id_usuario según tu caso
-        comentario,
-      }),
-    });
+  // Maneja la decisión del editor (Aprobar/Rechazar)
+  const manejarDecision = async (articuloId, nuevoEstado) => {
+    try {
+      const comentario = comentarios[articuloId];
 
-    if (res.ok) {
-      alert('Comentario guardado correctamente');
-      // Limpiar solo el comentario del artículo que se guardó
+      // 1️⃣ Guardar comentario
+      await fetch('http://localhost:5000/api/comentarios-editor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          articulo_id: articuloId,
+          editor_id: usuario.id,
+          comentario,
+        }),
+      });
+
+      // 2️⃣ Actualizar estado del artículo
+      await fetch('http://localhost:5000/api/articulos/estado', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          articulo_id: articuloId,
+          estado: nuevoEstado,
+        }),
+      });
+
+      alert(`Artículo ${nuevoEstado.toLowerCase()} correctamente`);
       setComentarios((prev) => ({ ...prev, [articuloId]: '' }));
-    } else {
-      alert('Error al guardar el comentario');
+
+      // 3️⃣ Opcional: Recargar lista
+      const res = await fetch('http://localhost:5000/api/articulos/en-revision');
+      const data = await res.json();
+      setArticulos(data);
+
+    } catch (error) {
+      console.error('Error al procesar decisión:', error);
     }
-  } catch (error) {
-    console.error('Error al guardar comentario:', error);
-  }
-};
+  };
 
 
   const verArchivo = (ruta) => {
-    window.open(ruta, '_blank');
+    const url = `http://localhost:5000${ruta}`;
+    const extension = ruta.split('.').pop().toLowerCase();
+
+    if (extension === 'pdf') {
+      // Si es PDF, abrirlo
+      window.open(url, '_blank');
+    } else {
+      // Si no es PDF, descargarlo directamente
+      descargarArchivo(ruta);
+    }
   };
+
+  const descargarArchivo = (ruta) => {
+    const url = `http://localhost:5000${ruta}`;
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = ruta.split('/').pop(); // Nombre del archivo
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
 
   return (
     <div className="contenedor-notas">
@@ -79,14 +111,13 @@ function RevisionEditor() {
                   onChange={(e) => handleComentarioChange(art.id_articulo, e.target.value)}
                   placeholder="Escribe tu comentario aquí..."
                 />
-                <button onClick={() => guardarComentario(art.id_articulo)}>💾 Guardar</button>
+                <button onClick={() => manejarDecision(art.id_articulo, 'Aprobado')}>✅ Aprobar</button>
+                <button onClick={() => manejarDecision(art.id_articulo, 'En revisión')}>❌ Rechazar</button>
               </td>
               <td>{art.nombre_periodista} {art.apellido_periodista}</td>
               <td>
                 <button onClick={() => verArchivo(art.ruta_archivo)}>👁 Ver</button>
-                <a href={art.ruta_archivo} download>
-                  <button>📥 Descargar</button>
-                </a>
+                <button onClick={() => descargarArchivo(art.ruta_archivo)}>📥 Descargar</button>
               </td>
             </tr>
           ))}

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';  // ✅ Correcto
+import { AuthContext } from '../context/AuthContext.js';// sin llaves
 import '../assets/styles/periodista-upload.css';
 import { useNavigate } from 'react-router-dom';
 
