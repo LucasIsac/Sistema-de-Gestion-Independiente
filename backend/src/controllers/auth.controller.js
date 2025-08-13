@@ -32,7 +32,7 @@ export async function login(req, res) {
     res.json({
       token,
       user: {
-        id: user.id_usuario,
+        id_usuario: user.id_usuario,
         nombre: user.nombre,
         apellido: user.apellido,
         categoria: user.categoria.toLowerCase(),

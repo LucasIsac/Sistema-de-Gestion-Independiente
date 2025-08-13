@@ -1,9 +1,9 @@
 import express from "express"
-import { uploadArticle, getMyArticles, downloadArticle, viewArticle } from "../controllers/file.controller.js"
+import { uploadArticle, getMyArticles, downloadArticle, viewArticle } from "../controllers/file.controllers.js"
 import { verifyToken } from "../middlewares/auth.middleware.js"
 import multer from "multer"
 import path from "path"
-import { deleteArticle } from "../controllers/file.controller.js"
+import { deleteArticle } from "../controllers/file.controllers.js"
 
 const router = express.Router()
 

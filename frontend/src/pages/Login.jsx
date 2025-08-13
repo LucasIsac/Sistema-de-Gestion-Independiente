@@ -1,7 +1,7 @@
 // src/pages/login.jsx
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext'; // Importar AuthContext
+import { AuthContext } from '../context/AuthContext.js'; // Importar AuthContext
 import LoginForm from '../components/LoginForm';
 import '../assets/styles/login.css';
 
@@ -12,7 +12,6 @@ function Login() {
 
   const handleLogin = async (credentials) => {
     try {
-      console.log('🔄 Enviando credenciales:', credentials);
       
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
@@ -30,10 +29,9 @@ function Login() {
       console.log('📡 Respuesta del servidor:', data);
       
       if (response.ok) {
-        console.log('✅ Login exitoso:', data.user);
-        // Guardar token y usuario
-        login(data.user, data.token);
-        
+        // Actualizar contexto (y localStorage dentro del provider)
+        login(data.user);
+
         // Redirigir según el rol del usuario
         const rol = data.user.categoria;
         console.log('Redirigiendo según el rol:', rol);

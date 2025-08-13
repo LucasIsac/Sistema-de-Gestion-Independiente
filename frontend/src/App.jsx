@@ -22,7 +22,7 @@ import RevisionEditor from './pages/RevisionEditor';
 function App() {
   return (
      <>
-      <Navbar /> {/* visible siempre */}
+      <Navbar /> 
       <Routes>
         <Route path="/" element={<Presentacion />} />
         <Route path="/login" element={<Login />} />
