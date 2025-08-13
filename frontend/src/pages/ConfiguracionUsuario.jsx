@@ -60,7 +60,7 @@ export default function ConfiguracionUsuario() {
       const formData = new FormData();
       formData.append('avatar', file);
 
-      const response = await fetch('http://localhost:5000/api/upload-avatar', {
+    const response = await fetch('http://localhost:5000/api/upload-avatar', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

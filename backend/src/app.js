@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import errorHandler from './middlewares/error.middleware.js';
 import articleRoutes from './routes/article.routes.js';
+import fileRoutes from './routes/file.routes.js';
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -23,6 +24,7 @@ app.use('/api', userRoutes);
 
 app.get('/test', (req, res) => res.json({ message: 'Test OK' }));
 app.use('/avatars', express.static(path.join(__dirname,'uploads/avatars')));
+app.use('/api',fileRoutes);
 
 app.use(errorHandler);   // siempre al final
 export default app;

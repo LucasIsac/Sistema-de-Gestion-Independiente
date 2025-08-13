@@ -5,10 +5,8 @@ import { guardarComentarioEditor } from '../controllers/comentario.controller.js
 
 const router = Router();
 
-// Ruta para obtener artículos "En revisión"
 router.get('/articulos/en-revision', obtenerArticulosEnRevision);
 
-// Ruta para guardar comentario del editor
 router.post('/comentarios-editor', guardarComentarioEditor);
 
 export default router;

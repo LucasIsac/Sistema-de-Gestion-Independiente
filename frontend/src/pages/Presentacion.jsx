@@ -10,11 +10,17 @@ function Presentacion() {
           <img src={logo} alt="Logo Diario" className="logo-presentacion" />
           <h1>Sistema de Gestión de Archivos</h1>
           <p>
-            Bienvenido al sistema interno del Diario El Independiente.
-            Este sistema permite a periodistas, fotógrafos y editores gestionar su trabajo de forma eficiente y colaborativa.
+            El Sistema de Gestión de Archivos del Diario El Independiente centraliza
+            el trabajo de periodistas, fotógrafos y editores en una plataforma única,
+            facilitando la organización y colaboración diaria.
           </p>
           <p>
-            Inicie sesión desde el botón ubicado arriba a la derecha para acceder a sus herramientas.
+            Permite subir, editar y revisar contenidos con control de versiones,
+            garantizando seguridad y trazabilidad en cada etapa del proceso editorial.
+          </p>
+          <p>
+            Con roles y permisos definidos, se optimizan los flujos de trabajo, reduciendo
+            tiempos y errores para entregar noticias de calidad a los lectores.
           </p>
         </div>
       </div>

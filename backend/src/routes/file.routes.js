@@ -1,28 +1,38 @@
 import express from 'express';
-import multer from 'multer';
+import { uploadAvatar } from '../config/multer.js'; // Asegúrate de que la ruta es correcta
 import { pool } from '../config/db.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { verifyToken as authMiddleware } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
-const upload = multer({ dest: 'uploads/avatars/' }); // Ajusta la ruta según tu estructura
 
-router.post('/upload-avatar', authMiddleware, upload.single('avatar'), async (req, res) => {
+// Esta es tu ruta existente con el mínimo cambio necesario
+router.post('/upload-avatar', authMiddleware, uploadAvatar.single('avatar'), async (req, res) => {
   try {
     const userId = req.userId;
-    const avatarPath = req.file.path;
+    
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No se proporcionó imagen' });
+    }
 
-    // Actualiza la URL del avatar en la base de datos
+    // Usamos filename directamente (multer ya le da un nombre único)
+    const avatarUrl = `/avatars/${req.file.filename}`;
+
     await pool.query(
-      'UPDATE usuarios SET avatar_url = $1 WHERE id_usuario = $2 RETURNING avatar_url',
-      [avatarPath, userId]
+      'UPDATE usuarios SET avatar_url = $1 WHERE id_usuario = $2',
+      [avatarUrl, userId]
     );
 
     res.json({ 
       success: true,
-      avatarUrl: `/avatars/${req.file.filename}` // Ruta pública accesible
+      avatarUrl: avatarUrl
     });
   } catch (error) {
     console.error('Error subiendo avatar:', error);
-    res.status(500).json({ success: false, message: 'Error al subir imagen' });
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error al subir imagen' 
+    });
   }
 });
+
+export default router;
