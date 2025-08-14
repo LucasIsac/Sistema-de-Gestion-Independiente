@@ -126,11 +126,8 @@ export default function Navbar() {
             <Link to="/perfil" className="user-drawer-item" onClick={onClose}>
               <span>👤</span> Mi perfil
             </Link>
-            <Link to="/ajustes" className="user-drawer-item" onClick={onClose}>
+            <Link to="/configuracion" className="user-drawer-item" onClick={onClose}>
               <span>⚙️</span> Configuración
-            </Link>
-            <Link to="/notificaciones" className="user-drawer-item" onClick={onClose}>
-              <span>🔔</span> Notificaciones
             </Link>
           </div>
 

@@ -21,6 +21,9 @@ export default function ConfiguracionUsuario() {
   // Cargar datos del usuario
   useEffect(() => {
     if (usuario && usuario.id_usuario) {
+
+      console.log('Token que se enviará:', token);
+      
       fetch(`http://localhost:5000/api/users/${usuario.id_usuario}`, {
         headers: {
           'Authorization': `Bearer ${token}`
