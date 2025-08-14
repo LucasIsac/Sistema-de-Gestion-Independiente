@@ -27,11 +27,9 @@ export default function Navbar() {
       { to: '/galeria', texto: 'Galería' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
       { to: '/ajustes', texto: 'Ajustes' },
-      { to: '/mensajes', texto: 'Mensajes' },
     ],
     editor: [
       { to: '/revisiones', texto: 'Revisiones' },
-      { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
     ],
     administrador: [
@@ -40,7 +38,6 @@ export default function Navbar() {
       { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
       { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/ajustes', texto: 'Ajustes' },
     ],
   };
 
