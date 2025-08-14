@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import '../assets/styles/EditorRevision.css';
+import '../assets/styles/notas.css';
 
 function RevisionEditor() {
   const [articulos, setArticulos] = useState([]);

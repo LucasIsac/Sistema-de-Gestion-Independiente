@@ -13,10 +13,7 @@ export function verifyToken(req, res, next) {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     console.log("🔍 DEBUG - Token decodificado:", decoded);
-    
-    // ✅ CAMBIO: extraer userId del token decodificado
-    req.userId = decoded.userId || decoded.id || decoded.user_id;
-    
+    req.userId = decoded.userId;
     console.log("🔍 DEBUG - req.userId asignado:", req.userId);
     next();
   } catch (err) {

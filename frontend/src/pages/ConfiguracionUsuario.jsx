@@ -19,107 +19,151 @@ export default function ConfiguracionUsuario() {
   const navigate = useNavigate();
 
   // Cargar datos del usuario
-  useEffect(() => {
-    if (usuario && usuario.id_usuario) {
-
-      console.log('Token que se enviará:', token);
-      
-      fetch(`http://localhost:5000/api/users/${usuario.id_usuario}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-        .then(res => {
-          if (!res.ok) throw new Error('Error al cargar datos');
-          return res.json();
-        })
-        .then(data => {
-          if (data.usuario) {
-            setFormData({
-              nombre: data.usuario.nombre || '',
-              apellido: data.usuario.apellido || '',
-              telefono: data.usuario.telefono || '',
-              email: data.usuario.email || ''
-            });
-            setError('');
-          } else {
-            setError('No se encontró información del usuario');
-          }
-        })
-        .catch(err => {
-          console.error('Error:', err);
-          setError('Error al cargar datos del usuario');
-        });
-    }
-  }, [usuario, token]);
-
-  const handleFotoClick = () => inputFotoRef.current.click();
-
-  const handleFotoChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      const formData = new FormData();
-      formData.append('avatar', file);
-
-      const response = await fetch('http://localhost:5000/api/upload-avatar', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setPreview(URL.createObjectURL(file));
-        setUsuario(prev => ({
-          ...prev,
-          avatar_url: data.avatarUrl
-        }));
-      } else {
-        throw new Error(data.message || 'Error al subir imagen');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setError('Error al actualizar la foto de perfil');
-    }
-  };
-
-  const handleUpdate = async () => {
+ useEffect(() => {
+  const loadUserData = async () => {
     try {
       if (!usuario?.id_usuario) {
-        throw new Error('ID de usuario no disponible');
+        setError('Usuario no identificado');
+        return;
+      }
+
+      console.log('Token actual:', token); // Depuración
+
+      if (!token) {
+        setError('No hay token de autenticación');
+        return;
       }
 
       const response = await fetch(`http://localhost:5000/api/users/${usuario.id_usuario}`, {
-        method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          ...formData,
-          password
-        })
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error al guardar');
+      if (response.status === 401) {
+        setError('Sesión expirada. Por favor, vuelve a iniciar sesión.');
+        // Opcional: redirigir al login
+        return;
       }
 
-      await response.json();
-      alert('¡Datos actualizados correctamente!');
-      setEditMode(false);
-      setPassword('');
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.usuario) {
+        setFormData({
+          nombre: data.usuario.nombre || '',
+          apellido: data.usuario.apellido || '',
+          telefono: data.usuario.telefono || '',
+          email: data.usuario.email || ''
+        });
+      }
     } catch (err) {
-      console.error('Error en handleUpdate:', err);
-      setError(err.message || 'Error al actualizar los datos');
+      console.error('Error al cargar datos:', err);
+      setError(err.message || 'Error al cargar información del usuario');
     }
   };
+
+  loadUserData();
+}, [usuario, token]);
+
+  const handleFotoClick = () => inputFotoRef.current.click();
+
+ const handleFotoChange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (!token) {
+    setError('No hay token de autenticación');
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    const response = await fetch('http://localhost:5000/api/upload-avatar', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    });
+
+    if (response.status === 401) {
+      throw new Error('Sesión expirada');
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Error al subir imagen');
+    }
+
+    setPreview(URL.createObjectURL(file));
+    setUsuario(prev => ({
+      ...prev,
+      avatar_url: data.avatarUrl
+    }));
+  } catch (error) {
+    console.error('Error al actualizar avatar:', error);
+    setError(error.message || 'Error al actualizar la foto de perfil');
+  }
+};
+
+  const handleUpdate = async () => {
+  try {
+    if (!usuario?.id_usuario) {
+      throw new Error('ID de usuario no disponible');
+    }
+
+    if (!token) {
+      throw new Error('No hay token de autenticación');
+    }
+
+    const response = await fetch(`http://localhost:5000/api/users/${usuario.id_usuario}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        ...formData,
+        password
+      })
+    });
+
+    if (response.status === 401) {
+      throw new Error('Sesión expirada. Por favor, vuelve a iniciar sesión.');
+    }
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Error al actualizar los datos');
+    }
+
+    // Actualizar el contexto con los nuevos datos
+    setUsuario(prev => ({
+      ...prev,
+      nombre: formData.nombre,
+      apellido: formData.apellido,
+      telefono: formData.telefono,
+      email: formData.email
+    }));
+
+    alert('¡Datos actualizados correctamente!');
+    setEditMode(false);
+    setPassword('');
+    setError('');
+  } catch (err) {
+    console.error('Error en handleUpdate:', err);
+    setError(err.message || 'Error al actualizar los datos');
+  }
+};
 
   return (
     <div className="configuracion-upload-container">

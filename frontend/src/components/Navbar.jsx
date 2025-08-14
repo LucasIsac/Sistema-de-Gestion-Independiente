@@ -5,7 +5,7 @@ import logo from '../assets/imagenes/logo.png';
 import '../assets/styles/navbar.css';
 
 export default function Navbar() {
-  const { usuario, logout } = useContext(AuthContext);
+  const { usuario, logout, token } = useContext(AuthContext);
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const [notificaciones, setNotificaciones] = useState([]);
   const [expandedNotificationId, setExpandedNotificationId] = useState(null);
@@ -47,10 +47,14 @@ export default function Navbar() {
   const links = usuario ? linksPorCategoria[usuario.categoria] ?? [] : [];
 
   useEffect(() => {
-    if (usuario) {
+    if (usuario && token) {
       const cargarNotificaciones = async () => {
         try {
-          const res = await fetch(`http://localhost:5000/api/notificaciones/${usuario.id_usuario}`);
+          const res = await fetch(`http://localhost:5000/api/notificaciones/${usuario.id_usuario}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
           if (!res.ok) throw new Error('Error al cargar notificaciones');
           const data = await res.json();
           setNotificaciones(data);
@@ -61,7 +65,7 @@ export default function Navbar() {
 
       cargarNotificaciones();
     }
-  }, [usuario]);
+  }, [usuario, token]);
 
   // Marcar notificación como leída
   const marcarComoLeida = async (id) => {
