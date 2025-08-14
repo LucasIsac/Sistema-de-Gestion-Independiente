@@ -18,10 +18,11 @@ import GestionUsuario from './pages/GestionUsuario';
 
 import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
 import RevisionEditor from './pages/RevisionEditor';
+import { AuthProvider } from './context/AuthProvider.jsx';
 
 function App() {
   return (
-     <>
+     <AuthProvider>
       <Navbar /> 
       <Routes>
         <Route path="/" element={<Presentacion />} />
@@ -68,7 +69,7 @@ function App() {
 
         <Route path="/no-autorizado" element={<h2>No autorizado</h2>} />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 

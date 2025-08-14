@@ -8,6 +8,7 @@ const router = Router();
 
 // Ruta para obtener artículos "En revisión"
 router.get('/articulos/en-revision', obtenerArticulosEnRevision);
+
 // Ruta para actualizar estado del artículo
 router.post('/articulos/estado', actualizarEstadoArticulo);
 

@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext';
-
+import React, { useState, useEffect } from 'react';
+import { AuthContext } from './AuthContext';
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [token, setToken] = useState(null);
@@ -9,24 +8,40 @@ export function AuthProvider({ children }) {
     const storedUser = localStorage.getItem('usuario');
     const storedToken = localStorage.getItem('token');
     
-    if (storedUser) setUsuario(JSON.parse(storedUser));
-    if (storedToken) setToken(storedToken);
+    if (storedUser && storedToken) {
+      try {
+        setUsuario(JSON.parse(storedUser));
+        setToken(storedToken);
+      } catch (error) {
+        console.error("Error parsing stored user data:", error);
+        logout();
+      }
+    }
   }, []);
 
   const login = (userData, authToken) => {
-    // Asegúrate que userData incluya id_usuario
+    if (!userData || !authToken) {
+      console.error("Login requires both userData and authToken");
+      return;
+    }
+
     const userToStore = {
-      id_usuario: userData.id || userData.id_usuario, // Compatibilidad con ambos formatos
+      id_usuario: userData.id_usuario,
       nombre: userData.nombre,
       apellido: userData.apellido,
       email: userData.email,
-      categoria: userData.categoria || userData.rol // Depende de tu backend
+      categoria: userData.categoria || userData.rol,
+      avatar_url: userData.avatar_url // Añade esto si es relevante
     };
 
-    localStorage.setItem('usuario', JSON.stringify(userToStore));
-    localStorage.setItem('token', authToken);
-    setUsuario(userToStore);
-    setToken(authToken);
+    try {
+      localStorage.setItem('usuario', JSON.stringify(userToStore));
+      localStorage.setItem('token', authToken);
+      setUsuario(userToStore);
+      setToken(authToken);
+    } catch (error) {
+      console.error("Error saving auth data to localStorage:", error);
+    }
   };
 
   const logout = () => {
@@ -37,7 +52,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ setUsuario , usuario, token, login, logout }}>
+    <AuthContext.Provider value={{ usuario, token, setUsuario, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
