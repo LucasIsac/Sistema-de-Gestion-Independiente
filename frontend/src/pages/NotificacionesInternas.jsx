@@ -14,7 +14,7 @@ export default function NotificacionesInternas() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/notificaciones", {
+      const response = await fetch("http://localhost:5000/api/notificaciones/crear", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ titulo, mensaje: descripcion, tipoDestino, valorDestino })
