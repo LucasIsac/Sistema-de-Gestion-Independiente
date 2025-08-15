@@ -21,12 +21,13 @@ export default function UsuarioTabla({ usuarios, onEditar, onEliminar }) {
               <td>{u.email}</td>
               <td>{u.rol}</td>
               <td>
-                <button onClick={() => onEditar(u)}>Editar</button>
+               <button className="editar" onClick={() => onEditar(u)}>✏️ Editar</button>
+
                 <button
                   className="eliminar"
                   onClick={() => onEliminar(u.id)}
                 >
-                  Eliminar
+                  Eliminar🗑️ 
                 </button>
               </td>
             </tr>

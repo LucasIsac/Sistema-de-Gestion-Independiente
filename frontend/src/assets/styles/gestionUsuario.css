@@ -1,7 +1,18 @@
+/* Contenedor principal debajo del navbar */
 .gestion-usuario {
+  background: white;
   padding: 20px;
+  border-radius: 8px;
+  border-left: 28px solid #064420; /* Línea verde oscuro a la izquierda */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 900px;
+
+  /* Centramos horizontalmente */
+  margin: 40px auto; /* margen arriba y abajo, y centrado automático */
 }
 
+/* Acciones */
 .acciones {
   display: flex;
   justify-content: space-between;
@@ -10,8 +21,26 @@
 
 .acciones input {
   padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
+.acciones button {
+  background-color: #064420; /* Verde oscuro */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.acciones button:hover {
+  background-color: #046307; /* Verde más vivo */
+}
+
+/* Tabla de usuarios */
 .tabla-usuarios {
   width: 100%;
   border-collapse: collapse;
@@ -21,6 +50,7 @@
 .tabla-usuarios td {
   border: 1px solid #ccc;
   padding: 8px;
+  text-align: left;
 }
 
 .tabla-usuarios th {
@@ -29,13 +59,23 @@
 
 .tabla-usuarios button {
   margin-right: 5px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
+/* Botón eliminar */
 .tabla-usuarios .eliminar {
   background-color: rgb(2, 58, 21);
   color: white;
 }
 
+.tabla-usuarios .eliminar:hover {
+  background-color: rgb(3, 80, 30);
+}
+
+/* Modal */
 .modal {
   position: fixed;
   top: 0;
@@ -48,6 +88,7 @@
   justify-content: center;
 }
 
+/* Formulario de usuario */
 .form-usuario {
   background: white;
   padding: 20px;
@@ -66,3 +107,16 @@
   display: flex;
   justify-content: space-between;
 }
+.tabla-usuarios .editar {
+  background-color: #064420; /* Verde oscuro, por ejemplo */
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tabla-usuarios .editar:hover {
+  background-color: #046307; /* Verde más vivo al pasar el mouse */
+}
+

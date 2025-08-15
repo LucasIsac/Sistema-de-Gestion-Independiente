@@ -60,7 +60,7 @@ export default function NotificacionesInternas() {
         placeholder="Ingrese el destinatario"
       />
 
-      <button onClick={generarNotificacion}>Generar Notificación</button>
+      <button onClick={generarNotificacion}>Enviar Mensaje 📩</button>
     </div>
   );
 }

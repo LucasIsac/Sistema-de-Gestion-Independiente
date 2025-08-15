@@ -15,7 +15,7 @@ export default function RoleForm({ onAddRole }) {
 
   return (
     <form onSubmit={handleSubmit} className="role-form">
-      <h3>Agregar Rol</h3>
+      <h3>Nuevo rol</h3>
       <input
         type="text"
         placeholder="Nombre"

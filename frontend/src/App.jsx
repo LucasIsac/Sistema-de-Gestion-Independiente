@@ -9,7 +9,6 @@ import Login from './pages/Login';
 import Recuperar from './pages/Recuperar';
 import ResetPassword from './pages/ResetPassword';
 import Notas from './pages/Notas';
-import Galeria from './pages/Galeria';
 import ConfiguracionUsuario from './pages/ConfiguracionUsuario'; 
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
@@ -17,6 +16,12 @@ import GestionRoles from './pages/GestionRoles';
 import GestionCategorias from './pages/GestionCategorias';
 import NotificacionesInternas from './pages/NotificacionesInternas';
 import GestionUsuario from './pages/GestionUsuario';
+
+import GaleriaPersonal from './pages/GaleriaPersonal';
+import Revisiones from './pages/Revisiones';
+import GestionEditor from './pages/GestionEditor';
+import Categorias from './pages/Categorias';
+import EnviadosRevision from './pages/EnviadosRevision';
 
 function App() {
   return (
@@ -37,8 +42,17 @@ function App() {
           <Route path="/notas" element={<Notas />} />
         </Route>
 
+         <Route element={<ProtectedRoute allow={['periodista']} />}>
+          <Route path="/enviados-revision" element={<EnviadosRevision />} />
+        </Route>
+
+
+         <Route element={<ProtectedRoute allow={['fotografo']} />}>
+          <Route path="/fotografo-upload" element={<FotografoUpload />} />
+        </Route>
+
         <Route element={<ProtectedRoute allow={['fotografo']} />}>
-          <Route path="/galeria" element={<Galeria />} />
+          <Route path="/galeriaPersonal" element={<GaleriaPersonal />} />
         </Route>
 
         <Route element={<ProtectedRoute allow={['periodista', 'fotografo', 'editor']} />}>
@@ -53,12 +67,24 @@ function App() {
          <Route path="/gestion-categorias" element={<GestionCategorias />} />
           </Route>
 
-          <Route element={<ProtectedRoute allow={['administrador']} />}>
+          <Route element={<ProtectedRoute allow={['administrador', 'editor']} />}>
          <Route path="/notificaciones-internas" element={<NotificacionesInternas />} />
           </Route>
 
           <Route element={<ProtectedRoute allow={['administrador']} />}>
          <Route path="/gestion-usuario" element={<GestionUsuario />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allow={['editor']} />}>
+         <Route path="/revisiones" element={<Revisiones />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allow={['editor']} />}>
+         <Route path="/gestion-editor" element={<GestionEditor />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allow={['editor']} />}>
+         <Route path="/categorias" element={<Categorias />} />
           </Route>
 
 

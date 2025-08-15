@@ -1,30 +1,49 @@
+/* Contenedor principal */
 .gestion-categorias-container {
   max-width: 800px;
-  margin: auto;
+  margin: 40px auto; /* Centramos horizontal y damos margen arriba */
   padding: 20px;
+  border-left: 28px solid #064420; /* Línea verde oscuro a la izquierda */
+  background-color: #ffffff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  border-radius: 8px;
+  font-family: Arial, sans-serif; /* Tipografía consistente */
 }
 
+/* Formulario */
 .categoria-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   margin-bottom: 20px;
 }
 
 .categoria-form input,
 .categoria-form textarea {
   padding: 8px;
-  font-size: 14px;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit; /* Asegura que use la misma tipografía */
 }
 
 .categoria-form button {
-  background: #127e42;
+  background: #0a6131; /* Verde oscuro */
   color: white;
   padding: 8px;
   border: none;
   cursor: pointer;
+  border-radius: 4px;
+  font-family: inherit;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
+.categoria-form button:hover {
+  background-color: #0f6c38; /* Verde más intenso al pasar el mouse */
+}
+
+/* Tabla de categorías */
 .categoria-table {
   width: 100%;
   border-collapse: collapse;
@@ -33,7 +52,9 @@
 .categoria-table th,
 .categoria-table td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px;
+  text-align: left;
+  font-family: inherit;
 }
 
 .categoria-table th {

@@ -1,31 +1,39 @@
+/* --- Tipografía general --- */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #274a2a;
-  padding: 0.7rem 1.5rem;
+  padding: 1rem 2rem; /* Más espacio */
   color: #ffffff;
+  font-family: 'Poppins', 'Segoe UI', sans-serif; /* Tipografía más moderna */
+  font-weight: 600; /* Más rellena */
+  letter-spacing: 0.3px;
 }
 
+/* Logo */
 .nav-logo img {
-  height: 42px;
+  height: 48px; /* Un poco más grande */
 }
 
+/* Links */
 .nav-links {
   display: flex;
-  gap: 1.1rem;
+  gap: 1.5rem;
   list-style: none;
   position: relative;
 }
 
 .nav-links a {
-  color: #d9dde0;
+  color: #f0f4f2;
   text-decoration: none;
-  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.25s ease, transform 0.2s ease;
 }
 
 .nav-links a:hover {
-  color: #809f39;
+  color: #9dcf6d;
+  transform: translateY(-1px);
 }
 
 /* --- Notificaciones --- */
@@ -37,35 +45,37 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #d9dde0;
-  font-weight: 500;
+  color: #f0f4f2;
   font-size: 1rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  transition: color 0.25s ease, transform 0.2s ease;
 }
 
 .btn-notificaciones:hover {
-  color: #297c3e;
+  color: #9dcf6d;
+  transform: translateY(-1px);
 }
 
 .dropdown-notificaciones {
   position: absolute;
-  top: 28px;
+  top: 35px;
   right: 0;
   background-color: #ffffff;
   color: #000000;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 250px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  width: 260px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
   z-index: 1000;
 }
 
 .dropdown-notificaciones div {
-  padding: 0.5rem;
-  border-bottom: 1px solid #eee;
+  padding: 0.7rem 1rem;
   font-size: 0.9rem;
+  border-bottom: 1px solid #eee;
 }
 
 .dropdown-notificaciones div:last-child {
@@ -73,25 +83,28 @@
 }
 
 .dropdown-notificaciones div:hover {
-  background: #f5f5f5;
+  background: #f7f7f7;
 }
 
+/* Usuario */
 .nav-user {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 1rem;
+  font-size: 0.95rem;
 }
 
 .btn-logout {
-  background: transparent;
-  border: 1px solid #a9c3ba;
-  border-radius: 4px;
-  padding: 0.25rem 0.8rem;
-  color: #a9c3ba;
+  background: #386e3a;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  color: #ffffff;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.25s ease;
 }
 
 .btn-logout:hover {
-  background-color: #1e311b;
-  color: #fff;
+  background-color: #2d5c30;
 }

@@ -1,0 +1,58 @@
+.categorias-container {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #2f4f2f;
+}
+
+.categorias-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.categoria-card {
+  background: #4caf50;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.categoria-card:hover {
+  background: #388e3c;
+}
+
+.categoria-card.seleccionada {
+  border: 2px solid #1b5e20;
+}
+
+.archivos-container {
+  margin-top: 25px;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.archivos-container h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.archivo-item {
+  background: #e8f5e9;
+  padding: 8px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
