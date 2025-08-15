@@ -44,7 +44,7 @@ function Login() {
         } else if (rol === 'administrador') {
           navigate('/gestion-roles');
         } else if (rol === 'editor') {
-          navigate('/editor');
+          navigate('/revisiones');
         } else {
           navigate('/dashboard'); // ruta por defecto
         }
