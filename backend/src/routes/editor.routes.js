@@ -7,6 +7,7 @@ import { actualizarEstadoArticulo } from '../controllers/articulo.controller.js'
 const router = Router();
 
 router.get('/articulos/en-revision', obtenerArticulosEnRevision);
+
 // Ruta para actualizar estado del artículo
 router.post('/articulos/estado', actualizarEstadoArticulo);
 

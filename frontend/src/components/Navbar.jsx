@@ -5,7 +5,7 @@ import logo from '../assets/imagenes/logo.png';
 import '../assets/styles/navbar.css';
 
 export default function Navbar() {
-  const { usuario, logout } = useContext(AuthContext);
+  const { usuario, logout, token } = useContext(AuthContext);
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const [notificaciones, setNotificaciones] = useState([]);
   const [expandedNotificationId, setExpandedNotificationId] = useState(null);
@@ -27,11 +27,9 @@ export default function Navbar() {
       { to: '/galeria', texto: 'Galería' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
       { to: '/ajustes', texto: 'Ajustes' },
-      { to: '/mensajes', texto: 'Mensajes' },
     ],
     editor: [
       { to: '/revisiones', texto: 'Revisiones' },
-      { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
     ],
     administrador: [
@@ -40,17 +38,20 @@ export default function Navbar() {
       { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
       { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/ajustes', texto: 'Ajustes' },
     ],
   };
 
   const links = usuario ? linksPorCategoria[usuario.categoria] ?? [] : [];
 
   useEffect(() => {
-    if (usuario) {
+    if (usuario && token) {
       const cargarNotificaciones = async () => {
         try {
-          const res = await fetch(`http://localhost:5000/api/notificaciones/${usuario.id_usuario}`);
+          const res = await fetch(`http://localhost:5000/api/notificaciones/${usuario.id_usuario}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
           if (!res.ok) throw new Error('Error al cargar notificaciones');
           const data = await res.json();
           setNotificaciones(data);
@@ -61,7 +62,7 @@ export default function Navbar() {
 
       cargarNotificaciones();
     }
-  }, [usuario]);
+  }, [usuario, token]);
 
   // Marcar notificación como leída
   const marcarComoLeida = async (id) => {
@@ -126,11 +127,8 @@ export default function Navbar() {
             <Link to="/perfil" className="user-drawer-item" onClick={onClose}>
               <span>👤</span> Mi perfil
             </Link>
-            <Link to="/ajustes" className="user-drawer-item" onClick={onClose}>
+            <Link to="/configuracion" className="user-drawer-item" onClick={onClose}>
               <span>⚙️</span> Configuración
-            </Link>
-            <Link to="/notificaciones" className="user-drawer-item" onClick={onClose}>
-              <span>🔔</span> Notificaciones
             </Link>
           </div>
 

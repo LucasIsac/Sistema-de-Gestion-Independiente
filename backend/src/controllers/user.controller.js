@@ -115,3 +115,13 @@ export async function actualizarUsuario(req, res) {
     });
   }
 }
+
+export async function obtenerUsuarios(req, res) {
+  try {
+    const { rows } = await pool.query('SELECT id_usuario as id, nombre, apellido, email FROM usuarios');
+    res.json(rows);
+  } catch (err) {
+    console.error('💥 obtenerUsuarios:', err);
+    res.status(500).json({ message: 'Error al obtener usuarios' });
+  }
+}
