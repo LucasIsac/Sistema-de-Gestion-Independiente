@@ -36,14 +36,17 @@ function Login() {
       console.log('Redirigiendo según el rol:', rol);
       
       switch(rol) {
-        case 'Periodista':
+        case 'periodista':
           navigate('/notas');
           break;
-        case 'Fotografo':
+        case 'fotografo':
           navigate('/galeria');
           break;
-        case 'Editor':
+        case 'editor':
           navigate('/editor');
+          break;
+        case 'administrador': // Estandarizar con el backend
+          navigate('/gestion-usuario');
           break;
         default:
           navigate('/');

@@ -1,68 +1,169 @@
 .gestion-usuario {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
+}
+
+.gestion-usuario-header {
+  margin-bottom: 30px;
+}
+
+.gestion-usuario-header h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.gestion-usuario-header p {
+  color: #666;
+  margin: 0;
 }
 
 .acciones {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 15px;
 }
 
-.acciones input {
-  padding: 5px;
+.busqueda-container {
+  display: flex;
+  flex: 1;
+  max-width: 500px;
 }
 
+.busqueda-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px 0 0 4px;
+  font-size: 14px;
+}
+
+.btn-buscar {
+  padding: 0 15px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-buscar:hover {
+  background-color: #e0e0e0;
+}
+
+.btn-buscar i {
+  color: #555;
+}
+
+.btn-nuevo {
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s;
+}
+
+.btn-nuevo:hover {
+  background-color: #45a049;
+}
+
+.btn-nuevo i {
+  font-size: 14px;
+}
+
+/* Estilos para la tabla (manteniendo los tuyos y añadiendo mejoras) */
 .tabla-usuarios {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .tabla-usuarios th,
 .tabla-usuarios td {
-  border: 1px solid #ccc;
-  padding: 8px;
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
 }
 
 .tabla-usuarios th {
-  background-color: #f4f4f4;
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.tabla-usuarios tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.tabla-usuarios tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Botones de acción en la tabla */
+.acciones-celda {
+  display: flex;
+  gap: 8px;
 }
 
 .tabla-usuarios button {
-  margin-right: 5px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.tabla-usuarios .eliminar {
-  background-color: rgb(2, 58, 21);
+.tabla-usuarios button i {
+  font-size: 12px;
+}
+
+.tabla-usuarios .editar {
+  background-color: #2196F3;
   color: white;
 }
 
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.tabla-usuarios .editar:hover {
+  background-color: #0b7dda;
 }
 
-.form-usuario {
-  background: white;
+.tabla-usuarios .eliminar {
+  background-color: #f44336;
+  color: white;
+}
+
+.tabla-usuarios .eliminar:hover {
+  background-color: #da190b;
+}
+
+/* Estados */
+.cargando, .error {
   padding: 20px;
-  border-radius: 5px;
-  width: 300px;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 50px;
 }
 
-.form-usuario input,
-.form-usuario select {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 5px;
+.cargando {
+  color: #555;
 }
 
-.acciones-form {
-  display: flex;
-  justify-content: space-between;
+.error {
+  color: #d32f2f;
+  background-color: #fde8e8;
+  border-radius: 4px;
+  padding: 15px;
 }

@@ -16,10 +16,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Middlewares globales
 app.use(cors());
+app.use(express.json()); // Middleware para parsear JSON
+
 app.use('/api/articles',articleRoutes);
 
 app.get('/', (_req, res) => res.send('Backend Diario Virtual funcionando 👌'));
-app.use(express.json());
 app.use('/api/auth', authRoutes); // Rutas de autenticación
 app.use('/api', userRoutes); // Rutas de usuarios
 app.use('/api', rolesRoutes); // Rutas de roles
