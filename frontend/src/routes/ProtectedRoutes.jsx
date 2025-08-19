@@ -4,10 +4,19 @@ import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';  // ✅ Correcto
 
 export default function ProtectedRoute({ allow }) {
-  const { usuario } = useContext(AuthContext);
-  if (!usuario)         return <Navigate to="/login" replace />;
-  if (!allow.map(r => r.toLowerCase()).includes(usuario.categoria.toLowerCase()))
-  return <Navigate to="/no-autorizado" replace />;
+  const { usuario, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return <div>Cargando sesión...</div>; // O un spinner de carga
+  }
+
+  if (!usuario) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!allow.map(r => r.toLowerCase()).includes(usuario.categoria.toLowerCase())) {
+    return <Navigate to="/no-autorizado" replace />;
+  }
 
   return <Outlet />;
 }

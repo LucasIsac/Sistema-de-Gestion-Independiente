@@ -1,22 +1,22 @@
-//Registrar usuario
 import { Router } from 'express';
-import { registrarUsuario } from '../controllers/user.controller.js';
-
-const router = Router();
-
 import {
-  actualizarUsuario,
+  registrarUsuario,
+  obtenerUsuarios,
   obtenerUsuario,
-  obtenerUsuarios
+  actualizarUsuario,
+  eliminarUsuario  // Asegúrate de importar esta función del controlador
 } from '../controllers/user.controller.js';
 import { verifyToken } from '../middlewares/auth.middleware.js';
 
-// Agrega estas rutas nuevas:
-router.get('/usuarios', obtenerUsuarios);
-router.get('/users/:id', verifyToken, obtenerUsuario);
-router.put('/users/:id', verifyToken, actualizarUsuario);
+const router = Router();
 
-// Mantén tu ruta existente:
-router.post('/users', registrarUsuario);
+// Rutas públicas
+router.post('/usuario', registrarUsuario);  // Registro puede ser público
+
+// Rutas protegidas (requieren autenticación)
+router.get('/usuarios', verifyToken, obtenerUsuarios);  // Obtener todos los usuarios
+router.get('/usuarios/:id', verifyToken, obtenerUsuario);  // Obtener un usuario específico
+router.put('/usuarios/:id', verifyToken, actualizarUsuario);  // Actualizar usuario
+router.delete('/usuarios/:id', verifyToken, eliminarUsuario);  // Eliminar usuario
 
 export default router;
