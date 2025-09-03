@@ -10,6 +10,7 @@ import errorHandler from './middlewares/error.middleware.js';
 import editorRoutes from './routes/editor.routes.js';
 import notificacionesRoutes from "./routes/notificaciones.routes.js";
 import articleRoutes from './routes/article.routes.js';
+import mensajesRoutes from './routes/mensajes.routes.js';
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -27,6 +28,7 @@ app.use('/api', rolesRoutes); // Rutas de roles
 app.use('/api', editorRoutes); // Rutas de editor
 app.use('/archivos', express.static('archivos')); //archivos está en la raíz del proyecto
 app.use("/api/notificaciones", notificacionesRoutes); // Rutas de notificaciones
+app.use("/api/mensajes", mensajesRoutes); // Mensajes 1 A 1
 app.get('/test', (req, res) => res.json({ message: 'Test OK' }));
 app.use('/avatars', express.static(path.join(__dirname,'uploads/avatars')));
 
