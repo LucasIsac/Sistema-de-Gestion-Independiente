@@ -120,4 +120,21 @@ Article.delete = async (id) => {
     return rowCount > 0;
 };
 
+Article.findByStatus = async (estado) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT a.*, u.nombre as periodista_nombre, u.apellido as periodista_apellido 
+       FROM articulos a 
+       JOIN usuarios u ON a.periodista_id = u.id_usuario 
+       WHERE a.estado = $1 
+       ORDER BY a.fecha_creacion DESC`,
+      [estado]
+    );
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 export default Article;

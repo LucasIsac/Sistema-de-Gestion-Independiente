@@ -17,16 +17,17 @@ export default function Navbar() {
   const linksPorCategoria = {
     periodista: [
       { to: '/notas', texto: 'Mis Artículos' },
-      { to: '/enviados-revision', texto: 'Enviados a Revisión' },
+      { to: '/ArticulosEnRevision', texto: 'Enviados a Revisión' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/ajustes', texto: 'Ajustes' },
       { to: '/mensajes', texto: 'Mensajes' },
-      { to: '/periodista-upload', texto: 'Archivo' },
+      { to: '/periodista-upload', texto: 'Subir Articulo' },
     ],
     fotografo: [
       { to: '/galeria', texto: 'Galería' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
       { to: '/ajustes', texto: 'Ajustes' },
+      { to: '/FotografoUpload', texto: 'Subir foto' },
+
     ],
     editor: [
       { to: '/revisiones', texto: 'Revisiones' },

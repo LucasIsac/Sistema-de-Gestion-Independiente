@@ -34,7 +34,7 @@ export default function ConfiguracionUsuario() {
         return;
       }
 
-      const response = await fetch(`http://localhost:5000/api/users/${usuario.id_usuario}`, {
+      const response = await fetch(`http://localhost:5000/api/usuarios/${usuario.id_usuario}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -54,13 +54,13 @@ export default function ConfiguracionUsuario() {
       const data = await response.json();
       
       if (data.usuario) {
-        setFormData({
-          nombre: data.usuario.nombre || '',
-          apellido: data.usuario.apellido || '',
-          telefono: data.usuario.telefono || '',
-          email: data.usuario.email || ''
-        });
-      }
+      setFormData({
+        nombre: data.usuario.nombre || '',
+        apellido: data.usuario.apellido || '',
+        telefono: data.usuario.telefono || '',
+        email: data.usuario.email || ''
+      });
+}
     } catch (err) {
       console.error('Error al cargar datos:', err);
       setError(err.message || 'Error al cargar información del usuario');
@@ -124,7 +124,7 @@ export default function ConfiguracionUsuario() {
       throw new Error('No hay token de autenticación');
     }
 
-    const response = await fetch(`http://localhost:5000/api/users/${usuario.id_usuario}`, {
+    const response = await fetch(`http://localhost:5000/api/usuarios/${usuario.id_usuario}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -148,12 +148,12 @@ export default function ConfiguracionUsuario() {
 
     // Actualizar el contexto con los nuevos datos
     setUsuario(prev => ({
-      ...prev,
-      nombre: formData.nombre,
-      apellido: formData.apellido,
-      telefono: formData.telefono,
-      email: formData.email
-    }));
+        ...prev,
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        telefono: formData.telefono,
+        email: formData.email
+      }));
 
     alert('¡Datos actualizados correctamente!');
     setEditMode(false);

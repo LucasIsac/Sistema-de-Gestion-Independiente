@@ -1,29 +1,68 @@
 import React, { useRef, useState } from 'react';
 import '../assets/styles/fotografo-upload.css';
+import axios from 'axios';
 
 export default function FotografoUpload() {
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState(''); // ← Agregar descripción
   const [preview, setPreview] = useState(null);
   const [fileName, setFileName] = useState('');
   const [archivoSubido, setArchivoSubido] = useState(false);
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+  const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState('');
   const inputFileRef = useRef();
+  const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
 
   const handleUploadClick = () => inputFileRef.current.click();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setArchivoSeleccionado(file);
       setPreview(URL.createObjectURL(file));
       setFileName(title.trim() !== '' ? title.trim() : file.name);
       setMostrarConfirmacion(true);
     }
   };
 
-  const confirmarSubida = () => {
-    setArchivoSubido(true);
-    setMostrarConfirmacion(false);
-    setFileName(title.trim() !== '' ? title.trim() : fileName);
+  const confirmarSubida = async () => {
+    if (!archivoSeleccionado || !title.trim()) {
+      setError('Título y archivo son obligatorios');
+      return;
+    }
+
+    setCargando(true);
+    setError('');
+
+    try {
+      const formData = new FormData();
+      formData.append('archivo', archivoSeleccionado);
+      formData.append('titulo', title);
+      formData.append('descripcion', description);
+      // Agrega más campos si necesitas: categoria_id, es_global, etc.
+
+      const token = localStorage.getItem('token');
+      
+      const response = await axios.post('http://localhost:5000/api/fotos/upload', formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      if (response.status === 201) {
+        setArchivoSubido(true);
+        setMostrarConfirmacion(false);
+        setFileName(title);
+        alert('✅ Foto subida exitosamente');
+      }
+    } catch (error) {
+      console.error('Error al subir foto:', error);
+      setError('Error al subir la foto. Intenta nuevamente.');
+    } finally {
+      setCargando(false);
+    }
   };
 
   const cancelarSubida = () => {
@@ -32,6 +71,9 @@ export default function FotografoUpload() {
     setArchivoSubido(false);
     setMostrarConfirmacion(false);
     setTitle('');
+    setDescription('');
+    setArchivoSeleccionado(null);
+    setError('');
   };
 
   const editarEntrega = () => {
@@ -48,6 +90,10 @@ export default function FotografoUpload() {
     }
   };
 
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+
   return (
     <div className="fotografo-upload-container">
       <div className="upload-header">FOTÓGRAFO</div>
@@ -57,33 +103,67 @@ export default function FotografoUpload() {
         <main className="upload-main">
           <div className="upload-form">
             <div className="left-section">
-              <label htmlFor="title">Título</label>
+              <label htmlFor="title">Título *</label>
               <input
                 type="text"
                 id="title"
                 value={title}
                 onChange={handleTitleChange}
                 placeholder="Ingresar título"
-                disabled={archivoSubido}
+                disabled={archivoSubido || cargando}
               />
 
-              <button className="upload-button" onClick={handleUploadClick}>
-                Subir archivo
+              <label htmlFor="description">Descripción</label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={handleDescriptionChange}
+                placeholder="Descripción de la foto (opcional)"
+                disabled={archivoSubido || cargando}
+                rows="3"
+              />
+
+              <button 
+                className="upload-button" 
+                onClick={handleUploadClick}
+                disabled={cargando}
+              >
+                {cargando ? 'Subiendo...' : 'Subir archivo'}
               </button>
+              
               <input
                 type="file"
                 accept="image/*"
                 ref={inputFileRef}
                 onChange={handleFileChange}
                 hidden
+                disabled={cargando}
               />
+
+              {error && (
+                <div className="error-message">
+                  ❌ {error}
+                </div>
+              )}
 
               {mostrarConfirmacion && (
                 <div className="confirm-box">
                   <p>¿Está seguro de subir este archivo?</p>
                   <div className="confirm-buttons">
-                    <button className="yes-btn" onClick={confirmarSubida}>Sí</button>
-                    <button className="no-btn" onClick={cancelarSubida}>No</button>
+                    <button 
+                      className="yes-btn" 
+                      onClick={confirmarSubida}
+                      disabled={cargando}
+                    >
+                      {cargando ? 'Subiendo...' : 'Sí'}
+                    </button>
+                    <button 
+                      className="no-btn" 
+                      onClick={cancelarSubida}
+                      disabled={cargando}
+                    >
+                      No
+                    </button>
                   </div>
                 </div>
               )}
@@ -91,8 +171,12 @@ export default function FotografoUpload() {
               {archivoSubido && (
                 <div className="upload-box moodle-box">
                   <div className="moodle-buttons">
-                    <button className="edit-btn" onClick={editarEntrega}>EDITAR ENTREGA</button>
-                    <button className="delete-btn" onClick={cancelarSubida}>BORRAR ENTREGA</button>
+                    <button className="edit-btn" onClick={editarEntrega}>
+                      EDITAR ENTREGA
+                    </button>
+                    <button className="delete-btn" onClick={cancelarSubida}>
+                      BORRAR ENTREGA
+                    </button>
                   </div>
 
                   <table className="status-table">
@@ -108,13 +192,14 @@ export default function FotografoUpload() {
                       <tr>
                         <td><strong>Archivos enviados</strong></td>
                         <td>
-                          <a href={preview} target="_blank" rel="noreferrer">{fileName}</a><br />
-                          <span className="fecha-envio">{new Date().toLocaleString()}</span>
+                          <a href={preview} target="_blank" rel="noreferrer">
+                            {fileName}
+                          </a>
+                          <br />
+                          <span className="fecha-envio">
+                            {new Date().toLocaleString()}
+                          </span>
                         </td>
-                      </tr>
-                      <tr>
-                        <td><strong>Comentarios de la entrega</strong></td>
-                        <td><a href="#">Comentarios (0)</a></td>
                       </tr>
                     </tbody>
                   </table>
@@ -128,7 +213,9 @@ export default function FotografoUpload() {
                 {preview ? (
                   <img src={preview} alt="Vista previa" />
                 ) : (
-                  <span className="preview-placeholder">No hay archivo cargado</span>
+                  <span className="preview-placeholder">
+                    No hay archivo cargado
+                  </span>
                 )}
               </div>
             </div>

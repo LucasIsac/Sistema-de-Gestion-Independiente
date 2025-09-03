@@ -1,9 +1,14 @@
-//Registrar usuario
+//src/controllers/user.controller.js
 import bcrypt from 'bcryptjs';
 import {
   findByUsuario,
   findByEmail,
   createUser,
+  findAll,
+  findById,
+  updateUser,
+  deleteUser,
+  findRoles ,
 } from '../models/user.model.js';
 
 const saltRounds = 10;
@@ -37,8 +42,17 @@ export async function registrarUsuario(req, res) {
       rolId: rol,
     });
 
-    // 5. Respuesta (sin contraseña)
-    res.status(201).json({ message: 'Usuario creado', usuario: nuevo });
+    res.status(201).json({ 
+      message: 'Usuario creado', 
+      usuario: {
+        id: nuevo.id_usuario,
+        nombre: nuevo.nombre,
+        apellido: nuevo.apellido,
+        email: nuevo.email,
+        telefono: nuevo.telefono,
+        rol_id: nuevo.rol_id,
+      }
+    });
   } catch (err) {
     console.error('💥 registrarUsuario:', err);
     res.status(500).json({ message: 'Error del servidor' });
@@ -123,5 +137,36 @@ export async function obtenerUsuarios(req, res) {
   } catch (err) {
     console.error('💥 obtenerUsuarios:', err);
     res.status(500).json({ message: 'Error al obtener usuarios' });
+  }
+}
+
+export async function eliminarUsuario(req, res) {
+  const { id } = req.params;
+
+  try {
+    const rowCount = await deleteUser(id);
+
+    if (rowCount === 0) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    res.json({ message: 'Usuario eliminado correctamente' });
+  } catch (err) {
+    console.error('💥 eliminarUsuario:', err);
+    res.status(500).json({ message: 'Error al eliminar usuario' });
+  }
+}
+
+export async function obtenerRoles(req, res) {
+  try {
+    const roles = await findRoles();
+    console.log('✅ Roles obtenidos:', roles);
+    res.json(roles);
+  } catch (err) {
+    console.error('💥 obtenerRoles:', err);
+    res.status(500).json({ 
+      message: 'Error al obtener roles',
+      error: err.message 
+    });
   }
 }

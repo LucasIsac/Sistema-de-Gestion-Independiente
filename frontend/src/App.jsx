@@ -8,13 +8,14 @@ import Login from './pages/Login';
 import Recuperar from './pages/Recuperar';
 import ResetPassword from './pages/ResetPassword';
 import Notas from './pages/Notas';
-import Galeria from './pages/Galeria';
+import Galeria from './pages/GaleriaPersonal.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 import GestionRoles from './pages/GestionRoles';
 import GestionCategorias from './pages/GestionCategorias';
 import NotificacionesInternas from './pages/NotificacionesInternas';
 import GestionUsuario from './pages/GestionUsuario';
+import ArticulosEnRevision from './pages/ArticulosEnRevision.jsx';
 
 import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
 import RevisionEditor from './pages/RevisionEditor';
@@ -31,9 +32,15 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/configuracion" element={<ConfiguracionUsuario />} /> {/* ✅ NUEVA RUTA */}
 
+
         <Route element={<ProtectedRoute allow={['periodista']} />}>
           <Route path="/periodista-upload" element={<PeriodistaUpload />} />
         </Route>
+
+        <Route element={<ProtectedRoute allow={['periodista']} />}>
+         <Route path="/ArticulosEnRevision" element={<ArticulosEnRevision/>} /> {}
+        </Route>
+
 
         <Route element={<ProtectedRoute allow={['periodista']} />}>
           <Route path="/notas" element={<Notas />} />
@@ -41,6 +48,9 @@ function App() {
 
         <Route element={<ProtectedRoute allow={['fotografo']} />}>
           <Route path="/galeria" element={<Galeria />} />
+          <Route path="/FotografoUpload" element={<FotografoUpload />} />
+
+          
         </Route>
 
         <Route element={<ProtectedRoute allow={['periodista', 'fotografo', 'editor']} />}>

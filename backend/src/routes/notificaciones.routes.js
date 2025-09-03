@@ -1,3 +1,4 @@
+//src/routes/notificaciones.routes.js
 import { Router } from "express";
 import {
     obtenerNotificaciones,

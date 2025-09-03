@@ -1,3 +1,4 @@
+//src/controllers/notificacion.controller.js
 import { pool } from "../config/db.js";
 
 // Crear notificación (1 usuario, grupo o todos)
