@@ -153,7 +153,7 @@ function Notas() {
     <div className="periodista-upload-container">
       <div className="upload-header">
         Mis Artículos
-        <button className="btn-nuevo" onClick={() => navigate('/subir-articulo')}>
+        <button className="btn-nuevo" onClick={() => navigate('/periodista-upload')}>
           + Nuevo Artículo
         </button>
       </div>
