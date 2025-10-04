@@ -1,6 +1,5 @@
 /* Contenedor principal */
 .notificaciones-container {
-<<<<<<< HEAD
   max-width: 650px;
   margin: 40px auto; /* centrado horizontal y separación del navbar */
   padding: 40px;
@@ -10,15 +9,6 @@
   font-family: Arial, sans-serif; /* tipografía uniforme */
   font-size: 16px; 
   box-shadow: 0px 4px 12px rgba(0,0,0,0.1); /* sombra suave */
-=======
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #f4f4f4;
-  border-radius: 10px;
-  box-sizing: border-box;
-  width: 90%;
->>>>>>> origin/main
 }
 
 /* Título */
@@ -43,13 +33,6 @@
 .notificaciones-container textarea,
 .notificaciones-container select {
   width: 100%;
-<<<<<<< HEAD
-  padding: 15px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-family: inherit;
-=======
   padding: 0.8rem;
   margin-top: 0.3rem;
   border: 1px solid #ccc;
@@ -70,7 +53,6 @@
   background-repeat: no-repeat;
   background-position: right 0.8rem center;
   background-size: 1rem;
->>>>>>> origin/main
 }
 
 /* Botón */
@@ -83,24 +65,20 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-<<<<<<< HEAD
   font-family: inherit;
   font-weight: bold;
   font-size: 16px;
-=======
+
   font-size: 1rem;
   font-weight: bold;
->>>>>>> origin/main
   transition: background-color 0.3s ease;
 }
 
 /* Hover del botón */
 .notificaciones-container button:hover {
-<<<<<<< HEAD
-  background: #02612a; /* verde más intenso */
-=======
+
   background: #023826;
->>>>>>> origin/main
+
 }
 
 /* Media Queries para responsive design */

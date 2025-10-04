@@ -7,7 +7,6 @@ import Login from './pages/Login';
 import Recuperar from './pages/Recuperar';
 import ResetPassword from './pages/ResetPassword';
 import Notas from './pages/Notas';
-
 import ConfiguracionUsuario from './pages/ConfiguracionUsuario'; 
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import GestionRoles from './pages/GestionRoles';
@@ -20,9 +19,6 @@ import Revisiones from './pages/Revisiones';
 import GestionEditor from './pages/GestionEditor';
 import Categorias from './pages/Categorias';
 import EnviadosRevision from './pages/EnviadosRevision';
-
-import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
-import RevisionEditor from './pages/RevisionEditor';
 import { AuthProvider } from './context/AuthProvider.jsx';
 
 function App() {
