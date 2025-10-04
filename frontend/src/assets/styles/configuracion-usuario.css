@@ -157,3 +157,64 @@ input[type="text"]:focus {
 .guardar-btn {
   margin-top: 1.5rem;
 }
+
+/* Nuevos estilos para integrar funcionalidad */
+.info-section {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.info-group {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.info-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #1e311b;
+  font-size: 1.1rem;
+}
+
+.info-value {
+  padding: 1rem;
+  background-color: #f8f9f8;
+  border-radius: 12px;
+  color: #1e311b;
+  border: 1px solid #dde5d5;
+}
+
+.password-note {
+  display: block;
+  margin-top: 0.5rem;
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.error-message {
+  color: #d32f2f;
+  background: #ffebee;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+.cancel-btn {
+  background-color: #f44336 !important;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.button-group button {
+  flex: 1;
+  min-width: 120px;
+}

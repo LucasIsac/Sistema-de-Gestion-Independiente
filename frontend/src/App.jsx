@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import FotografoUpload from './pages/FotografoUpload';
@@ -8,7 +7,8 @@ import Login from './pages/Login';
 import Recuperar from './pages/Recuperar';
 import ResetPassword from './pages/ResetPassword';
 import Notas from './pages/Notas';
-import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
+
+import ConfiguracionUsuario from './pages/ConfiguracionUsuario'; 
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import GestionRoles from './pages/GestionRoles';
 import GestionCategorias from './pages/GestionCategorias';
@@ -21,10 +21,14 @@ import GestionEditor from './pages/GestionEditor';
 import Categorias from './pages/Categorias';
 import EnviadosRevision from './pages/EnviadosRevision';
 
+import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
+import RevisionEditor from './pages/RevisionEditor';
+import { AuthProvider } from './context/AuthProvider.jsx';
+
 function App() {
   return (
-    <>
-      <Navbar /> {/* visible siempre */}
+    <AuthProvider>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Presentacion />} />
         <Route path="/login" element={<Login />} />
@@ -86,7 +90,7 @@ function App() {
 
         <Route path="/no-autorizado" element={<h2>No autorizado</h2>} />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 

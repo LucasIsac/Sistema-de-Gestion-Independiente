@@ -24,18 +24,18 @@ export async function login(req, res) {
       return res.status(401).json({ message: "Credenciales inválidas" });
 
     const token = jwt.sign(
-      { id: user.id_usuario, categoria: user.categoria },
+      { userId: user.id_usuario, categoria: user.categoria },
       JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     res.json({
       token,
       user: {
-        id: user.id_usuario,
+        id_usuario: user.id_usuario,
         nombre: user.nombre,
         apellido: user.apellido,
-        categoria: user.categoria,
+        categoria: user.categoria.toLowerCase(),
       },
     });
   } catch (err) {
