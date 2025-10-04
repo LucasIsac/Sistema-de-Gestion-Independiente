@@ -1,25 +1,20 @@
-//src/routes/user.routes.js
 import { Router } from 'express';
 import {
   registrarUsuario,
   obtenerUsuarios,
   obtenerUsuario,
   actualizarUsuario,
-  eliminarUsuario,  // Asegúrate de importar esta función del controlador
-  obtenerRoles,
+  obtenerUsuario,
+  obtenerUsuarios
 } from '../controllers/user.controller.js';
 import { verifyToken } from '../middlewares/auth.middleware.js';
 
-const router = Router();
+// Agrega estas rutas nuevas:
+router.get('/usuarios', obtenerUsuarios);
+router.get('/users/:id', verifyToken, obtenerUsuario);
+router.put('/users/:id', verifyToken, actualizarUsuario);
 
-// Rutas públicas
-router.post('/usuarios', registrarUsuario); // Registro puede ser público
-
-// Rutas protegidas (requieren autenticación)
-router.get('/usuarios', verifyToken, obtenerUsuarios);  // Obtener todos los usuarios
-router.get('/usuarios/:id', verifyToken, obtenerUsuario);  // Obtener un usuario específico
-router.put('/usuarios/:id', verifyToken, actualizarUsuario);  // Actualizar usuario
-router.delete('/usuarios/:id', verifyToken, eliminarUsuario);  // Eliminar usuario
-router.get('/roles', obtenerRoles);
+// Mantén tu ruta existente:
+router.post('/users', registrarUsuario);
 
 export default router;

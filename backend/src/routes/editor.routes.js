@@ -4,9 +4,11 @@ import { obtenerArticulosEnRevision } from '../controllers/articulo.controller.j
 import { guardarComentarioEditor} from '../controllers/comentario.controller.js';
 import { actualizarEstadoArticulo } from '../controllers/articulo.controller.js';
 
+
 const router = Router();
 
 router.get('/articulos/en-revision', obtenerArticulosEnRevision);
+
 
 // Ruta para actualizar estado del artículo
 router.post('/articulos/estado', actualizarEstadoArticulo);

@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import '../assets/styles/notas.css';
+import '../assets/styles/revisioneditor.css';
 
 function RevisionEditor() {
   const [articulos, setArticulos] = useState([]);
@@ -44,7 +44,7 @@ function RevisionEditor() {
   const manejarDecision = async (articuloId, decision) => {
     try {
       const comentario = comentarios[articuloId] || '';
-      const endpoint = decision === 'approve' 
+      const endpoint = decision === 'approve'
         ? `http://localhost:5000/api/articles/${articuloId}/approve`
         : `http://localhost:5000/api/articles/${articuloId}/reject`;
 
@@ -54,7 +54,10 @@ function RevisionEditor() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ comentario }),
+        body: JSON.stringify({
+          articulo_id: articuloId,
+          comentario,
+        }),
       });
 
       const data = await response.json();
@@ -65,6 +68,8 @@ function RevisionEditor() {
 
       alert(data.message || `Artículo ${decision === 'approve' ? 'aprobado' : 'rechazado'} correctamente`);
       setComentarios((prev) => ({ ...prev, [articuloId]: '' }));
+
+      // Recargar lista
       fetchArticulosEnRevision();
     } catch (error) {
       console.error('Error al procesar decisión:', error);
@@ -72,7 +77,6 @@ function RevisionEditor() {
     }
   };
 
-  // Función verArchivo actualizada
   const verArchivo = async (id) => {
     try {
       const response = await fetch(`http://localhost:5000/api/articles/view/${id}`, {
@@ -143,7 +147,7 @@ function RevisionEditor() {
   return (
     <div className="contenedor-notas">
       <h2>Artículos en Revisión</h2>
-      
+
       {articulos.length === 0 ? (
         <div className="no-articulos">
           <p>No hay artículos en revisión en este momento.</p>

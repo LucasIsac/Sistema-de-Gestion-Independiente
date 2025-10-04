@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import useAuth from "../context/useAuth.js";
 import "../assets/styles/notificaciones.css";
 
 export default function NotificacionesInternas() {
@@ -10,6 +11,7 @@ export default function NotificacionesInternas() {
   const [roles, setRoles] = useState([]);
   const [busquedaUsuario, setBusquedaUsuario] = useState("");
   const [cargando, setCargando] = useState(false);
+  const { token } = useAuth();
 
   // Cargar datos iniciales
   useEffect(() => {
@@ -17,8 +19,13 @@ export default function NotificacionesInternas() {
       try {
         setCargando(true);
         
+        const headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        };
+
         // Obtener usuarios
-        const resUsuarios = await fetch("http://localhost:5000/api/usuarios");
+        const resUsuarios = await fetch("http://localhost:5000/api/usuarios", { headers });
         const dataUsuarios = await resUsuarios.json();
         // Limpiar datos de usuarios
         const usuariosLimpios = dataUsuarios.map(user => ({
@@ -30,7 +37,7 @@ export default function NotificacionesInternas() {
         setUsuarios(usuariosLimpios);
         
         // Obtener roles
-        const resRoles = await fetch("http://localhost:5000/api/roles");
+        const resRoles = await fetch("http://localhost:5000/api/roles", { headers });
         const dataRoles = await resRoles.json();
         setRoles(dataRoles);
         
@@ -41,8 +48,10 @@ export default function NotificacionesInternas() {
       }
     };
     
-    cargarDatos();
-  }, []);
+    if (token) {
+      cargarDatos();
+    }
+  }, [token]);
 
   // Filtrar usuarios según búsqueda (ahora segura contra valores null/undefined)
   const usuariosFiltrados = usuarios.filter(usuario => {
@@ -62,7 +71,10 @@ export default function NotificacionesInternas() {
     try {
       const response = await fetch("http://localhost:5000/api/notificaciones/crear", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ 
           titulo, 
           mensaje: descripcion, 

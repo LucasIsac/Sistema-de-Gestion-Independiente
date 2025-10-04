@@ -3,19 +3,29 @@ import { AuthContext } from './AuthContext';
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const logout = () => {
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('token');
+    setUsuario(null);
+    setToken(null);
+  };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('usuario');
-    const storedToken = localStorage.getItem('token');
-    
-    if (storedUser && storedToken) {
-      try {
+    try {
+      const storedUser = localStorage.getItem('usuario');
+      const storedToken = localStorage.getItem('token');
+      
+      if (storedUser && storedToken) {
         setUsuario(JSON.parse(storedUser));
         setToken(storedToken);
-      } catch (error) {
-        console.error("Error parsing stored user data:", error);
-        logout();
       }
+    } catch (error) {
+      console.error("Error parsing stored user data:", error);
+      logout();
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -44,15 +54,8 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('token');
-    setUsuario(null);
-    setToken(null);
-  };
-
   return (
-    <AuthContext.Provider value={{ usuario, token, setUsuario, login, logout }}>
+    <AuthContext.Provider value={{ usuario, token, loading, setUsuario, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

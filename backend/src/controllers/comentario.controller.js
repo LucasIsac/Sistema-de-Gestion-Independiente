@@ -1,3 +1,4 @@
+
 import { pool } from "../config/db.js";
 import { crearNotificacion } from "./notificacion.controller.js";
 

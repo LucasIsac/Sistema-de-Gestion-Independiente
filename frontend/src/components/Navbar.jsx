@@ -16,29 +16,29 @@ export default function Navbar() {
 
   const linksPorCategoria = {
     periodista: [
+      { to: '/periodista-upload', texto: 'Nuevo Artículo' },
       { to: '/notas', texto: 'Mis Artículos' },
-      { to: '/ArticulosEnRevision', texto: 'Enviados a Revisión' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/mensajes', texto: 'Mensajes' },
-      { to: '/periodista-upload', texto: 'Subir Articulo' },
+      { to: '/enviados-revision', texto: 'Enviados a Revisión' },
+      { tipo:'notificaciones', texto: '' },
+      { to: '/ajustes', texto: 'Ajustes' },
+  
     ],
     fotografo: [
       { to: '/galeria', texto: 'Galería' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
       { to: '/ajustes', texto: 'Ajustes' },
-      { to: '/FotografoUpload', texto: 'Subir foto' },
-
     ],
     editor: [
       { to: '/revisiones', texto: 'Revisiones' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
     ],
     administrador: [
-      { to: '/gestion-roles', texto: 'Gestión de Roles' },
-      { to: '/gestion-usuario', texto: 'Gestión de Usuario' },
-      { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
-      { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
+      { to: '/gestion-usuario', texto: 'Usuarios' },
+      { to: '/gestion-roles', texto: 'Roles' },
+      { to: '/gestion-categorias', texto: 'Categorías' },
+      { to: '/notificaciones-internas', texto: 'Enviar Mensajes' },
+      { tipo: 'notificaciones', texto: '' },
+      { to: '/ajustes', texto: 'Ajustes' },
     ],
   };
 
