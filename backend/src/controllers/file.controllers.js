@@ -737,3 +737,37 @@ export const getNotificacionesUsuario = async (req, res) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
+
+export const getArticulosFiltrados = async (req, res) => {
+  const { categoria } = req.query;
+  
+  try {
+    let query = `
+      SELECT 
+        a.*, 
+        c.nombre as categoria_nombre,
+        u.nombre as autor_nombre, 
+        u.apellido as autor_apellido,
+        u.usuario as autor_usuario
+      FROM articulos a
+      JOIN categorias c ON a.categoria_id = c.id_categoria
+      JOIN usuarios u ON a.periodista_id = u.id_usuario
+      WHERE 1=1
+    `;
+    
+    const params = [];
+    
+    if (categoria) {
+      params.push(parseInt(categoria));
+      query += ` AND a.categoria_id = $${params.length}`;
+    }
+    
+    query += ` ORDER BY a.fecha_creacion DESC`;
+    
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('❌ Error al obtener artículos filtrados:', error);
+    res.status(500).json({ message: "Error al obtener artículos" });
+  }
+};

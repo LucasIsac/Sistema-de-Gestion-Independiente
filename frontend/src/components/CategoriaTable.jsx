@@ -13,11 +13,11 @@ export default function CategoriaTable({ categorias, onDelete }) {
       <tbody>
         {categorias.length > 0 ? (
           categorias.map((cat) => (
-            <tr key={cat.id}>
+            <tr key={cat.id_categoria}>
               <td>{cat.nombre}</td>
               <td>{cat.descripcion}</td>
               <td>
-                <button onClick={() => onDelete(cat.id)}>Eliminar</button>
+                <button onClick={() => onDelete(cat.id_categoria)}>Eliminar</button>
               </td>
             </tr>
           ))

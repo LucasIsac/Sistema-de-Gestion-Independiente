@@ -1,24 +1,30 @@
-// src/controllers/auth.controller.js
+// 📁 controllers/auth.controller.js
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { pool } from "../config/db.js";
 import { transporter } from "../service/mail.service.js";
+
 const JWT_SECRET = process.env.JWT_SECRET || "un_secreto_muy_seguro_para_jwt";
 const saltRounds = 10;
 
+// 🔹 LOGIN
 export async function login(req, res) {
   const { email, password } = req.body;
 
   try {
     const { rows } = await pool.query(
       `SELECT u.id_usuario, u.nombre, u.apellido, u.contraseña, r.nombre AS categoria
-      FROM usuarios u
-      JOIN roles r ON u.rol_id = r.id_rol
-      WHERE u.email = $1`, [email]);
+       FROM usuarios u
+       JOIN roles r ON u.rol_id = r.id_rol
+       WHERE u.email = $1`,
+      [email]
+    );
+
     if (!rows.length)
       return res.status(401).json({ message: "Credenciales inválidas" });
 
     const user = rows[0];
+
     const match = await bcrypt.compare(password, user.contraseña);
     if (!match)
       return res.status(401).json({ message: "Credenciales inválidas" });
@@ -26,7 +32,7 @@ export async function login(req, res) {
     const token = jwt.sign(
       { userId: user.id_usuario, categoria: user.categoria },
       JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "8h" }
     );
 
     res.json({
@@ -44,6 +50,7 @@ export async function login(req, res) {
   }
 }
 
+// 🔹 FORGOT PASSWORD
 export async function forgotPassword(req, res) {
   const { email } = req.body;
   try {
@@ -85,6 +92,7 @@ export async function forgotPassword(req, res) {
   }
 }
 
+// 🔹 RESET PASSWORD
 export async function resetPassword(req, res) {
   const { token, newPassword } = req.body;
   try {

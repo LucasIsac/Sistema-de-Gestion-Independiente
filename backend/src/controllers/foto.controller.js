@@ -89,7 +89,7 @@ export const getFotosGlobales = async (req, res) => {
        LEFT JOIN usuarios u ON f.fotografo_id = u.id_usuario
        LEFT JOIN categorias c ON f.categoria_id = c.id_categoria
        WHERE f.es_global = true
-       ORDER BY f.fecha_creacion DESC`
+       ORDER BY f.fecha DESC`
     );
     
     res.json(result.rows);
@@ -267,5 +267,39 @@ export const viewFoto = async (req, res) => {
   } catch (error) {
     console.error("❌ Error al visualizar foto:", error);
     res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
+export const getFotosFiltradas = async (req, res) => {
+  const { categoria } = req.query;
+  
+  try {
+    let query = `
+      SELECT 
+        f.*, 
+        c.nombre as categoria_nombre,
+        u.nombre as fotografo_nombre, 
+        u.apellido as fotografo_apellido,
+        u.usuario as fotografo_usuario
+      FROM fotos f
+      JOIN categorias c ON f.categoria_id = c.id_categoria
+      JOIN usuarios u ON f.fotografo_id = u.id_usuario
+      WHERE f.es_global = true
+    `;
+    
+    const params = [];
+    
+    if (categoria) {
+      params.push(parseInt(categoria));
+      query += ` AND f.categoria_id = $${params.length}`;
+    }
+    
+    query += ` ORDER BY f.fecha DESC`;
+    
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('❌ Error al obtener fotos filtradas:', error);
+    res.status(500).json({ message: "Error al obtener fotos" });
   }
 };

@@ -291,3 +291,107 @@
   .galeria-container { padding: 10px; }
   .botones-accion { flex-direction: column; }
 }
+
+/* Estilos específicos para galería global */
+.galeria-grid-global {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.tarjeta-foto-global {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta-foto-global:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.imagen-container-global {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.tarjeta-info-global {
+  padding: 1.2rem;
+}
+
+.fotografo-info-small {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0.5rem 0;
+  font-style: italic;
+}
+
+.categoria-tag {
+  display: inline-block;
+  background: #007bff;
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  margin: 0.5rem 0;
+}
+
+.botones-accion-global {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.btn-descargar-global {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.btn-descargar-global:hover {
+  background: #218838;
+}
+
+.modal-content-global {
+  max-width: 90vw;
+  max-height: 90vh;
+  width: auto;
+}
+
+.modal-info-global {
+  background: white;
+  padding: 1.5rem;
+}
+
+.filtro-categoria {
+  margin: 1rem 0;
+  padding: 0 1rem;
+}
+
+.filtro-categoria label {
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+.filtro-categoria select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.subtitulo-galeria {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
