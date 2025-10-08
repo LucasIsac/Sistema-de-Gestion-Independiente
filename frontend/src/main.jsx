@@ -11,7 +11,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter> 
       <AuthProvider>
-        <CategoriasProvider> {/* 👈 AHORA SÍ ESTÁ IMPORTADO */}
+        <CategoriasProvider> 
           <App />
         </CategoriasProvider>
       </AuthProvider>

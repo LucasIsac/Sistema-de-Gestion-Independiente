@@ -1,238 +1,144 @@
-import React, { useState, useEffect, useContext } from 'react';
+// 📁 src/pages/GaleriaGlobal.jsx - VERSIÓN FUSIONADA CON FILTROS Y CONTEXT
+import React, { useState, useEffect } from 'react';
+import { useCategorias } from '../context/CategoriasContext.jsx';
 import '../assets/styles/galeria.css';
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
-
-const ModalFotoGlobal = ({ foto, isOpen, onClose }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content-global" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>×</button>
-        <img 
-          src={`http://localhost:5000/${foto.ruta_archivo.replace(/\\/g, '/')}`} 
-          alt={foto.titulo}
-          className="modal-image"
-        />
-        <div className="modal-info-global">
-          <h3>{foto.titulo}</h3>
-          <p>{foto.descripcion}</p>
-          <div className="fotografo-info">
-            <strong>Fotógrafo:</strong> {foto.fotografo_nombre} {foto.fotografo_apellido}
-          </div>
-          <div className="categoria-info">
-            <strong>Categoría:</strong> {foto.categoria_nombre || 'Sin categoría'}
-          </div>
-          <span className="modal-fecha">
-            Subida el: {new Date(foto.fecha).toLocaleDateString()}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const FotoItemGlobal = ({ foto, onDownload, onView }) => {
-  const [imageStatus, setImageStatus] = useState('loading');
-
-  return (
-    <div className="tarjeta-foto-global">
-      <div className="imagen-container-global" onClick={() => onView(foto)}>
-        {imageStatus === 'loading' && (
-          <div className="skeleton-loader">
-            <div className="spinner"></div>
-          </div>
-        )}
-        
-        <img 
-          src={`http://localhost:5000/${foto.ruta_archivo.replace(/\\/g, '/')}`}
-          alt={foto.titulo}
-          className={`foto-imagen ${imageStatus === 'loaded' ? 'loaded' : ''}`}
-          onLoad={() => setImageStatus('loaded')}
-          onError={() => setImageStatus('error')}
-        />
-
-        {imageStatus === 'error' && (
-          <div className="error-placeholder">
-            <span>❌ Error al cargar</span>
-          </div>
-        )}
-
-        <div className="overlay-global">
-          <span className="view-text">👁️ Ver</span>
-        </div>
-      </div>
-      
-      <div className="tarjeta-info-global">
-        <h3 className="foto-titulo">{foto.titulo}</h3>
-        <p className="foto-descripcion">{foto.descripcion}</p>
-        
-        <div className="fotografo-info-small">
-          📸 Por: {foto.fotografo_nombre} {foto.fotografo_apellido}
-        </div>
-        
-        {foto.categoria_nombre && (
-          <div className="categoria-tag">
-            {foto.categoria_nombre}
-          </div>
-        )}
-
-        <div className="botones-accion-global">
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              onDownload(foto.id_foto, foto.nombre_original);
-            }}
-            className="btn-descargar-global"
-          >
-            ⬇️ Descargar
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const GaleriaGlobal = () => {
+  const { categorias } = useCategorias(); // 🔹 Obtener categorías desde el Context
   const [fotos, setFotos] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [fotoSeleccionada, setFotoSeleccionada] = useState(null);
-  const [modalAbierto, setModalAbierto] = useState(false);
-  const { token } = useContext(AuthContext);
-  const [filtroCategoria, setFiltroCategoria] = useState('');
-  const [categorias, setCategorias] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [categoriaFiltro, setCategoriaFiltro] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    cargarFotos();
-    cargarCategorias();
-   
-  }, []);
-
-  const cargarFotos = async () => {
-  try {
-    // ✅ SIN token para rutas públicas
-    const response = await axios.get('http://localhost:5000/api/fotos/globales');
-    setFotos(response.data);
-  } catch (error) {
-    console.error('Error al cargar fotos globales:', error);
-  } finally {
-    setCargando(false);
-  }
-};
-
- const cargarCategorias = async () => {
-  try {
-    // ✅ SIN token para rutas públicas  
-    const response = await axios.get('http://localhost:5000/api/categorias');
-    setCategorias(response.data);
-  } catch (error) {
-    console.error('Error al cargar categorías:', error);
-  }
-};
-
-  const handleDescargar = async (fotoId, nombreOriginal) => {
+  // 🔹 Cargar fotos desde la API, opcionalmente filtradas por categoría
+  const cargarFotos = async (categoriaId = '') => {
     try {
-      const config = token ? { 
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: 'blob'
-      } : { responseType: 'blob' };
-
-      const response = await axios.get(`http://localhost:5000/api/fotos/download/${fotoId}`, config);
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = nombreOriginal || `foto_${fotoId}.jpg`;
-      document.body.appendChild(link);
-      link.click();
+      setLoading(true);
+      let url = 'http://localhost:5000/api/fotos/globales';
+      if (categoriaId) url += `?categoria=${categoriaId}`;
       
-      setTimeout(() => {
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(link);
-      }, 100);
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Error al cargar las fotos');
 
-    } catch (error) {
-      console.error('Error al descargar:', error);
-      alert('Error al descargar la foto');
+      const data = await response.json();
+      setFotos(data);
+      setError(null);
+    } catch (err) {
+      console.error('Error cargando fotos:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const abrirModal = (foto) => {
-    setFotoSeleccionada(foto);
-    setModalAbierto(true);
+  // 🔹 Cargar fotos al inicio o cuando cambia el filtro de categoría
+  useEffect(() => {
+    cargarFotos(categoriaFiltro);
+  }, [categoriaFiltro]);
+
+  // 🔹 Filtrar fotos por búsqueda
+  const fotosFiltradas = fotos.filter(foto => 
+    foto.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (foto.descripcion && foto.descripcion.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  // 🔹 Limpiar filtros
+  const limpiarFiltros = () => {
+    setCategoriaFiltro('');
+    setSearchTerm('');
   };
-
-  const cerrarModal = () => {
-    setModalAbierto(false);
-    setFotoSeleccionada(null);
-  };
-
-  const fotosFiltradas = filtroCategoria 
-    ? fotos.filter(foto => foto.categoria_id === parseInt(filtroCategoria))
-    : fotos;
-
-  if (cargando) {
-    return (
-      <div className="galeria-container">
-        <h1>Galería Global</h1>
-        <div className="cargando-container">
-          <div className="spinner grande"></div>
-          <p>Cargando galería global...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="galeria-container">
-      <h1>Galería Global</h1>
-      <p className="subtitulo-galeria">Fotos compartidas por todos los fotógrafos</p>
-
-      {/* Filtro por categoría */}
-      <div className="filtro-categoria">
-        <label htmlFor="categoria">Filtrar por categoría:</label>
-        <select 
-          id="categoria"
-          value={filtroCategoria} 
-          onChange={(e) => setFiltroCategoria(e.target.value)}
-        >
-          <option value="">Todas las categorías</option>
-          {categorias.map(cat => (
-            <option key={cat.id_categoria} value={cat.id_categoria}>
-              {cat.nombre}
-            </option>
-          ))}
-        </select>
+      <div className="galeria-header">
+        <h1>Galería Global de Fotos</h1>
+        <p>Explora todas las fotos publicadas por nuestros fotógrafos</p>
       </div>
 
-      {fotosFiltradas.length === 0 ? (
-        <div className="no-fotos">
-          <p>No hay fotos disponibles en la galería global.</p>
-          {filtroCategoria && (
-            <button onClick={() => setFiltroCategoria('')}>
-              Mostrar todas las categorías
-            </button>
-          )}
+      {/* 🔹 FILTROS */}
+      <div className="filtros-container">
+        <div className="filtro-group">
+          <label htmlFor="categoria-filtro">Filtrar por categoría:</label>
+          <select
+            id="categoria-filtro"
+            value={categoriaFiltro}
+            onChange={(e) => setCategoriaFiltro(e.target.value)}
+          >
+            <option value="">Todas las categorías</option>
+            {categorias.map((cat) => (
+              <option key={cat.id_categoria} value={cat.id_categoria}>
+                {cat.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filtro-group">
+          <label htmlFor="busqueda">Buscar:</label>
+          <input
+            type="text"
+            id="busqueda"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Buscar por título o descripción..."
+          />
+        </div>
+
+        {(categoriaFiltro || searchTerm) && (
+          <button className="limpiar-filtros-btn" onClick={limpiarFiltros}>
+            Limpiar filtros
+          </button>
+        )}
+      </div>
+
+      {/* 🔹 CONTADOR DE RESULTADOS */}
+      <div className="resultados-info">
+        <p>
+          Mostrando <strong>{fotosFiltradas.length}</strong> de <strong>{fotos.length}</strong> fotos
+          {categoriaFiltro && ` en ${categorias.find(c => c.id_categoria.toString() === categoriaFiltro)?.nombre}`}
+          {searchTerm && ` que coinciden con "${searchTerm}"`}
+        </p>
+      </div>
+
+      {/* 🔹 GALERÍA */}
+      {loading ? (
+        <div className="loading">🔄 Cargando fotos...</div>
+      ) : error ? (
+        <div className="error">❌ Error: {error}</div>
+      ) : fotosFiltradas.length === 0 ? (
+        <div className="no-resultados">
+          <p>No se encontraron fotos con los filtros aplicados</p>
+          <button onClick={limpiarFiltros} className="btn-primary">
+            Mostrar todas las fotos
+          </button>
         </div>
       ) : (
-        <div className="galeria-grid-global">
+        <div className="galeria-grid">
           {fotosFiltradas.map((foto) => (
-            <FotoItemGlobal 
-              key={foto.id_foto} 
-              foto={foto} 
-              onDownload={handleDescargar}
-              onView={abrirModal}
-            />
+            <div key={foto.id_foto} className="galeria-item">
+              <img 
+                src={`http://localhost:5000/${foto.ruta_archivo.replace(/\\/g, '/')}`} 
+                alt={foto.titulo}
+                onError={(e) => { e.target.src = '/placeholder-image.jpg'; }}
+              />
+              <div className="galeria-info">
+                <h3>{foto.titulo}</h3>
+                {foto.descripcion && <p>{foto.descripcion}</p>}
+                <div className="galeria-meta">
+                  {foto.categoria_nombre && (
+                    <span className="categoria-badge">{foto.categoria_nombre}</span>
+                  )}
+                  <span className="fotografo">
+                    Por: {foto.fotografo_nombre} {foto.fotografo_apellido}
+                  </span>
+                  <span className="fecha">{new Date(foto.fecha).toLocaleDateString()}</span>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       )}
-
-      <ModalFotoGlobal 
-        foto={fotoSeleccionada} 
-        isOpen={modalAbierto} 
-        onClose={cerrarModal} 
-      />
     </div>
   );
 };

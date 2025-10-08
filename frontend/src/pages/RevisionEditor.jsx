@@ -1,18 +1,54 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useCallback } from 'react'; // 👈 AGREGAR useCallback
 import { AuthContext } from '../context/AuthContext';
+import { useCategorias } from '../context/CategoriasContext.jsx';
 import '../assets/styles/notas.css';
 
 function RevisionEditor() {
   const [articulos, setArticulos] = useState([]);
+  const [articulosFiltrados, setArticulosFiltrados] = useState([]);
   const [comentarios, setComentarios] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [categoriaFiltro, setCategoriaFiltro] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  
   const { token } = useContext(AuthContext);
+  const { categorias } = useCategorias();
 
   useEffect(() => {
     fetchArticulosEnRevision();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 🔹 FUNCIÓN PARA APLICAR FILTROS CON useCallback
+  const aplicarFiltros = useCallback(() => {
+    let filtrados = [...articulos];
+
+    // Filtrar por categoría
+    if (categoriaFiltro) {
+      filtrados = filtrados.filter(art => 
+        art.categoria_id.toString() === categoriaFiltro
+      );
+    }
+
+    // Filtrar por búsqueda
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtrados = filtrados.filter(art =>
+        art.titulo.toLowerCase().includes(term) ||
+        (art.periodista_nombre && art.periodista_nombre.toLowerCase().includes(term)) ||
+        (art.periodista_apellido && art.periodista_apellido.toLowerCase().includes(term)) ||
+        (art.categoria_nombre && art.categoria_nombre.toLowerCase().includes(term))
+      );
+    }
+
+    setArticulosFiltrados(filtrados);
+  }, [articulos, categoriaFiltro, searchTerm]); // 👈 DEPENDENCIAS CORRECTAS
+
+  // 🔹 Aplicar filtros cuando cambien las dependencias
+  useEffect(() => {
+    aplicarFiltros();
+  }, [aplicarFiltros]); // 👈 SOLO aplicarFiltros (que ya incluye todas las dependencias)
 
   const fetchArticulosEnRevision = async () => {
     try {
@@ -35,6 +71,12 @@ function RevisionEditor() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // 🔹 LIMPIAR FILTROS
+  const limpiarFiltros = () => {
+    setCategoriaFiltro('');
+    setSearchTerm('');
   };
 
   const handleComentarioChange = (id, texto) => {
@@ -72,7 +114,6 @@ function RevisionEditor() {
     }
   };
 
-  // Función verArchivo actualizada
   const verArchivo = async (id) => {
     try {
       const response = await fetch(`http://localhost:5000/api/articles/view/${id}`, {
@@ -144,9 +185,64 @@ function RevisionEditor() {
     <div className="contenedor-notas">
       <h2>Artículos en Revisión</h2>
       
-      {articulos.length === 0 ? (
+      {/* 🔹 FILTROS PARA EDITORES */}
+      <div className="filtros-editor">
+        <div className="filtro-group">
+          <label htmlFor="categoria-filtro">Filtrar por categoría:</label>
+          <select
+            id="categoria-filtro"
+            value={categoriaFiltro}
+            onChange={(e) => setCategoriaFiltro(e.target.value)}
+          >
+            <option value="">Todas las categorías</option>
+            {categorias.map((cat) => (
+              <option key={cat.id_categoria} value={cat.id_categoria}>
+                {cat.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filtro-group">
+          <label htmlFor="busqueda-editor">Buscar:</label>
+          <input
+            type="text"
+            id="busqueda-editor"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Buscar por título, periodista o categoría..."
+          />
+        </div>
+
+        {(categoriaFiltro || searchTerm) && (
+          <button className="limpiar-filtros-btn" onClick={limpiarFiltros}>
+            Limpiar filtros
+          </button>
+        )}
+      </div>
+
+      {/* 🔹 INFORMACIÓN DE RESULTADOS */}
+      <div className="resultados-info">
+        <p>
+          Mostrando <strong>{articulosFiltrados.length}</strong> de <strong>{articulos.length}</strong> artículos en revisión
+          {categoriaFiltro && ` en ${categorias.find(c => c.id_categoria.toString() === categoriaFiltro)?.nombre}`}
+          {searchTerm && ` que coinciden con "${searchTerm}"`}
+        </p>
+      </div>
+      
+      {articulosFiltrados.length === 0 ? (
         <div className="no-articulos">
-          <p>No hay artículos en revisión en este momento.</p>
+          <p>
+            {articulos.length === 0 
+              ? "No hay artículos en revisión en este momento." 
+              : "No se encontraron artículos con los filtros aplicados."
+            }
+          </p>
+          {(categoriaFiltro || searchTerm) && (
+            <button onClick={limpiarFiltros} className="btn-primary">
+              Mostrar todos los artículos
+            </button>
+          )}
         </div>
       ) : (
         <table className="tabla-notas">
@@ -154,16 +250,24 @@ function RevisionEditor() {
             <tr>
               <th>Título</th>
               <th>Periodista</th>
+              <th>Categoría</th>
               <th>Fecha de envío</th>
               <th>Comentario del editor</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {articulos.map((art) => (
+            {articulosFiltrados.map((art) => (
               <tr key={art.id_articulo}>
-                <td>{art.titulo}</td>
+                <td>
+                  <strong>{art.titulo}</strong>
+                </td>
                 <td>{art.periodista_nombre} {art.periodista_apellido}</td>
+                <td>
+                  <span className="categoria-badge">
+                    {art.categoria_nombre}
+                  </span>
+                </td>
                 <td>{new Date(art.fecha_modificacion).toLocaleDateString('es-AR')}</td>
                 <td>
                   <textarea 
