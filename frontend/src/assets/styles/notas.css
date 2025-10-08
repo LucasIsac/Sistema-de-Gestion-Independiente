@@ -332,3 +332,30 @@
 .tabla-notas td:nth-child(3) {
   text-align: center;
 }
+
+.categoria-badge {
+  background: #6f42c1;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* AJUSTES DE TABLA CON NUEVA COLUMNA */
+.notas-table th:nth-child(2) {
+  width: 140px; /* Ancho fijo para categoría */
+}
+
+.notas-table td:nth-child(2) {
+  text-align: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .notas-table th:nth-child(2),
+  .notas-table td:nth-child(2) {
+    display: none; /* Ocultar categoría en móvil si es necesario */
+  }
+}

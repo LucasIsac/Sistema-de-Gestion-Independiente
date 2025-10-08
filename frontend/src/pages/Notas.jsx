@@ -1,7 +1,8 @@
-// src/pages/Notas.jsx
+// src/pages/Notas.jsx - CON COLUMNA DE CATEGORÍA
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext.js';
+import { useCategorias } from '../context/CategoriasContext.jsx';
 import '../assets/styles/notas.css';
 
 function Notas() {
@@ -10,6 +11,7 @@ function Notas() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = useContext(AuthContext);
+  const { categorias } = useCategorias(); // 👈 USAR CATEGORÍAS
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,17 +30,15 @@ function Notas() {
       if (!response.ok) throw new Error('Error al cargar artículos');
 
       const data = await response.json();
-      console.log('📊 Todos los artículos:', data);
 
       // ✅ Filtrar solo borradores y rechazados
       const borradoresYRechazados = data.filter(
         articulo => articulo.estado === 'borrador' || articulo.estado === 'rechazado'
       );
       
-      console.log('📋 Borradores y rechazados:', borradoresYRechazados);
       setNotas(borradoresYRechazados);
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
-      console.error('Error:', err);
       setError('No se pudieron cargar los artículos');
     } finally {
       setLoading(false);
@@ -61,10 +61,16 @@ function Notas() {
     }
   };
 
+  // 🔹 Obtener nombre de categoría
+  const getNombreCategoria = (categoriaId) => {
+    if (!categoriaId) return 'Sin categoría';
+    
+    const categoria = categorias.find(cat => cat.id_categoria === categoriaId);
+    return categoria ? categoria.nombre : 'Sin categoría';
+  };
+
   // 🔹 Obtener comentario de rechazo
   const getComentarioRechazo = (articuloId, titulo) => {
-    console.log(`Buscando notificación para artículo ${articuloId}: "${titulo}"`);
-    
     const notif = notificaciones.find(n => {
       if (!n.mensaje) return false;
       
@@ -78,13 +84,7 @@ function Notas() {
       return (tieneId || tieneTitulo) && esRechazo;
     });
     
-    if (notif) {
-      console.log('✅ Notificación de rechazo encontrada:', notif.mensaje);
-      return notif.mensaje;
-    } else {
-      console.log('❌ No se encontró notificación de rechazo');
-      return null;
-    }
+    return notif ? notif.mensaje : null;
   };
 
   // -------------------- Acciones --------------------
@@ -223,6 +223,7 @@ function Notas() {
             <thead>
               <tr>
                 <th>Título</th>
+                <th>Categoría</th> {/* 👈 NUEVA COLUMNA */}
                 <th>Estado</th>
                 <th>Fecha de creación</th>
                 <th>Última modificación</th>
@@ -232,11 +233,15 @@ function Notas() {
             <tbody>
               {notas.map((nota) => {
                 const comentarioRechazo = getComentarioRechazo(nota.id_articulo, nota.titulo);
-                console.log(`Artículo ${nota.id_articulo} - Estado: ${nota.estado} - Tiene comentario: ${!!comentarioRechazo}`);
                 
                 return (
                   <tr key={nota.id_articulo} className={nota.estado === 'rechazado' ? 'fila-rechazada' : ''}>
                     <td>{nota.titulo}</td>
+                    <td>
+                      <span className="categoria-badge">
+                        {getNombreCategoria(nota.categoria_id)}
+                      </span>
+                    </td>
                     <td>
                       <span className={`estado-badge ${getEstadoBadgeClass(nota.estado)}`}>
                         {nota.estado || 'Borrador'}

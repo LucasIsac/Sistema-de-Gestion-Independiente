@@ -1,4 +1,4 @@
-// 📁 src/context/CategoriasContext.jsx - CREAR ESTE ARCHIVO NUEVO
+// 📁 src/context/CategoriasContext.jsx - VERSIÓN LIMPIA
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 
 const CategoriasContext = createContext();
@@ -17,11 +17,9 @@ export const CategoriasProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 🔹 Cargar categorías desde la API (con useCallback para evitar dependencias)
   const cargarCategorias = useCallback(async () => {
     try {
       setLoading(true);
-      console.log("🔄 Cargando categorías desde API...");
       
       const response = await fetch('http://localhost:5000/api/categorias');
       
@@ -30,16 +28,12 @@ export const CategoriasProvider = ({ children }) => {
       }
       
       const data = await response.json();
-      console.log("✅ Categorías cargadas:", data);
-      
       setCategorias(data);
       setError(null);
       return data;
     } catch (err) {
-      console.error('❌ Error cargando categorías:', err);
       setError(err.message);
       
-      // 🔹 FALLBACK
       const fallback = [
         { id_categoria: 3, nombre: "Economía" },
         { id_categoria: 4, nombre: "Cultura" },
@@ -57,15 +51,13 @@ export const CategoriasProvider = ({ children }) => {
     }
   }, []);
 
-  // 🔹 Recargar categorías
   const recargarCategorias = async () => {
     return await cargarCategorias();
   };
 
-  // 🔹 Cargar categorías al iniciar
   useEffect(() => {
     cargarCategorias();
-  }, [cargarCategorias]); // ✅ Ahora no da error de ESLint
+  }, [cargarCategorias]);
 
   const value = {
     categorias,
