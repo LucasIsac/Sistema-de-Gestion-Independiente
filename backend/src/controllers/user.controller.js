@@ -4,8 +4,6 @@ import {
   findByUsuario,
   findByEmail,
   createUser,
-  findAll,
-  findById,
   updateUser,
   deleteUser,
   findRoles ,
@@ -130,7 +128,7 @@ export async function actualizarUsuario(req, res) {
   }
 }
 
-export async function obtenerUsuarios(req, res) {
+export async function obtenerUsuariosTodos(req, res) {
   try {
     const { rows } = await pool.query('SELECT id_usuario as id, nombre, apellido, email FROM usuarios');
     res.json(rows);

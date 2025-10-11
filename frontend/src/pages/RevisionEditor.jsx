@@ -72,7 +72,6 @@ function RevisionEditor() {
     }
   };
 
-  // Función verArchivo actualizada
   const verArchivo = async (id) => {
     try {
       const response = await fetch(`http://localhost:5000/api/articles/view/${id}`, {
@@ -142,7 +141,7 @@ function RevisionEditor() {
 
   return (
     <div className="contenedor-notas">
-      <h2>Artículos en Revisión</h2>
+      <h2>📝 Artículos en Revisión</h2>
       
       {articulos.length === 0 ? (
         <div className="no-articulos">
