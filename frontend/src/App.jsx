@@ -20,9 +20,10 @@ import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
 import RevisionEditor from './pages/RevisionEditor';
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { DashboardAdmin } from './pages/DashboardAdmin.jsx';
+import ChatPage from './pages/ChatPage.jsx'; // Importar ChatPage
 import { useHeartbeat } from './hooks/useHeartbeat'; // ⬅️ IMPORTAR
 import { useContext } from 'react'; // ⬅️ IMPORTAR
-import { AuthContext } from './context/AuthContext'; // ⬅️ IMPORTAR
+import { AuthContext } from './context/AuthContext'; 
 
 // ✅ Componente que activa el heartbeat para TODOS
 function GlobalHeartbeat() {
@@ -92,6 +93,11 @@ function AppContent() {
 
         <Route element={<ProtectedRoute allow={['administrador']} />}>
           <Route path="/admin/dashboard" element={<DashboardAdmin />} />
+        </Route>
+
+        {/* Ruta para el Chat */}
+        <Route element={<ProtectedRoute allow={['periodista', 'fotografo', 'editor', 'administrador']} />}>
+          <Route path="/chat" element={<ChatPage userId={usuario?.id_usuario} />} />
         </Route>
 
         <Route path="/no-autorizado" element={<h2>No autorizado</h2>} />
