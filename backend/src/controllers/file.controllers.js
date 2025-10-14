@@ -461,8 +461,7 @@ export const sendToReview = async (req, res) => {
 
     const article = articleCheck.rows[0];
     
-    // Solo se puede enviar a revisión si está en estado borrador
-    if (article.estado !== 'borrador') {
+    if (article.estado !== 'borrador' && article.estado !== 'rechazado') {
       return res.status(400).json({ 
         message: `Solo los artículos en estado "borrador" pueden enviarse a revisión. Estado actual: ${article.estado}` 
       });
