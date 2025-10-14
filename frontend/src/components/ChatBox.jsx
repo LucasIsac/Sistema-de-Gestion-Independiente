@@ -31,7 +31,7 @@ const ChatBox = ({ receptor, userId }) => {
             className={`my-1 flex ${
               m.emisor_id === userId ? "justify-end" : "justify-start"
             }`}
-          >
+          >  
             <p
               className={`inline-block px-2 py-1 rounded-lg ${
                 m.emisor_id === userId
