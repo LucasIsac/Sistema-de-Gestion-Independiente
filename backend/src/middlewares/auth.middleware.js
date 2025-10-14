@@ -1,16 +1,15 @@
-// 📁 middlewares/auth.middleware.js - SIMPLIFICAR
-import jwt from 'jsonwebtoken';
-import { pool } from '../config/db.js';
+import jwt from "jsonwebtoken";
+import { pool } from "../config/db.js";
 
-const JWT_SECRET = process.env.JWT_SECRET || 'un_secreto_muy_seguro_para_jwt';
+const JWT_SECRET = process.env.JWT_SECRET || "un_secreto_muy_seguro_para_jwt";
 
 export async function verifyToken(req, res, next) {
-  const token = req.headers.authorization?.split(' ')[1];
-  
+  const token = req.headers.authorization?.split(" ")[1];
+
   if (!token) {
-    return res.status(401).json({ message: 'Token requerido' });
+    return res.status(401).json({ message: "Token requerido" });
   }
-  
+
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.userId = decoded.userId;

@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext, useCallback } from 'react'; // 👈 AGREGAR useCallback
 import { AuthContext } from '../context/AuthContext';
-import { useCategorias } from '../context/CategoriasContext.jsx';
-import '../assets/styles/notas.css';
+import '../assets/styles/revisioneditor.css';
 
 function RevisionEditor() {
   const [articulos, setArticulos] = useState([]);
@@ -47,37 +46,17 @@ function RevisionEditor() {
 
   // 🔹 Aplicar filtros cuando cambien las dependencias
   useEffect(() => {
-    aplicarFiltros();
-  }, [aplicarFiltros]); // 👈 SOLO aplicarFiltros (que ya incluye todas las dependencias)
-
-  const fetchArticulosEnRevision = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch('http://localhost:5000/api/articles/editor/review', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!res.ok) {
-        throw new Error('Error al cargar artículos en revisión');
+    const fetchArticulos = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/articulos/en-revision');
+        const data = await res.json();
+        setArticulos(data);
+      } catch (err) {
+        console.error('Error al cargar artículos:', err);
       }
-
-      const data = await res.json();
-      setArticulos(data);
-    } catch (err) {
-      console.error('Error al cargar artículos:', err);
-      setError('No se pudieron cargar los artículos en revisión');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🔹 LIMPIAR FILTROS
-  const limpiarFiltros = () => {
-    setCategoriaFiltro('');
-    setSearchTerm('');
-  };
+    };
+    fetchArticulos();
+  }, []);
 
   const handleComentarioChange = (id, texto) => {
     setComentarios({ ...comentarios, [id]: texto });
@@ -85,101 +64,66 @@ function RevisionEditor() {
 
   const manejarDecision = async (articuloId, decision) => {
     try {
-      const comentario = comentarios[articuloId] || '';
-      const endpoint = decision === 'approve' 
-        ? `http://localhost:5000/api/articles/${articuloId}/approve`
-        : `http://localhost:5000/api/articles/${articuloId}/reject`;
-
-      const response = await fetch(endpoint, {
+      const comentario = comentarios[articuloId];
+      // 1️⃣ Guardar comentario
+      await fetch('http://localhost:5000/api/comentarios-editor', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ comentario }),
+        body: JSON.stringify({
+          articulo_id: articuloId,
+          editor_id: usuario.id,
+          comentario,
+        }),
       });
 
-      const data = await response.json();
+      // 2️⃣ Actualizar estado del artículo
+      await fetch('http://localhost:5000/api/articulos/estado', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          articulo_id: articuloId,
+          estado: nuevoEstado,
+        }),
+      });
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Error al procesar la decisión');
-      }
-
-      alert(data.message || `Artículo ${decision === 'approve' ? 'aprobado' : 'rechazado'} correctamente`);
+      alert(`Artículo ${nuevoEstado.toLowerCase()} correctamente`);
       setComentarios((prev) => ({ ...prev, [articuloId]: '' }));
-      fetchArticulosEnRevision();
+
+      // 3️⃣ Opcional: Recargar lista
+      const res = await fetch('http://localhost:5000/api/articulos/en-revision');
+      const data = await res.json();
+      setArticulos(data);
     } catch (error) {
       console.error('Error al procesar decisión:', error);
       alert(`Error: ${error.message}`);
     }
   };
 
-  const verArchivo = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/articles/view/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error al visualizar el archivo');
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const fileType = blob.type;
-
-      if (fileType === 'application/pdf') {
-        window.open(url, '_blank');
-      } else {
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `articulo_${id}`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-
-      setTimeout(() => window.URL.revokeObjectURL(url), 100);
-
-    } catch (error) {
-      console.error('Error al ver archivo:', error);
-      alert(`Error: ${error.message}`);
+  const verArchivo = (ruta) => {
+    const url = `http://localhost:5000${ruta}`;
+    const extension = ruta.split('.').pop().toLowerCase();
+    if (extension === 'pdf') {
+      // Si es PDF, abrirlo
+      window.open(url, '_blank');
+    } else {
+      // Si no es PDF, descargarlo directamente
+      descargarArchivo(ruta);
     }
   };
 
-  const descargarArchivo = async (id, nombreOriginal) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/articles/download/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al descargar el archivo');
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = nombreOriginal || `articulo_${id}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-
-    } catch (error) {
-      console.error('Error al descargar:', error);
-      alert('Error al descargar el archivo');
-    }
+  const descargarArchivo = (ruta) => {
+    const url = `http://localhost:5000${ruta}`;
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = ruta.split('/').pop(); // Nombre del archivo
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
-
-  if (loading) return <div className="loading">Cargando artículos en revisión...</div>;
-  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="contenedor-notas">

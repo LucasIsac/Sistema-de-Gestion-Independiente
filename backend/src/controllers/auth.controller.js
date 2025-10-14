@@ -32,7 +32,7 @@ export async function login(req, res) {
     const token = jwt.sign(
       { userId: user.id_usuario, categoria: user.categoria },
       JWT_SECRET,
-      { expiresIn: "8h" }
+      { expiresIn: "24h" }
     );
 
     res.json({

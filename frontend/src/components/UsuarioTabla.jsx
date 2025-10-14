@@ -27,35 +27,48 @@ export default function UsuarioTabla({ usuarios, onEditar, onEliminar }) {
         <tr>
           <th>ID</th>
           <th>Nombre</th>
-          <th>Usuario</th>
+          <th>Apellido</th>
           <th>Email</th>
+          <th>Teléfono</th>
           <th>Rol</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         {usuarios.length > 0 ? (
-          usuarios.map((usuario) => (
-            <tr key={usuario.id}>
-              <td>{usuario.id}</td>
-              <td>{usuario.nombre} {usuario.apellido}</td>
-              <td>{usuario.usuario}</td>
-              <td>{usuario.email}</td>
-              <td>{getRolNombre(usuario.rol_id)}</td>
+          usuarios.map((u) => (
+            <tr key={u.id}>
+              <td>{u.id}</td>
+              <td>{u.nombre}</td>
+              <td>{u.apellido}</td>
+              <td>{u.email}</td>
+              <td>{u.telefono}</td>
+              <td>{u.rol}</td>
               <td>
-                <button onClick={() => onEditar(usuario)}>Editar</button>
-                <button
-                  className="eliminar"
-                  onClick={() => handleEliminarClick(usuario)}
-                >
-                  Eliminar
-                </button>
+                <div className="acciones-celda">
+                  <button
+                    className="editar"
+                    onClick={() => onEditar(u)}
+                    title="Editar usuario"
+                  >
+                    <i className="fas fa-edit"></i> Editar
+                  </button>
+                  <button
+                    className="eliminar"
+                    onClick={() => onEliminar(u.id)}
+                    title="Eliminar usuario"
+                  >
+                    <i className="fas fa-trash-alt"></i> Eliminar
+                  </button>
+                </div>
               </td>
             </tr>
           ))
         ) : (
           <tr>
-            <td colSpan="6">No hay usuarios</td>
+            <td colSpan="7" style={{ textAlign: 'center' }}>
+              No hay usuarios registrados
+            </td>
           </tr>
         )}
       </tbody>

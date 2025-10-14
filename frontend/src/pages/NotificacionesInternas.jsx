@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from '../context/AuthContext';
+import React, { useState, useEffect } from "react";
+import useAuth from "../context/useAuth.js";
 import "../assets/styles/notificaciones.css";
 
 export default function NotificacionesInternas() {
@@ -12,25 +12,21 @@ export default function NotificacionesInternas() {
   const [busqueda, setBusqueda] = useState("");
   const [filtroRol, setFiltroRol] = useState("");
   const [cargando, setCargando] = useState(false);
-  const [error, setError] = useState("");
-  const [mostrarSelector, setMostrarSelector] = useState(false);
-
-  const { token } = useContext(AuthContext);
+  const { token } = useAuth();
 
   // Cargar datos iniciales
   useEffect(() => {
     const cargarDatos = async () => {
       try {
         setCargando(true);
-        setError("");
         
+        const headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        };
+
         // Obtener usuarios
-        const resUsuarios = await fetch("http://localhost:5000/api/usuarios", {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (!resUsuarios.ok) throw new Error(`Error ${resUsuarios.status}`);
-
+        const resUsuarios = await fetch("http://localhost:5000/api/usuarios", { headers });
         const dataUsuarios = await resUsuarios.json();
         
         if (!Array.isArray(dataUsuarios)) {
@@ -48,17 +44,10 @@ export default function NotificacionesInternas() {
         
         setUsuarios(usuariosLimpios);
         
-        // Obtener roles para filtros
-        const resRoles = await fetch("http://localhost:5000/api/roles", {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (resRoles.ok) {
-          const dataRoles = await resRoles.json();
-          if (Array.isArray(dataRoles)) {
-            setRoles(dataRoles);
-          }
-        }
+        // Obtener roles
+        const resRoles = await fetch("http://localhost:5000/api/roles", { headers });
+        const dataRoles = await resRoles.json();
+        setRoles(dataRoles);
         
       } catch (error) {
         console.error("Error cargando datos:", error);
@@ -68,7 +57,9 @@ export default function NotificacionesInternas() {
       }
     };
     
-    if (token) cargarDatos();
+    if (token) {
+      cargarDatos();
+    }
   }, [token]);
 
   // 🔹 FILTRAR USUARIOS PARA EL SELECTOR
@@ -134,7 +125,7 @@ export default function NotificacionesInternas() {
 
       const response = await fetch("http://localhost:5000/api/notificaciones/crear", {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },

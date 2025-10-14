@@ -28,29 +28,34 @@ function Login() {
       if (response.ok) {
         login(data.user, data.token);
 
-        const rol = data.user.categoria;
-        
-        switch(rol) {
-          case 'Periodista':
-            navigate('/notas');
-            break;
-          case 'Fotografo':
-            navigate('/galeria');
-            break;
-          case 'Editor':
-            navigate('/editor');
-            break;
-          default:
-            navigate('/');
-        }
-      } else {
-        setError(data.message || 'Credenciales incorrectas');
+      // Redirigir según el rol
+      const rol = data.user.categoria;
+      console.log('Redirigiendo según el rol:', rol);
+      
+      switch(rol) {
+        case 'periodista':
+          navigate('/notas');
+          break;
+        case 'fotografo':
+          navigate('/galeria');
+          break;
+        case 'editor':
+          navigate('/editor');
+          break;
+        case 'administrador': // Estandarizar con el backend
+          navigate('/gestion-usuario');
+          break;
+        default:
+          navigate('/');
       }
-    // eslint-disable-next-line no-unused-vars
-    } catch (error) {
-      setError('Error de conexión con el servidor');
+    } else {
+      setError(data.message || 'Credenciales incorrectas');
     }
-  };
+  } catch (error) {
+    console.error('💥 Error al intentar login:', error);
+    setError('Error de conexión con el servidor');
+  }
+};
 
   return (
     <div className="login-page">

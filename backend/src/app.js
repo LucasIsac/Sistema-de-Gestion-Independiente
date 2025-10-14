@@ -15,6 +15,8 @@ import fotoRoutes from './routes/foto.routes.js';
 import categoriaRoutes from './routes/categoria.routes.js';
 import onlineUsersRoutes from './routes/onlineUsers.routes.js';
 import fileRoutes from './routes/file.routes.js';  
+import mensajesRoutes from './routes/mensajes.routes.js';
+
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -64,6 +66,23 @@ app.use('/api/admin', onlineUsersRoutes);
 // Rutas estáticas
 app.use('/archivos', express.static('archivos'));
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+
+// Middlewares globales
+app.use(cors());
+app.use(express.json()); // Middleware para parsear JSON
+
+app.use('/api/articles',articleRoutes);
+
+app.get('/', (_req, res) => res.send('Backend Diario Virtual funcionando 👌'));
+app.use('/api/auth', authRoutes); // Rutas de autenticación
+app.use('/api', userRoutes); // Rutas de usuarios
+app.use('/api', rolesRoutes); // Rutas de roles
+app.use('/api', editorRoutes); // Rutas de editor
+app.use('/archivos', express.static('archivos')); //archivos está en la raíz del proyecto
+app.use("/api/notificaciones", notificacionesRoutes); // Rutas de notificaciones
+app.use("/api/mensajes", mensajesRoutes); // Mensajes 1 A 1
+app.get('/test', (req, res) => res.json({ message: 'Test OK' }));
+
 app.use('/avatars', express.static(path.join(__dirname,'uploads/avatars')));
 
 // Rutas básicas
