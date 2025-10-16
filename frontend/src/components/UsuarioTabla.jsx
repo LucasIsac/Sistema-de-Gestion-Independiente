@@ -1,12 +1,33 @@
 import React from "react";
 
 export default function UsuarioTabla({ usuarios, onEditar, onEliminar }) {
+  // Función para mapear rol_id a nombre de rol
+  const getRolNombre = (rolId) => {
+    const rolesMap = {
+      1: 'Administrador',
+      2: 'Periodista', 
+      3: 'Fotógrafo',
+      4: 'Editor'
+    };
+    return rolesMap[rolId] || 'Desconocido';
+  };
+
+  const handleEliminarClick = (usuario) => {
+    if (!usuario.id) {
+      alert("Error: ID de usuario no válido");
+      return;
+    }
+    
+    onEliminar(usuario.id);
+  };
+
   return (
     <table className="tabla-usuarios">
       <thead>
         <tr>
           <th>ID</th>
           <th>Nombre</th>
+          <th>Usuario</th>
           <th>Email</th>
           <th>Rol</th>
           <th>Acciones</th>
@@ -14,17 +35,18 @@ export default function UsuarioTabla({ usuarios, onEditar, onEliminar }) {
       </thead>
       <tbody>
         {usuarios.length > 0 ? (
-          usuarios.map((u) => (
-            <tr key={u.id}>
-              <td>{u.id}</td>
-              <td>{u.nombre}</td>
-              <td>{u.email}</td>
-              <td>{u.rol}</td>
+          usuarios.map((usuario) => (
+            <tr key={usuario.id}>
+              <td>{usuario.id}</td>
+              <td>{usuario.nombre} {usuario.apellido}</td>
+              <td>{usuario.usuario}</td>
+              <td>{usuario.email}</td>
+              <td>{getRolNombre(usuario.rol_id)}</td>
               <td>
-                <button onClick={() => onEditar(u)}>Editar</button>
+                <button onClick={() => onEditar(usuario)}>Editar</button>
                 <button
                   className="eliminar"
-                  onClick={() => onEliminar(u.id)}
+                  onClick={() => handleEliminarClick(usuario)}
                 >
                   Eliminar
                 </button>
@@ -33,7 +55,7 @@ export default function UsuarioTabla({ usuarios, onEditar, onEliminar }) {
           ))
         ) : (
           <tr>
-            <td colSpan="5">No hay usuarios</td>
+            <td colSpan="6">No hay usuarios</td>
           </tr>
         )}
       </tbody>

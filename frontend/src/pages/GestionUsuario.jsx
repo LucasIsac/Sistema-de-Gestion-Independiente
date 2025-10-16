@@ -1,78 +1,16 @@
-import React, { useEffect, useState, useContext } from "react"; // ← Agregar useContext
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import "../assets/styles/gestionUsuario.css";
 import UsuarioTabla from "../components/UsuarioTabla";
 import UsuarioForm from "../components/UsuarioForm";
-import { AuthContext } from "../context/AuthContext"; // ← Importar AuthContext
+import { AuthContext } from "../context/AuthContext";
 
 export default function GestionUsuario() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [mostrarForm, setMostrarForm] = useState(false);
-  const { token } = useContext(AuthContext); // ← Obtener token del contexto
-
-  const mockUsuarios = [
-    { id: 1, nombre: "Juan Pérez", email: "juan@example.com", rol: "admin" },
-    { id: 2, nombre: "Ana López", email: "ana@example.com", rol: "usuario" },
-    { id: 3, nombre: "Carlos Díaz", email: "carlos@example.com", rol: "usuario" }
-  ];
-
-  useEffect(() => {
-    setUsuarios(mockUsuarios);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleBuscar = (e) => {
-    setBusqueda(e.target.value);
-  };
-
-  const usuariosFiltrados = usuarios.filter((u) =>
-    u.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
-
-  const handleNuevo = () => {
-    setUsuarioEditando(null);
-    setMostrarForm(true);
-  };
-
-  const handleEditar = (usuario) => {
-    setUsuarioEditando(usuario);
-    setMostrarForm(true);
-  };
-
-  const handleEliminar = (id) => {
-    if (window.confirm("¿Seguro que quieres eliminar este usuario?")) {
-      setUsuarios(usuarios.filter((u) => u.id !== id));
-    }
-  };
-
-  const obtenerRolId = async (nombreRol) => {
-    try {
-      const response = await fetch('http://localhost:5000/api/roles');
-      const roles = await response.json();
-      const rol = roles.find(r => r.nombre === nombreRol);
-      return rol ? rol.id_rol : null;
-    } catch (error) {
-      console.error('Error al obtener roles:', error);
-      return null;
-    }
-  };
-
-  const cargarUsuarios = async () => { // ← Agregar función cargarUsuarios
-    try {
-      const response = await fetch('http://localhost:5000/api/usuarios', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setUsuarios(data);
-      }
-    } catch (error) {
-      console.error('Error al cargar usuarios:', error);
-    }
-  };
+  const [cargando, setCargando] = useState(true);
+  const { token } = useContext(AuthContext);
 
   const handleGuardar = async (usuarioData) => {
     try {
@@ -86,15 +24,18 @@ export default function GestionUsuario() {
         apellido: usuarioData.apellido,
         usuario: usuarioData.usuario,
         email: usuarioData.email,
-        telefono: usuarioData.telefono,
-        rol_id: rol_id
+        telefono: usuarioData.telefono || '',
+        rol: rol_id
       };
 
-      if (usuarioData.contraseña) {
+      if (!usuarioData.id) {
+        if (!usuarioData.contraseña) {
+          throw new Error('La contraseña es obligatoria para nuevos usuarios');
+        }
+        datosParaBackend.contraseña = usuarioData.contraseña;
+      } else if (usuarioData.contraseña) {
         datosParaBackend.contraseña = usuarioData.contraseña;
       }
-
-      console.log('📤 Enviando datos:', datosParaBackend);
 
       const url = usuarioData.id 
         ? `http://localhost:5000/api/usuarios/${usuarioData.id}`
@@ -114,17 +55,133 @@ export default function GestionUsuario() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || 'Error al guardar usuario');
+        throw new Error(result.message || `Error ${response.status}`);
       }
 
       alert(result.message || 'Usuario guardado correctamente');
-      cargarUsuarios(); // ← Llamar a la función para recargar
+      cargarUsuarios();
       setMostrarForm(false);
     } catch (error) {
-      console.error('Error al guardar usuario:', error);
-      alert(error.message || 'Error al guardar usuario');
+      alert('Error: ' + error.message);
     }
   };
+
+  const cargarUsuarios = useCallback(async () => {
+    try {
+      setCargando(true);
+      
+      const response = await fetch('http://localhost:5000/api/usuarios', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      setUsuarios(data);
+    } catch {
+      setUsuarios([]);
+    } finally {
+      setCargando(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    cargarUsuarios();
+  }, [cargarUsuarios]);
+
+  const handleBuscar = (e) => {
+    setBusqueda(e.target.value);
+  };
+
+  const usuariosFiltrados = usuarios.filter((u) =>
+    u.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
+    u.email?.toLowerCase().includes(busqueda.toLowerCase()) ||
+    u.usuario?.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
+  const handleNuevo = () => {
+    setUsuarioEditando(null);
+    setMostrarForm(true);
+  };
+
+  const handleEditar = (usuario) => {
+    const usuarioParaForm = {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      apellido: usuario.apellido,
+      usuario: usuario.usuario,
+      email: usuario.email,
+      telefono: usuario.telefono,
+      rol: usuario.rol_nombre || "Editor"
+    };
+    
+    setUsuarioEditando(usuarioParaForm);
+    setMostrarForm(true);
+  };
+
+  const handleEliminar = async (id) => {
+    if (!id) {
+      alert("Error: ID de usuario no válido");
+      return;
+    }
+
+    if (window.confirm("¿Seguro que quieres desactivar este usuario?")) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/usuarios/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          alert('Usuario desactivado correctamente');
+          cargarUsuarios();
+        } else {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Error al desactivar usuario');
+        }
+      } catch (error) {
+        alert(error.message || 'Error al desactivar usuario');
+      }
+    }
+  };
+
+  const obtenerRolId = async (nombreRol) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/roles', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error ${response.status} al obtener roles`);
+      }
+      
+      const roles = await response.json();
+      const rol = roles.find(r => r.nombre === nombreRol);
+      
+      return rol ? rol.id_rol : null;
+    } catch {
+      return null;
+    }
+  };
+
+  if (cargando) {
+    return (
+      <div className="gestion-usuario">
+        <h1>Gestión de Usuarios</h1>
+        <div className="cargando">Cargando usuarios...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="gestion-usuario">
@@ -140,11 +197,17 @@ export default function GestionUsuario() {
         <button onClick={handleNuevo}>+ Nuevo Usuario</button>
       </div>
 
-      <UsuarioTabla
-        usuarios={usuariosFiltrados}
-        onEditar={handleEditar}
-        onEliminar={handleEliminar}
-      />
+      {usuarios.length === 0 ? (
+        <div className="sin-usuarios">
+          No hay usuarios registrados en el sistema.
+        </div>
+      ) : (
+        <UsuarioTabla
+          usuarios={usuariosFiltrados}
+          onEditar={handleEditar}
+          onEliminar={handleEliminar}
+        />
+      )}
 
       {mostrarForm && (
         <UsuarioForm

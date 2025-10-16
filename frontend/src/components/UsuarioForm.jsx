@@ -20,9 +20,7 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
     const fetchRoles = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/roles", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (!response.ok) {
@@ -30,34 +28,24 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
         }
 
         const data = await response.json();
-        console.log("Roles recibidos:", data);
-
-        if (Array.isArray(data)) {
-          setRolesDisponibles(data);
-        } else {
-          console.error("La respuesta de roles no es un array:", data);
-          setRolesDisponibles([]);
-        }
-      } catch (error) {
-        console.error("Error fetching roles:", error);
+        setRolesDisponibles(Array.isArray(data) ? data : []);
+      } catch {
         setRolesDisponibles([]);
       }
     };
 
-    if (token) {
-      fetchRoles();
-    }
+    if (token) fetchRoles();
 
     if (usuario) {
       setFormData({
-        id: usuario.id || "",
+        id: usuario.id || usuario.id_usuario || "",
         nombre: usuario.nombre || "",
         apellido: usuario.apellido || "",
         usuario: usuario.usuario || "",
         email: usuario.email || "",
         telefono: usuario.telefono || "",
-        rol: usuario.rol || "",
-        contraseña: "" 
+        rol: usuario.rol || usuario.rol_nombre || "",
+        contraseña: ""
       });
     } else {
       setFormData({
@@ -88,7 +76,6 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
       <form className="form-usuario" onSubmit={handleSubmit}>
         <h2>{formData.id ? "Editar Usuario" : "Nuevo Usuario"}</h2>
 
-        {/* Nombre */}
         <div className="usuario-form-group">
           <label className="usuario-form-label">Nombre</label>
           <input
@@ -102,7 +89,6 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
           <span className="usuario-form-error">Este campo es requerido</span>
         </div>
 
-        {/* Apellido */}
         <div className="usuario-form-group">
           <label className="usuario-form-label">Apellido</label>
           <input
@@ -116,9 +102,8 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
           <span className="usuario-form-error">Este campo es requerido</span>
         </div>
 
-        {/* Usuario */}
         <div className="usuario-form-group">
-          <label className="usuario-form-label">Usuario (username)</label>
+          <label className="usuario-form-label">Usuario</label>
           <input
             type="text"
             name="usuario"
@@ -131,7 +116,6 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
           <span className="usuario-form-error">Este campo es requerido</span>
         </div>
 
-        {/* Contraseña solo si es nuevo */}
         {!formData.id && (
           <div className="usuario-form-group">
             <label className="usuario-form-label">Contraseña</label>
@@ -147,7 +131,6 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
           </div>
         )}
 
-        {/* Email */}
         <div className="usuario-form-group">
           <label className="usuario-form-label">Email</label>
           <input
@@ -161,7 +144,6 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
           <span className="usuario-form-error">Ingrese un email válido</span>
         </div>
 
-        {/* Teléfono */}
         <div className="usuario-form-group">
           <label className="usuario-form-label">Teléfono</label>
           <input
@@ -175,7 +157,6 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
           <span className="usuario-form-error">Este campo es requerido</span>
         </div>
 
-        {/* Rol */}
         <div className="usuario-form-group">
           <label className="usuario-form-label">Rol</label>
           <select
@@ -187,7 +168,7 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
           >
             <option value="">Seleccione un rol</option>
             {rolesDisponibles.map((rol) => (
-              <option key={rol.id} value={rol.nombre}>
+              <option key={rol.id_rol} value={rol.nombre}>
                 {rol.nombre}
               </option>
             ))}
@@ -195,20 +176,19 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
           <span className="usuario-form-error">Seleccione un rol</span>
         </div>
 
-        {/* Botones */}
         <div className="usuario-form-actions">
           <button
             type="button"
             className="usuario-form-button usuario-form-button--cancel"
             onClick={onCancelar}
           >
-            <i className="fas fa-times"></i> Cancelar
+            Cancelar
           </button>
           <button
             type="submit"
             className="usuario-form-button usuario-form-button--save"
           >
-            <i className="fas fa-save"></i> Guardar
+            Guardar
           </button>
         </div>
       </form>

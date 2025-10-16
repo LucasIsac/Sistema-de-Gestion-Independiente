@@ -1,9 +1,10 @@
-//src/routes/user.routes.js
+// 📁 routes/user.routes.js - YA APLICADO
+import { trackUserActivity } from '../controllers/onlineUsers.controller.js';
 import { Router } from 'express';
 import {
   registrarUsuario,
   actualizarUsuario,
-  eliminarUsuario,  // Asegúrate de importar esta función del controlador
+  eliminarUsuario,
   obtenerRoles,
   obtenerUsuariosTodos, 
   obtenerUsuario
@@ -13,13 +14,13 @@ import { verifyToken } from '../middlewares/auth.middleware.js';
 const router = Router();
 
 // Rutas públicas
-router.post('/usuarios', registrarUsuario); // Registro puede ser público
+router.post('/usuarios', registrarUsuario);
 
-// Rutas protegidas (requieren autenticación)
-router.get('/usuarios', verifyToken, obtenerUsuariosTodos);  // Obtener todos los usuarios
-router.get('/usuarios/:id', verifyToken, obtenerUsuario);  // Obtener un usuario específico
-router.put('/usuarios/:id', verifyToken, actualizarUsuario);  // Actualizar usuario
-router.delete('/usuarios/:id', verifyToken, eliminarUsuario);  // Eliminar usuario
-router.get('/roles', obtenerRoles);
+// ✅ RUTAS PROTEGIDAS CON TRACKING
+router.get('/usuarios', verifyToken, trackUserActivity, obtenerUsuarios);
+router.get('/usuarios/:id', verifyToken, trackUserActivity, obtenerUsuario);
+router.put('/usuarios/:id', verifyToken, trackUserActivity, actualizarUsuario);
+router.delete('/usuarios/:id', verifyToken, trackUserActivity, eliminarUsuario);
+router.get('/roles', verifyToken, trackUserActivity, obtenerRoles);
 
 export default router;

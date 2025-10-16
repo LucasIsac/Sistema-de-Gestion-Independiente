@@ -10,37 +10,53 @@ import ResetPassword from './pages/ResetPassword';
 import Notas from './pages/Notas';
 import Galeria from './pages/GaleriaPersonal.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-
+import GaleriaGlobal from './pages/GaleriaGlobal.jsx';
 import GestionRoles from './pages/GestionRoles';
 import GestionCategorias from './pages/GestionCategorias';
 import NotificacionesInternas from './pages/NotificacionesInternas';
 import GestionUsuario from './pages/GestionUsuario';
 import ArticulosEnRevision from './pages/ArticulosEnRevision.jsx';
-
 import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
 import RevisionEditor from './pages/RevisionEditor';
 import { AuthProvider } from './context/AuthProvider.jsx';
+import { DashboardAdmin } from './pages/DashboardAdmin.jsx';
+import ChatPage from './pages/ChatPage.jsx'; // Importar ChatPage
+import { useHeartbeat } from './hooks/useHeartbeat'; // ⬅️ IMPORTAR
+import { useContext } from 'react'; // ⬅️ IMPORTAR
+import { AuthContext } from './context/AuthContext'; 
 
-function App() {
+// ✅ Componente que activa el heartbeat para TODOS
+function GlobalHeartbeat() {
+  useHeartbeat(); // Este hook se ejecuta en TODA la app
+  return null; // No renderiza nada
+}
+
+// ✅ Wrapper para activar heartbeat solo si hay usuario
+function AppContent() {
+  const { usuario } = useContext(AuthContext);
+  
   return (
-     <AuthProvider>
-      <Navbar /> 
+    <>
+      <Navbar />
+      {/* ✅ Si hay usuario logueado, activar heartbeat global */}
+      {usuario && <GlobalHeartbeat />}
+      
       <Routes>
         <Route path="/" element={<Presentacion />} />
         <Route path="/login" element={<Login />} />
         <Route path="/recuperar" element={<Recuperar />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/configuracion" element={<ConfiguracionUsuario />} /> {/* ✅ NUEVA RUTA */}
-
+        <Route path="/configuracion" element={<ConfiguracionUsuario />} />
 
         <Route element={<ProtectedRoute allow={['periodista']} />}>
           <Route path="/periodista-upload" element={<PeriodistaUpload />} />
         </Route>
 
         <Route element={<ProtectedRoute allow={['periodista']} />}>
-         <Route path="/ArticulosEnRevision" element={<ArticulosEnRevision/>} /> {}
+          <Route path="/ArticulosEnRevision" element={<ArticulosEnRevision/>} />
         </Route>
 
+        <Route path="/galeria-global" element={<GaleriaGlobal />} />
 
         <Route element={<ProtectedRoute allow={['periodista']} />}>
           <Route path="/notas" element={<Notas />} />
@@ -49,36 +65,51 @@ function App() {
         <Route element={<ProtectedRoute allow={['fotografo']} />}>
           <Route path="/galeria" element={<Galeria />} />
           <Route path="/FotografoUpload" element={<FotografoUpload />} />
-
-          
         </Route>
 
         <Route element={<ProtectedRoute allow={['periodista', 'fotografo', 'editor']} />}>
           <Route path="/mensajes" element={<Mensajes />} />
         </Route>
 
-          <Route element={<ProtectedRoute allow={['administrador']} />}>
-         <Route path="/gestion-roles" element={<GestionRoles />} />
-          </Route>
+        <Route element={<ProtectedRoute allow={['administrador']} />}>
+          <Route path="/gestion-roles" element={<GestionRoles />} />
+        </Route>
 
-          <Route element={<ProtectedRoute allow={['administrador']} />}>
-         <Route path="/gestion-categorias" element={<GestionCategorias />} />
-          </Route>
+        <Route element={<ProtectedRoute allow={['administrador']} />}>
+          <Route path="/gestion-categorias" element={<GestionCategorias />} />
+        </Route>
 
-          <Route element={<ProtectedRoute allow={['administrador']} />}>
-         <Route path="/notificaciones-internas" element={<NotificacionesInternas />} />
-          </Route>
+        <Route element={<ProtectedRoute allow={['administrador']} />}>
+          <Route path="/notificaciones-internas" element={<NotificacionesInternas />} />
+        </Route>
 
-          <Route element={<ProtectedRoute allow={['administrador']} />}>
-         <Route path="/gestion-usuario" element={<GestionUsuario />} />
-          </Route>
+        <Route element={<ProtectedRoute allow={['administrador']} />}>
+          <Route path="/gestion-usuario" element={<GestionUsuario />} />
+        </Route>
 
         <Route element={<ProtectedRoute allow={['editor']} />}>
           <Route path="/revisiones" element={<RevisionEditor />} />
         </Route>
 
+        <Route element={<ProtectedRoute allow={['administrador']} />}>
+          <Route path="/admin/dashboard" element={<DashboardAdmin />} />
+        </Route>
+
+        {/* Ruta para el Chat */}
+        <Route element={<ProtectedRoute allow={['periodista', 'fotografo', 'editor', 'administrador']} />}>
+          <Route path="/chat" element={<ChatPage userId={usuario?.id_usuario} />} />
+        </Route>
+
         <Route path="/no-autorizado" element={<h2>No autorizado</h2>} />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
     </AuthProvider>
   );
 }

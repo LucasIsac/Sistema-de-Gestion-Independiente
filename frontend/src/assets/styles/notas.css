@@ -231,28 +231,118 @@ textarea:focus {
   background-color: #ffe6e6 !important;
 }
 
-/* ===============================
-   ESTADOS DE CARGA Y ERROR
-   =============================== */
-.loading,
-.error {
+.btn-modificar:hover {
+  background-color: #e66a00;
+}
+
+/* 📁 assets/styles/notas.css - AGREGAR ESTOS ESTILOS */
+
+/* FILTROS PARA EDITORES */
+.filtros-editor {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.filtros-editor .filtro-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filtros-editor .filtro-group label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.filtros-editor select,
+.filtros-editor input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 200px;
+}
+
+/* BADGE DE CATEGORÍA EN LA TABLA */
+.categoria-badge {
+  background: #007bff;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* INFORMACIÓN DE RESULTADOS */
+.resultados-info {
+  background: #e7f3ff;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #007bff;
+}
+
+.resultados-info p {
+  margin: 0;
+  color: #333;
+}
+
+/* BOTÓN PRIMARIO */
+.btn-primary {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+/* MEJORAS A LA TABLA EXISTENTE */
+.tabla-notas th:nth-child(3) {
+  width: 120px; /* Ancho fijo para columna categoría */
+}
+
+.tabla-notas td:nth-child(3) {
   text-align: center;
-  font-size: 1.2rem;
-  padding: 1.5rem;
 }
 
-.loading {
-  color: var(--verde-medio);
+.categoria-badge {
+  background: #6f42c1;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
 }
 
-.error {
-  color: var(--rojo);
+/* AJUSTES DE TABLA CON NUEVA COLUMNA */
+.notas-table th:nth-child(2) {
+  width: 140px; /* Ancho fijo para categoría */
 }
 
-/* ===============================
-   ANIMACIONES
-   =============================== */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.notas-table td:nth-child(2) {
+  text-align: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .notas-table th:nth-child(2),
+  .notas-table td:nth-child(2) {
+    display: none; /* Ocultar categoría en móvil si es necesario */
+  }
 }

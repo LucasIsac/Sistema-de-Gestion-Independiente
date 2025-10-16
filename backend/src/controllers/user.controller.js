@@ -90,12 +90,12 @@ export async function actualizarUsuario(req, res) {
     return res.status(400).json({ message: 'ID de usuario inválido' });
   }
 
-  const { nombre, apellido, email, telefono, password } = req.body;
+  const { nombre, apellido, email, telefono, rol, usuario } = req.body; // ✅ Agregar rol y usuario
 
   try {
     // 1. Verificar usuario existe
     const userCheck = await pool.query(
-      'SELECT id_usuario, contraseña FROM usuarios WHERE id_usuario = $1',
+      'SELECT id_usuario, usuario, email FROM usuarios WHERE id_usuario = $1',
       [id]
     );
     
@@ -103,34 +103,58 @@ export async function actualizarUsuario(req, res) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    // 2. Verificar contraseña
-    const isValid = await bcrypt.compare(password, userCheck.rows[0].contraseña);
-    if (!isValid) {
-      return res.status(401).json({ message: 'Contraseña incorrecta' });
+    // 2. Verificar que el NUEVO usuario no exista (excluyendo el actual)
+    if (usuario && usuario !== userCheck.rows[0].usuario) {
+      const usuarioExistente = await pool.query(
+        'SELECT id_usuario FROM usuarios WHERE usuario = $1 AND id_usuario != $2',
+        [usuario, id]
+      );
+      if (usuarioExistente.rows.length > 0) {
+        return res.status(409).json({ message: 'Nombre de usuario ya existe' });
+      }
     }
 
-    // 3. Actualizar
+    // 3. Verificar que el NUEVO email no exista (excluyendo el actual)
+    if (email && email !== userCheck.rows[0].email) {
+      const emailExistente = await pool.query(
+        'SELECT id_usuario FROM usuarios WHERE email = $1 AND id_usuario != $2',
+        [email, id]
+      );
+      if (emailExistente.rows.length > 0) {
+        return res.status(409).json({ message: 'El email ya existe' });
+      }
+    }
+
+    // 4. Actualizar
     const { rows } = await pool.query(
       `UPDATE usuarios 
-       SET nombre = $1, apellido = $2, email = $3, telefono = $4
-       WHERE id_usuario = $5
-       RETURNING id_usuario, nombre, apellido, email, telefono`,
-      [nombre, apellido, email, telefono, id]
+       SET nombre = $1, apellido = $2, email = $3, telefono = $4, rol_id = $5, usuario = $6
+       WHERE id_usuario = $7
+       RETURNING id_usuario, nombre, apellido, email, telefono, rol_id, usuario`,
+      [nombre, apellido, email, telefono, rol, usuario, id]
     );
 
-    res.json({ usuario: rows[0] });
+    res.json({ 
+      message: 'Usuario actualizado correctamente',
+      usuario: rows[0] 
+    });
   } catch (err) {
     console.error('💥 actualizarUsuario:', err);
     res.status(500).json({ 
       message: 'Error al actualizar usuario',
-      error: err.message // ← Detalle del error para debugging
+      error: err.message
     });
   }
 }
 
 export async function obtenerUsuariosTodos(req, res) {
   try {
-    const { rows } = await pool.query('SELECT id_usuario as id, nombre, apellido, email FROM usuarios');
+    const { rows } = await pool.query(
+      `SELECT id_usuario as id, nombre, apellido, email, usuario, telefono, rol_id 
+       FROM usuarios 
+       WHERE activo = true
+       ORDER BY nombre, apellido`
+    );
     res.json(rows);
   } catch (err) {
     console.error('💥 obtenerUsuarios:', err);
@@ -142,16 +166,31 @@ export async function eliminarUsuario(req, res) {
   const { id } = req.params;
 
   try {
-    const rowCount = await deleteUser(id);
-
-    if (rowCount === 0) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+    // 1. Verificar que el usuario existe y está activo
+    const userCheck = await pool.query(
+      'SELECT id_usuario, nombre, apellido FROM usuarios WHERE id_usuario = $1 AND activo = true',
+      [id]
+    );
+    
+    if (userCheck.rows.length === 0) {
+      return res.status(404).json({ message: 'Usuario no encontrado o ya desactivado' });
     }
 
-    res.json({ message: 'Usuario eliminado correctamente' });
+    const { rows } = await pool.query(
+      `UPDATE usuarios 
+       SET activo = false
+       WHERE id_usuario = $1
+       RETURNING id_usuario, nombre, apellido`,
+      [id]
+    );
+
+    res.json({ 
+      message: 'Usuario desactivado correctamente',
+      usuario: rows[0]
+    });
   } catch (err) {
     console.error('💥 eliminarUsuario:', err);
-    res.status(500).json({ message: 'Error al eliminar usuario' });
+    res.status(500).json({ message: 'Error al desactivar usuario' });
   }
 }
 

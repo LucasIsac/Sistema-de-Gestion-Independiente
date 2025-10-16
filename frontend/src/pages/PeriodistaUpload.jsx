@@ -1,13 +1,16 @@
-// src/pages/PeriodistaUpload.jsx
+// 📁 src/pages/PeriodistaUpload.jsx
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext.js';
+import { useCategorias } from '../context/CategoriasContext.jsx'; // 👈 NUEVO
 import '../assets/styles/periodista-upload.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function PeriodistaUpload() {
   const { token } = useContext(AuthContext);
+  const { categorias, loading, error } = useCategorias(); // 👈 USAR CONTEXT
+
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('1');
+  const [category, setCategory] = useState('');
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(null);
@@ -27,7 +30,7 @@ export default function PeriodistaUpload() {
       setIsModoEdicion(true);
       setArticuloEditando(articulo);
       setTitle(articulo.titulo);
-      setCategory(articulo.categoria_id || '1');
+      setCategory(articulo.categoria_id?.toString() || '');
       
       if (esModificacion) {
         setUploadStatus({ 
@@ -36,6 +39,13 @@ export default function PeriodistaUpload() {
       }
     }
   }, [location.state]);
+
+  // 🔹 Establecer categoría por defecto cuando se cargan las categorías
+  useEffect(() => {
+    if (categorias.length > 0 && !category) {
+      setCategory(categorias[0].id_categoria.toString());
+    }
+  }, [categorias, category]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -62,6 +72,11 @@ export default function PeriodistaUpload() {
       return;
     }
 
+    if (!category) {
+      alert('Debes seleccionar una categoría');
+      return;
+    }
+
     const formData = new FormData();
     if (file) formData.append('archivo', file);
     formData.append('titulo', title);
@@ -70,13 +85,6 @@ export default function PeriodistaUpload() {
     if (isModoEdicion && articuloEditando) {
       formData.append('articulo_id', articuloEditando.id_articulo);
     }
-
-    console.log("📤 Enviando formulario:");
-    console.log("Modo:", isModoEdicion ? "Edición" : "Nuevo");
-    console.log("Título:", title);
-    console.log("Archivo:", file ? file.name : "Mismo archivo");
-    console.log("Categoría ID:", category);
-    if (isModoEdicion) console.log("Artículo ID:", articuloEditando.id_articulo);
 
     setUploadStatus({ loading: true });
 
@@ -93,8 +101,6 @@ export default function PeriodistaUpload() {
 
       if (!response.ok) throw new Error(data.message || 'Error al subir');
 
-      console.log("✅ Respuesta del servidor:", data);
-
       setUploadStatus({ 
         success: isModoEdicion 
           ? 'Artículo actualizado correctamente' 
@@ -109,7 +115,7 @@ export default function PeriodistaUpload() {
 
   const handleCancel = () => {
     if (isModoEdicion) {
-      navigate('/articulos-revision');
+      navigate('/ArticulosEnRevision');
     } else {
       navigate('/notas');
     }
@@ -138,7 +144,7 @@ export default function PeriodistaUpload() {
               )}
 
               <div className="form-group">
-                <label htmlFor="title">Título del artículo</label>
+                <label htmlFor="title">Título del artículo *</label>
                 <input
                   type="text"
                   id="title"
@@ -146,22 +152,39 @@ export default function PeriodistaUpload() {
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Ingresa un título descriptivo"
                   disabled={isSubmitted}
+                  required
                 />
               </div>
 
+              {/* 👈 SELECT DE CATEGORÍAS ACTUALIZADO */}
               <div className="form-group">
-                <label htmlFor="category">Categoría</label>
-                <select
-                  id="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  disabled={isSubmitted}
-                >
-                  <option value="1">Política</option>
-                  <option value="2">Economía</option>
-                  <option value="3">Deportes</option>
-                  <option value="4">Cultura</option>
-                </select>
+                <label htmlFor="category">Categoría *</label>
+                
+                {loading ? (
+                  <div className="loading-categorias">🔄 Cargando categorías...</div>
+                ) : error ? (
+                  <div className="error-categorias">❌ Error cargando categorías</div>
+                ) : (
+                  <select
+                    id="category"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    disabled={isSubmitted}
+                    required
+                    className={!category ? 'field-error' : ''}
+                  >
+                    <option value="">Selecciona una categoría</option>
+                    {categorias.map((cat) => (
+                      <option key={cat.id_categoria} value={cat.id_categoria}>
+                        {cat.nombre}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                
+                {!category && categorias.length > 0 && (
+                  <span className="field-error-text">Debes seleccionar una categoría</span>
+                )}
               </div>
 
               <div className="form-group">
@@ -188,11 +211,9 @@ export default function PeriodistaUpload() {
                 </p>
               </div>
 
-              {/* 🔹 Mostrar info de modificación */}
               {uploadStatus?.info && (
                 <div className="info-message">{uploadStatus.info}</div>
               )}
-
               {uploadStatus?.error && (
                 <div className="error-message">{uploadStatus.error}</div>
               )}
@@ -223,7 +244,7 @@ export default function PeriodistaUpload() {
                       className="new-upload-button"
                       onClick={() => {
                         setTitle('');
-                        setCategory('1');
+                        setCategory('');
                         setFile(null);
                         setPreview(null);
                         setIsSubmitted(false);

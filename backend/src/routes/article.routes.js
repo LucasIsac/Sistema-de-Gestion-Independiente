@@ -16,7 +16,8 @@ import {
   rejectArticle,
   getArticlesByEstado,
   getCategorias,
-  getNotificacionesUsuario 
+  getNotificacionesUsuario,
+  getArticulosFiltrados,
 } from '../controllers/file.controllers.js'; // Asegurate de usar un solo archivo de controller
 import { verifyToken } from '../middlewares/auth.middleware.js'; // Usamos verifyToken como principal
 
@@ -45,6 +46,7 @@ router.get('/user/notifications', verifyToken, getNotificacionesUsuario);
 router.get('/my/:estado', verifyToken, getArticlesByEstado);
 router.get('/download/:id', verifyToken, downloadArticle);
 router.get('/view/:id', verifyToken, viewArticle);
+router.get('/', getArticulosFiltrados);
 
 // Rutas para periodistas (primer código manda)
 router.post('/upload', verifyToken, upload.single('archivo'), uploadArticle);
