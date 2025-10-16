@@ -18,38 +18,36 @@ export default function Navbar() {
     periodista: [
       { to: '/notas', texto: 'Mis Artículos' },
       { to: '/ArticulosEnRevision', texto: 'Enviados a Revisión' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/chat', texto: 'Chat' },
       { to: '/periodista-upload', texto: 'Subir Articulo' },
       { to: '/galeria-global', texto: 'Galeria' },
+      { to: '/chat', texto: 'Chat' },
+      { tipo: 'notificaciones', texto: 'Notificaciones' },
       
     ],
     fotografo: [
-      { to: '/galeria', texto: 'Galería Personal' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/chat', texto: 'Chat' },
-      { to: '/ajustes', texto: 'Ajustes' },
-      { to: '/FotografoUpload', texto: 'Subir foto' },
       { to: '/galeria-global', texto: 'Galeria' },
-
+      { to: '/galeria', texto: 'Galería Personal' },
+      { to: '/FotografoUpload', texto: 'Subir foto' },
+      { to: '/chat', texto: 'Chat' },
+      { tipo: 'notificaciones', texto: 'Notificaciones' },
 
     ],
     editor: [
       { to: '/revisiones', texto: 'Revisiones' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/chat', texto: 'Chat' },
       { to: '/galeria-global', texto: 'Galeria' },
-
+      { to: '/chat', texto: 'Chat' },
+      { tipo: 'notificaciones', texto: 'Notificaciones' },
+      
     ],
     administrador: [
       { to: '/gestion-roles', texto: 'Gestión de Roles' },
       { to: '/gestion-usuario', texto: 'Gestión de Usuario' },
       { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
       { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
       { to: '/chat', texto: 'Chat' },
       { to: '/galeria-global', texto: 'Galeria' },
-      { to: '/admin/dashboard', texto: 'dashboard' },
+      { to: '/admin/dashboard', texto: 'Panel' },
+      { tipo: 'notificaciones', texto: 'Notificaciones' },
 
     ],
   };

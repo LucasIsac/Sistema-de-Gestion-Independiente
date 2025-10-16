@@ -17,7 +17,7 @@ const router = Router();
 router.post('/usuarios', registrarUsuario);
 
 // ✅ RUTAS PROTEGIDAS CON TRACKING
-router.get('/usuarios', verifyToken, trackUserActivity, obtenerUsuarios);
+router.get('/usuarios', verifyToken, trackUserActivity, obtenerUsuariosTodos);
 router.get('/usuarios/:id', verifyToken, trackUserActivity, obtenerUsuario);
 router.put('/usuarios/:id', verifyToken, trackUserActivity, actualizarUsuario);
 router.delete('/usuarios/:id', verifyToken, trackUserActivity, eliminarUsuario);

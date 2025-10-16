@@ -2,21 +2,29 @@ import React, { useState } from "react";
 import { ChatProvider } from "../context/chatContext.jsx";
 import ChatBox from "../components/ChatBox";
 import UserList from "../components/UserList";
+import "../assets/styles/chat-page.css";
 
 const ChatPage = ({ userId }) => {
   const [receptor, setReceptor] = useState(null);
 
   return (
     <ChatProvider userId={userId}>
-      <div className="flex gap-4 p-4 bg-gray-100 min-h-screen">
-        <UserList onSelectUser={setReceptor} userId={userId} />
-        {receptor ? (
-          <ChatBox receptor={receptor} userId={userId} />
-        ) : (
-          <p className="text-gray-600 m-auto">
-            Seleccioná un usuario para comenzar a chatear
-          </p>
-        )}
+      <div className="chat-page">
+        <div className="chat-sidebar">
+          
+          <UserList onSelectUser={setReceptor} userId={userId} />
+        </div>
+
+        <div className="chat-content">
+          {receptor ? (
+            <ChatBox receptor={receptor} userId={userId} />
+          ) : (
+            <div className="chat-placeholder">
+              <h3>💬 Comienza a chatear</h3>
+              <p>Seleccioná un usuario de la lista para iniciar una conversación</p>
+            </div>
+          )}
+        </div>
       </div>
     </ChatProvider>
   );
