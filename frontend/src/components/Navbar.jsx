@@ -16,7 +16,9 @@ export default function Navbar() {
 
   const linksPorCategoria = {
     periodista: [
+      { to: '/periodista-upload', texto: 'Nuevo Artículo' },
       { to: '/notas', texto: 'Mis Artículos' },
+<<<<<<< HEAD
       { to: '/ArticulosEnRevision', texto: 'Enviados a Revisión' },
       { to: '/periodista-upload', texto: 'Subir Articulo' },
       { to: '/galeria-global', texto: 'Galeria' },
@@ -31,6 +33,17 @@ export default function Navbar() {
       { to: '/chat', texto: 'Chat' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
 
+=======
+      { to: '/enviados-revision', texto: 'Enviados a Revisión' },
+      { tipo:'notificaciones', texto: '' },
+      { to: '/ajustes', texto: 'Ajustes' },
+  
+    ],
+    fotografo: [
+      { to: '/galeria', texto: 'Galería' },
+      { tipo: 'notificaciones', texto: 'Notificaciones' },
+      { to: '/ajustes', texto: 'Ajustes' },
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
     ],
     editor: [
       { to: '/revisiones', texto: 'Revisiones' },
@@ -40,6 +53,7 @@ export default function Navbar() {
       
     ],
     administrador: [
+<<<<<<< HEAD
       { to: '/gestion-roles', texto: 'Gestión de Roles' },
       { to: '/gestion-usuario', texto: 'Gestión de Usuario' },
       { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
@@ -49,6 +63,14 @@ export default function Navbar() {
       { to: '/admin/dashboard', texto: 'Panel' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
 
+=======
+      { to: '/gestion-usuario', texto: 'Usuarios' },
+      { to: '/gestion-roles', texto: 'Roles' },
+      { to: '/gestion-categorias', texto: 'Categorías' },
+      { to: '/notificaciones-internas', texto: 'Enviar Mensajes' },
+      { tipo: 'notificaciones', texto: '' },
+      { to: '/ajustes', texto: 'Ajustes' },
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
     ],
   };
 

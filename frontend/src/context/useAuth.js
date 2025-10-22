@@ -1,7 +1,6 @@
-//src/context/useAuth.js
-//import { useContext } from 'react';
-//import AuthContext from './AuthContext';
+import { useContext } from 'react';
+import { AuthContext } from './AuthContext';
 
-//export default function useAuth() {
-//  return useContext(AuthContext);
-//}
+export default function useAuth() {
+  return useContext(AuthContext);
+}

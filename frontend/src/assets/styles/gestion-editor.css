@@ -1,0 +1,85 @@
+.gestion-editor-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #f4f4f4;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.form-categoria {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+select, button {
+  padding: 8px;
+  font-size: 16px;
+}
+
+button {
+  background: #074930;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background: #04462a;
+}
+
+.lista-categorias ul {
+  list-style: none;
+  padding: 0;
+}
+
+.lista-categorias li {
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.btn-eliminar {
+  background: #dc3545;
+  border: none;
+  padding: 5px 10px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn-eliminar:hover {
+  background: #a71d2a;
+}
+.tipo-archivo {
+  background: #e9f7ef;
+  padding: 10px;
+  border: 1px solid #28a745;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #155724;
+}
+.cargar-archivo {
+  margin-bottom: 15px;
+}
+
+.tipo-archivo {
+  background: #e9f7ef;
+  padding: 10px;
+  border: 1px solid #28a745;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #155724;
+}

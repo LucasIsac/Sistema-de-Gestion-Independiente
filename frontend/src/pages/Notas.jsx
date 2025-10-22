@@ -206,15 +206,10 @@ function Notas() {
   return (
     <div className="periodista-upload-container">
       <div className="upload-header">
-        <h1>Mis artículos</h1>
-        <div className="header-actions">
-          <button className="btn-nuevo" onClick={() => navigate('/periodista-upload')}>
-            + Nuevo Artículo
-          </button>
-          <button className="btn-ver-revision" onClick={() => navigate('/ArticulosEnRevision')}>
-            Ver Artículos en Revisión
-          </button>
-        </div>
+        Mis Artículos
+        <button className="btn-nuevo" onClick={() => navigate('/periodista-upload')}>
+          + Nuevo Artículo
+        </button>
       </div>
 
       {notas.length > 0 ? (

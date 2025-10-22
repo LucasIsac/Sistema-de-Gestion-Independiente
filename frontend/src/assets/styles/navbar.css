@@ -1,13 +1,30 @@
+<<<<<<< HEAD
+/* --- Tipografía general --- */
+=======
 /* ====================== */
 /* ESTILOS BASE DEL NAVBAR */
 /* ====================== */
+>>>>>>> origin/main
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #274a2a;
-  padding: 0.7rem 1.5rem;
+  padding: 1rem 2rem; /* Más espacio */
   color: #ffffff;
+<<<<<<< HEAD
+  font-family: 'Poppins', 'Segoe UI', sans-serif; /* Tipografía más moderna */
+  font-weight: 600; /* Más rellena */
+  letter-spacing: 0.3px;
+}
+
+/* Logo */
+.nav-logo img {
+  height: 48px; /* Un poco más grande */
+}
+
+/* Links */
+=======
   position: relative;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -28,6 +45,7 @@
 /* ===================== */
 /* ESTILOS MENÚ PRINCIPAL */
 /* ===================== */
+>>>>>>> origin/main
 .nav-links {
   display: flex;
   gap: 1.5rem;
@@ -38,17 +56,23 @@
 }
 
 .nav-links a {
-  color: #d9dde0;
+  color: #f0f4f2;
   text-decoration: none;
+<<<<<<< HEAD
+  font-size: 1rem;
+  transition: color 0.25s ease, transform 0.2s ease;
+=======
   font-weight: 500;
   padding: 0.5rem 0;
   position: relative;
   transition: color 0.3s ease;
   white-space: nowrap;
+>>>>>>> origin/main
 }
 
 .nav-links a:hover {
-  color: #809f39;
+  color: #9dcf6d;
+  transform: translateY(-1px);
 }
 
 /* Efecto subrayado al hover */
@@ -78,12 +102,19 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #d9dde0;
-  font-weight: 500;
+  color: #f0f4f2;
   font-size: 1rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 0.3rem;
+<<<<<<< HEAD
+  transition: color 0.25s ease, transform 0.2s ease;
+}
+
+.btn-notificaciones:hover {
+  color: #9dcf6d;
+=======
   padding: 0.5rem;
   transition: all 0.3s ease;
   position: relative;
@@ -91,11 +122,22 @@
 
 .btn-notificaciones:hover {
   color: #297c3e;
+>>>>>>> origin/main
   transform: translateY(-1px);
 }
 
 .dropdown-notificaciones {
   position: absolute;
+<<<<<<< HEAD
+  top: 35px;
+  right: 0;
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 8px;
+  width: 260px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+=======
   top: 100%;
   right: 0;
   background-color: #ffffff;
@@ -106,11 +148,18 @@
   max-height: 70vh;
   overflow-y: auto;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+>>>>>>> origin/main
   z-index: 1000;
   transform-origin: top right;
   animation: fadeIn 0.2s ease-out;
 }
 
+<<<<<<< HEAD
+.dropdown-notificaciones div {
+  padding: 0.7rem 1rem;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #eee;
+=======
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -129,12 +178,20 @@
   display: flex;
   flex-direction: column;
   transition: background-color 0.2s ease;
+>>>>>>> origin/main
 }
 
 .notificacion-item:last-child {
   border-bottom: none;
 }
 
+<<<<<<< HEAD
+.dropdown-notificaciones div:hover {
+  background: #f7f7f7;
+}
+
+/* Usuario */
+=======
 .notificacion-item strong {
   cursor: pointer;
   width: 100%;
@@ -192,13 +249,30 @@
 /* ESTILOS USUARIO (NUEVO) */
 /* ===================== */
 /* Contenedor principal del usuario */
+>>>>>>> origin/main
 .nav-user {
   flex: 0 0 auto; /* No crece, no se encoge */
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 1rem;
+  font-size: 0.95rem;
 }
 
+<<<<<<< HEAD
+.btn-logout {
+  background: #386e3a;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.btn-logout:hover {
+  background-color: #2d5c30;
+=======
 /* Contenedor del dropdown/drawer */
 .user-dropdown-container {
   position: relative;
@@ -218,6 +292,7 @@
   cursor: pointer;
   font-weight: bold;
   transition: transform 0.2s ease;
+>>>>>>> origin/main
 }
 
 /* Efecto hover para el avatar */

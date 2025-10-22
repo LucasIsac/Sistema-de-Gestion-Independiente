@@ -16,6 +16,7 @@ import GestionCategorias from './pages/GestionCategorias';
 import NotificacionesInternas from './pages/NotificacionesInternas';
 import GestionUsuario from './pages/GestionUsuario';
 import ArticulosEnRevision from './pages/ArticulosEnRevision.jsx';
+import ArticulosAprobados from './pages/ArticulosAprobados.jsx';
 import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
 import RevisionEditor from './pages/RevisionEditor';
 import { AuthProvider } from './context/AuthProvider.jsx';
@@ -89,6 +90,7 @@ function AppContent() {
 
         <Route element={<ProtectedRoute allow={['editor']} />}>
           <Route path="/revisiones" element={<RevisionEditor />} />
+          <Route path="/articulos-aprobados" element={<ArticulosAprobados />} />
         </Route>
 
         <Route element={<ProtectedRoute allow={['administrador']} />}>

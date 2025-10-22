@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from '../context/AuthContext';
+=======
+import React, { useState, useEffect } from "react";
+import useAuth from "../context/useAuth.js";
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
 import "../assets/styles/notificaciones.css";
 
 export default function NotificacionesInternas() {
@@ -12,10 +17,14 @@ export default function NotificacionesInternas() {
   const [busqueda, setBusqueda] = useState("");
   const [filtroRol, setFiltroRol] = useState("");
   const [cargando, setCargando] = useState(false);
+<<<<<<< HEAD
   const [error, setError] = useState("");
   const [mostrarSelector, setMostrarSelector] = useState(false);
 
   const { token } = useContext(AuthContext);
+=======
+  const { token } = useAuth();
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
 
   // Cargar datos iniciales
   useEffect(() => {
@@ -24,13 +33,22 @@ export default function NotificacionesInternas() {
         setCargando(true);
         setError("");
         
+        const headers = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        };
+
         // Obtener usuarios
+<<<<<<< HEAD
         const resUsuarios = await fetch("http://localhost:5000/api/usuarios", {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if (!resUsuarios.ok) throw new Error(`Error ${resUsuarios.status}`);
 
+=======
+        const resUsuarios = await fetch("http://localhost:5000/api/usuarios", { headers });
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
         const dataUsuarios = await resUsuarios.json();
         
         if (!Array.isArray(dataUsuarios)) {
@@ -48,6 +66,7 @@ export default function NotificacionesInternas() {
         
         setUsuarios(usuariosLimpios);
         
+<<<<<<< HEAD
         // Obtener roles para filtros
         const resRoles = await fetch("http://localhost:5000/api/roles", {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -59,6 +78,12 @@ export default function NotificacionesInternas() {
             setRoles(dataRoles);
           }
         }
+=======
+        // Obtener roles
+        const resRoles = await fetch("http://localhost:5000/api/roles", { headers });
+        const dataRoles = await resRoles.json();
+        setRoles(dataRoles);
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
         
       } catch (error) {
         console.error("Error cargando datos:", error);
@@ -68,7 +93,13 @@ export default function NotificacionesInternas() {
       }
     };
     
+<<<<<<< HEAD
     if (token) cargarDatos();
+=======
+    if (token) {
+      cargarDatos();
+    }
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
   }, [token]);
 
   // 🔹 FILTRAR USUARIOS PARA EL SELECTOR
@@ -134,7 +165,11 @@ export default function NotificacionesInternas() {
 
       const response = await fetch("http://localhost:5000/api/notificaciones/crear", {
         method: "POST",
+<<<<<<< HEAD
         headers: { 
+=======
+        headers: {
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },

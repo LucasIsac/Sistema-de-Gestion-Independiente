@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* 📁 assets/styles/notificaciones.css */
 .notificaciones-container {
   max-width: 800px;
@@ -12,15 +13,47 @@
 }
 
 .form-group label {
+=======
+/* Contenedor principal */
+.notificaciones-container {
+  max-width: 650px;
+  margin: 40px auto; /* centrado horizontal y separación del navbar */
+  padding: 40px;
+  background: #f4f4f4;
+  border-radius: 10px;
+  border-left: 28px solid #064420; /* línea verde a la izquierda */
+  font-family: Arial, sans-serif; /* tipografía uniforme */
+  font-size: 16px; 
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1); /* sombra suave */
+}
+
+/* Título */
+.notificaciones-container h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #034b33;
+}
+
+/* Labels */
+.notificaciones-container label {
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
   display: block;
   margin-bottom: 5px;
   font-weight: 600;
   color: #333;
 }
 
+<<<<<<< HEAD
 .form-input,
 .form-textarea,
 .form-select {
+=======
+/* Inputs y textarea */
+.notificaciones-container input,
+.notificaciones-container textarea,
+.notificaciones-container select {
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -39,6 +72,7 @@
   margin-bottom: 20px;
 }
 
+<<<<<<< HEAD
 .tags-container {
   display: flex;
   flex-wrap: wrap;
@@ -93,11 +127,20 @@
 
 .btn-abrir-selector {
   background: #6c757d;
+=======
+/* Botón */
+.notificaciones-container button {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 1rem;
+  background: #034b33;
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
   color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+<<<<<<< HEAD
   font-size: 14px;
 }
 
@@ -194,13 +237,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+=======
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 16px;
+
+  font-size: 1rem;
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
   font-weight: bold;
   font-size: 14px;
   flex-shrink: 0;
 }
 
+<<<<<<< HEAD
 .info-usuario {
   flex-grow: 1;
+=======
+/* Hover del botón */
+.notificaciones-container button:hover {
+
+  background: #023826;
+
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
 }
 
 .nombre-usuario {

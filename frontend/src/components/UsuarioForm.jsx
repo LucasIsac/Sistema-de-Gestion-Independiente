@@ -1,22 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext"; 
+import React, { useState, useEffect } from "react";
 import "../assets/styles/UsuarioForm.css";
 
 export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
   const [formData, setFormData] = useState({
     id: "",
     nombre: "",
-    apellido: "",
-    usuario: "",
     email: "",
-    telefono: "",
     rol: "",
-    contraseña: "" 
   });
-  const [rolesDisponibles, setRolesDisponibles] = useState([]);
-  const { token } = useContext(AuthContext); 
 
   useEffect(() => {
+<<<<<<< HEAD
     const fetchRoles = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/roles", {
@@ -58,12 +52,15 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
         rol: "",
         contraseña: ""
       });
+=======
+    if (usuario) {
+      setFormData(usuario);
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
     }
   }, [usuario, token]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
@@ -72,10 +69,13 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
   };
 
   return (
-    <div className="modal">
-      <form className="form-usuario" onSubmit={handleSubmit}>
-        <h2>{formData.id ? "Editar Usuario" : "Nuevo Usuario"}</h2>
+    <div className="usuario-form-modal">
+      <div className="usuario-form-container">
+        <h2 className="usuario-form-title">
+          {formData.id ? "Editar Usuario" : "Nuevo Usuario"}
+        </h2>
 
+<<<<<<< HEAD
         <div className="usuario-form-group">
           <label className="usuario-form-label">Nombre</label>
           <input
@@ -190,6 +190,35 @@ export default function UsuarioForm({ usuario, onGuardar, onCancelar }) {
           >
             Guardar
           </button>
+=======
+        <input
+          type="text"
+          name="nombre"
+          placeholder="Nombre"
+          value={formData.nombre}
+          onChange={handleChange}
+          required
+        />
+
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+
+        <select name="rol" value={formData.rol} onChange={handleChange} required>
+          <option value="">Seleccione un rol</option>
+          <option value="admin">Admin</option>
+          <option value="usuario">Usuario</option>
+        </select>
+
+        <div className="acciones-form">
+          <button type="submit">Guardar</button>
+          <button type="button" onClick={onCancelar}>Cancelar</button>
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
         </div>
       </form>
     </div>

@@ -27,14 +27,20 @@ export default function UsuarioTabla({ usuarios, onEditar, onEliminar }) {
         <tr>
           <th>ID</th>
           <th>Nombre</th>
+<<<<<<< HEAD
           <th>Usuario</th>
+=======
+          <th>Apellido</th>
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
           <th>Email</th>
+          <th>Teléfono</th>
           <th>Rol</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         {usuarios.length > 0 ? (
+<<<<<<< HEAD
           usuarios.map((usuario) => (
             <tr key={usuario.id}>
               <td>{usuario.id}</td>
@@ -50,12 +56,45 @@ export default function UsuarioTabla({ usuarios, onEditar, onEliminar }) {
                 >
                   Eliminar
                 </button>
+=======
+          usuarios.map((u) => (
+            <tr key={u.id}>
+              <td>{u.id}</td>
+              <td>{u.nombre}</td>
+              <td>{u.apellido}</td>
+              <td>{u.email}</td>
+              <td>{u.telefono}</td>
+              <td>{u.rol}</td>
+              <td>
+                <div className="acciones-celda">
+                  <button
+                    className="editar"
+                    onClick={() => onEditar(u)}
+                    title="Editar usuario"
+                  >
+                    <i className="fas fa-edit"></i> Editar
+                  </button>
+                  <button
+                    className="eliminar"
+                    onClick={() => onEliminar(u.id)}
+                    title="Eliminar usuario"
+                  >
+                    <i className="fas fa-trash-alt"></i> Eliminar
+                  </button>
+                </div>
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
               </td>
             </tr>
           ))
         ) : (
           <tr>
+<<<<<<< HEAD
             <td colSpan="6">No hay usuarios</td>
+=======
+            <td colSpan="7" style={{ textAlign: 'center' }}>
+              No hay usuarios registrados
+            </td>
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
           </tr>
         )}
       </tbody>

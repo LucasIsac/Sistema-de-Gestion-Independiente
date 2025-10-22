@@ -23,6 +23,7 @@ function Login() {
         }),
       });
       
+<<<<<<< HEAD
       const data = await response.json();
       
       if (response.ok) {
@@ -45,6 +46,23 @@ function Login() {
         }
       } else {
         setError(data.message || 'Credenciales incorrectas');
+=======
+      switch(rol) {
+        case 'periodista':
+          navigate('/notas');
+          break;
+        case 'fotografo':
+          navigate('/galeria');
+          break;
+        case 'editor':
+          navigate('/editor');
+          break;
+        case 'administrador': // Estandarizar con el backend
+          navigate('/gestion-usuario');
+          break;
+        default:
+          navigate('/');
+>>>>>>> 653dc6f1da51637806ddb03f566bb237c6f103c0
       }
     // eslint-disable-next-line no-unused-vars
     } catch (error) {
