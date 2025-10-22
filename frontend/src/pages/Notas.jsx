@@ -36,6 +36,7 @@ function Notas() {
         (a) => a.estado === 'borrador' || a.estado === 'rechazado'
       );
       setNotas(filtrados);
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       setError('No se pudieron cargar los artículos');
     } finally {
