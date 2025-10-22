@@ -36,6 +36,7 @@ export default function Navbar() {
     ],
     editor: [
       { to: '/revisiones', texto: 'Revisiones' },
+      { to: '/articulos-aprobados', texto: 'Aprobados' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
       { to: '/chat', texto: 'Chat' },
       { to: '/galeria-global', texto: 'Galeria' },
