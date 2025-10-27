@@ -25,7 +25,7 @@ router.post('/upload', verifyToken, uploadMiddleware.single('archivo'), uploadFo
 router.put('/:id/toggle-visibility', verifyToken, toggleVisibilidadFoto);
 router.delete('/:id', verifyToken, deleteFoto);
 router.get('/view/:id', verifyToken, viewFoto);
-router.get('/global', getFotosFiltradas);
+router.get('/global', getFotosGlobales);
 
 // Rutas públicas (para periodistas)
 router.get('/:id', verifyToken, getFotoById);

@@ -68,7 +68,12 @@ export const getMyFotos = async (req, res) => {
       [fotografo_id]
     );
     
-    res.json(result.rows);
+    const fotosConUrl = result.rows.map(foto => ({
+      ...foto,
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+    }));
+
+    res.json(fotosConUrl);
   } catch (error) {
     console.error("❌ Error al obtener fotos:", error);
     res.status(500).json({ message: "Error interno del servidor" });
@@ -88,11 +93,15 @@ export const getFotosGlobales = async (req, res) => {
        FROM fotos f 
        LEFT JOIN usuarios u ON f.fotografo_id = u.id_usuario
        LEFT JOIN categorias c ON f.categoria_id = c.id_categoria
-       WHERE f.es_global = true
        ORDER BY f.fecha DESC`
     );
     
-    res.json(result.rows);
+    const fotosConUrl = result.rows.map(foto => ({
+      ...foto,
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+    }));
+
+    res.json(fotosConUrl);
   } catch (error) {
     console.error("❌ Error al obtener fotos globales:", error);
     res.status(500).json({ message: "Error interno del servidor" });
@@ -202,7 +211,13 @@ export const getFotoById = async (req, res) => {
       return res.status(404).json({ message: "Foto no encontrada" });
     }
 
-    res.json(result.rows[0]);
+    const foto = result.rows[0];
+    const fotoConUrl = {
+      ...foto,
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+    };
+
+    res.json(fotoConUrl);
   } catch (error) {
     console.error("❌ Error al obtener foto:", error);
     res.status(500).json({ message: "Error interno del servidor" });
@@ -297,7 +312,13 @@ export const getFotosFiltradas = async (req, res) => {
     query += ` ORDER BY f.fecha DESC`;
     
     const result = await pool.query(query, params);
-    res.json(result.rows);
+    
+    const fotosConUrl = result.rows.map(foto => ({
+      ...foto,
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+    }));
+
+    res.json(fotosConUrl);
   } catch (error) {
     console.error('❌ Error al obtener fotos filtradas:', error);
     res.status(500).json({ message: "Error al obtener fotos" });
