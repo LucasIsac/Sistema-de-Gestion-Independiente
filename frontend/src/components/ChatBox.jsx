@@ -19,43 +19,53 @@ const ChatBox = ({ receptor, userId }) => {
   );
 
   return (
-    <div className="p-4 border rounded-lg bg-white shadow-md w-full max-w-md">
-      <h2 className="font-bold mb-2 text-gray-800">
-        Chat con {receptor.nombre}
-      </h2>
-
-      <div className="h-64 overflow-y-auto border p-2 mb-2 bg-gray-50 rounded">
-        {mensajesFiltrados.map((m) => (
-          <div
-            key={m.id_mensaje}
-            className={`my-1 flex ${
-              m.emisor_id === userId ? "justify-end" : "justify-start"
-            }`}
-          >  
-            <p
-              className={`inline-block px-2 py-1 rounded-lg ${
-                m.emisor_id === userId
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-black"
-              }`}
-            >
-              {m.contenido}
-            </p>
-          </div>
-        ))}
+    <div className="flex flex-col max-w-3xl w-full mx-auto mt-6 bg-gradient-to-b from-green-50 to-white rounded-xl shadow-xl overflow-hidden border border-green-200">
+      {/* HEADER */}
+      <div className="bg-green-800 text-white p-8 flex items-center justify-between">
+        <h2 className="font-semibold text-lg">💬 {receptor.nombre}</h2>
+        <span className="text-sm opacity-80"></span>
       </div>
 
-      <div className="flex gap-2">
+      {/* MENSAJES */}
+      <div className="flex-1 overflow-y-auto p-8 bg-green-50">
+        {mensajesFiltrados.length === 0 ? (
+          <p className="text-center text-gray-500 mt-10">
+            No hay mensajes todavía. ¡Comenzá la conversación!
+          </p>
+        ) : (
+          mensajesFiltrados.map((m) => (
+            <div
+              key={m.id_mensaje}
+              className={`flex mb-4 ${
+                m.emisor_id === userId ? "justify-end" : "justify-start"
+              }`}
+            >
+              <div
+                className={`relative max-w-xs px-4 py-3 rounded-2xl text-sm shadow-sm transition-all ${
+                  m.emisor_id === userId
+                    ? "bg-green-700 text-white rounded-br-none animate-fadeIn"
+                    : "bg-white text-gray-800 border border-green-100 rounded-bl-none animate-fadeIn"
+                }`}
+              >
+                {m.contenido}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* INPUT */}
+      <div className="p-3 border-t border-green-200 bg-white flex gap-2 items-center">
         <input
           type="text"
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
           placeholder="Escribe un mensaje..."
-          className="border flex-1 p-2 rounded"
+          className="flex-1 border border-green-300 rounded-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <button
           onClick={handleEnviar}
-          className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+          className="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-full font-medium shadow-md transition-all"
         >
           Enviar
         </button>
