@@ -70,7 +70,7 @@ export function DashboardAdmin() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6">Dashboard Administrativo</h2>
+      <h2 className="text-3xl font-bold mb-6">Panel Administrativo</h2>
 
       {/* Tarjetas principales */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

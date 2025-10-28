@@ -32,8 +32,14 @@ h2 {
 }
 
 /* ------------------ */
-/* Tarjetas principales */
+/* Tarjetas principales (fila superior) */
 /* ------------------ */
+.grid.grid-cols-1.md\:grid-cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
 .dashboard-card {
   background: #ffffff;
   border-radius: 1rem;
@@ -77,7 +83,7 @@ h2 {
 }
 
 /* ------------------ */
-/* Usuarios conectados */
+/* Usuarios conectados (fila inferior) */
 /* ------------------ */
 .users-grid {
   display: grid;
