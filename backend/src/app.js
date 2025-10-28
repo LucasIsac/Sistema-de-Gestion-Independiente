@@ -79,10 +79,9 @@ app.use('/api', fileRoutes);
 app.use('/api/categorias', categoriaRoutes);
 app.use('/api/admin', onlineUsersRoutes);
 
-// 📂 Rutas estáticas
-app.use('/archivos', express.static('archivos'));
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
-app.use('/avatars', express.static(path.join(__dirname, 'uploads/avatars')));
+// 📂 Ruta estática unificada para todos los archivos subidos
+// Sirve el contenido de la carpeta `backend/uploads` en la ruta `/uploads`
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // 🌱 Rutas básicas
 app.get('/', (_req, res) => res.send('Backend Diario Virtual funcionando 👌'));
