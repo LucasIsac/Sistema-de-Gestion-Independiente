@@ -28,14 +28,15 @@ const isValidExtension = (filename, allowedExtensions) => {
 // Configuración para artículos
 const articlesStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const user = req.user;
-    if (!user || !user.usuario) {
-      // Esto no debería ocurrir si la ruta está protegida por verifyToken
-      return cb(new Error('No se pudo identificar al usuario para guardar el archivo.'));
-    }
-    const userFolderPath = path.join('articles', user.usuario);
-    cb(null, ensureUploadsDir(userFolderPath));
-  },
+  const userId = req.userId; // 🔹 usamos solo userId
+  if (!userId) {
+    return cb(new Error('No se pudo identificar al usuario para guardar el archivo.'));
+  }
+
+  // 📁 Cada usuario tendrá su propia carpeta: uploads/articles/<userId>
+  const userFolderPath = path.join('articles', String(userId));
+  cb(null, ensureUploadsDir(userFolderPath));
+},
   filename: (req, file, cb) => {
     // ✅ Sanitizar el nombre original (quitar caracteres peligrosos)
     const sanitizedOriginal = file.originalname

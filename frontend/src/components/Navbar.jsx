@@ -5,7 +5,7 @@ import logo from '../assets/imagenes/logo.png';
 import '../assets/styles/navbar.css';
 
 export default function Navbar() {
-  const { usuario, logout, token } = useContext(AuthContext);
+  const { user, logout, token } = useContext(AuthContext);
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const [notificaciones, setNotificaciones] = useState([]);
   const [expandedNotificationId, setExpandedNotificationId] = useState(null);
@@ -53,13 +53,13 @@ export default function Navbar() {
     ],
   };
 
-  const links = usuario ? linksPorCategoria[usuario.categoria] ?? [] : [];
+  const links = user ? linksPorCategoria[user.categoria] ?? [] : [];
 
   useEffect(() => {
-    if (usuario && token) {
+    if (user && token) {
       const cargarNotificaciones = async () => {
         try {
-          const res = await fetch(`http://localhost:5000/api/notificaciones/${usuario.id_usuario}`, {
+          const res = await fetch(`http://localhost:5000/api/notificaciones/${user.id_usuario}`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -74,7 +74,7 @@ export default function Navbar() {
 
       cargarNotificaciones();
     }
-  }, [usuario, token]);
+  }, [user, token]);
 
   // Marcar notificación como leída
   const marcarComoLeida = async (id) => {
@@ -117,21 +117,21 @@ export default function Navbar() {
         
         <div className={`user-drawer ${isOpen ? 'open' : ''}`}>
           <div className="user-drawer-header">
-            {usuario?.foto ? (
+            {user?.foto ? (
               <img 
-                src={usuario.foto}
+                src={user.foto}
                 alt="Avatar"
                 className="user-drawer-avatar"
               />
             ) : (
               <div className="user-drawer-avatar">
-                {usuario?.nombre.charAt(0)}
-                {usuario?.apellido.charAt(0)}
+                {user?.nombre.charAt(0)}
+                {user?.apellido.charAt(0)}
               </div>
             )}
             <div className="user-drawer-info">
-              <h3>{usuario?.nombre} {usuario?.apellido}</h3>
-              <p>{usuario?.email}</p>
+              <h3>{user?.nombre} {user?.apellido}</h3>
+              <p>{user?.email}</p>
             </div>
           </div>
 
@@ -227,23 +227,23 @@ export default function Navbar() {
       </ul>
 
       <div className="nav-user">
-        {usuario ? (
+        {user ? (
           <div className="user-dropdown-container">
             <div
               className="user-avatar"
               onClick={() => setDrawerOpen(true)}
               title="Abrir/cerrar menú usuario"
             >
-              {usuario?.foto ? (
+              {user?.foto ? (
                 <img
-                  src={usuario.foto}
+                  src={user.foto}
                   alt="Avatar"
                   className="avatar-image"
                 />
               ) : (
                 <div className="avatar-initials">
-                  {usuario?.nombre.charAt(0)}
-                  {usuario?.apellido.charAt(0)}
+                  {user?.nombre.charAt(0)}
+                  {user?.apellido.charAt(0)}
                 </div>
               )}
             </div>

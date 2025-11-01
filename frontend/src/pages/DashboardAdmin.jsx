@@ -6,7 +6,7 @@ import '../assets/styles/DashboardAdmin.css'; // CSS mejorado
 export function DashboardAdmin() {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [stats, setStats] = useState({ total: 0 });
-  const { usuario, token } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
 
   // ✅ Activar heartbeat automático
   useHeartbeat();
@@ -39,14 +39,14 @@ export function DashboardAdmin() {
   }, [token]);
 
   useEffect(() => {
-    if (!usuario || !token) return;
+    if (!user || !token) return;
 
     fetchOnlineUsers();
     const interval = setInterval(fetchOnlineUsers, 5000);
     return () => clearInterval(interval);
-  }, [usuario, token, fetchOnlineUsers]);
+  }, [user, token, fetchOnlineUsers]);
 
-  if (!usuario) {
+  if (!user) {
     return (
       <div className="p-6 text-center">
         <div className="text-blue-500">Cargando usuario...</div>
@@ -54,7 +54,7 @@ export function DashboardAdmin() {
     );
   }
 
-  const isAdmin = usuario.categoria?.toLowerCase() === 'administrador';
+  const isAdmin = user.categoria?.toLowerCase() === 'administrador';
 
   if (!isAdmin) {
     return (
@@ -62,7 +62,7 @@ export function DashboardAdmin() {
         <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
           No tienes permisos para acceder a esta página.
           <br />
-          <small>Tu categoría: {usuario.categoria || 'no definida'}</small>
+          <small>Tu categoría: {user.categoria || 'no definida'}</small>
         </div>
       </div>
     );

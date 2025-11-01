@@ -34,13 +34,13 @@ function GlobalHeartbeat() {
 
 // ✅ Wrapper para activar heartbeat solo si hay usuario
 function AppContent() {
-  const { usuario } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   
   return (
     <>
       <Navbar />
       {/* ✅ Si hay usuario logueado, activar heartbeat global */}
-      {usuario && <GlobalHeartbeat />}
+      {user && <GlobalHeartbeat />}
       
       <Routes>
         <Route path="/" element={<Presentacion />} />
@@ -99,7 +99,7 @@ function AppContent() {
 
         {/* Ruta para el Chat */}
         <Route element={<ProtectedRoute allow={['periodista', 'fotografo', 'editor', 'administrador']} />}>
-          <Route path="/chat" element={<ChatPage userId={usuario?.id_usuario} />} />
+          <Route path="/chat" element={<ChatPage userId={user?.id_usuario} />} />
         </Route>
 
         <Route path="/no-autorizado" element={<h2>No autorizado</h2>} />

@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import '../assets/styles/configuracion-usuario.css';
 
 export default function ConfiguracionUsuario() {
-  const { usuario, token, setUsuario } = useContext(AuthContext);
+  const { user, token, setUser } = useContext(AuthContext);
   const [editMode, setEditMode] = useState(false);
   const [password, setPassword] = useState('');
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ export default function ConfiguracionUsuario() {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        if (!usuario?.id_usuario) {
+        if (!user?.id_usuario) {
           setError('Usuario no identificado');
           return;
         }
@@ -32,7 +32,7 @@ export default function ConfiguracionUsuario() {
           return;
         }
 
-        const response = await fetch(`http://localhost:5000/api/usuarios/${usuario.id_usuario}`, {
+        const response = await fetch(`http://localhost:5000/api/usuarios/${user.id_usuario}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ export default function ConfiguracionUsuario() {
     };
 
     loadUserData();
-  }, [usuario, token]);
+  }, [user, token]);
 
   const handleFotoClick = () => inputFotoRef.current.click();
 
@@ -100,7 +100,7 @@ export default function ConfiguracionUsuario() {
       }
 
       setPreview(URL.createObjectURL(file));
-      setUsuario(prev => ({
+      setUser(prev => ({
         ...prev,
         avatar_url: data.avatarUrl
       }));
@@ -111,7 +111,7 @@ export default function ConfiguracionUsuario() {
 
   const handleUpdate = async () => {
     try {
-      if (!usuario?.id_usuario) {
+      if (!user?.id_usuario) {
         throw new Error('ID de usuario no disponible');
       }
 
@@ -119,7 +119,7 @@ export default function ConfiguracionUsuario() {
         throw new Error('No hay token de autenticación');
       }
 
-      const response = await fetch(`http://localhost:5000/api/usuarios/${usuario.id_usuario}`, {
+      const response = await fetch(`http://localhost:5000/api/usuarios/${user.id_usuario}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ export default function ConfiguracionUsuario() {
         throw new Error(result.message || 'Error al actualizar los datos');
       }
 
-      setUsuario(prev => ({
+      setUser(prev => ({
         ...prev,
         nombre: formData.nombre,
         apellido: formData.apellido,
@@ -176,8 +176,8 @@ export default function ConfiguracionUsuario() {
             <div className="imagen-perfil-box" onClick={handleFotoClick} style={{ cursor: 'pointer' }}>
               {preview ? (
                 <img src={preview} alt="Foto de perfil" className="imagen-perfil" />
-              ) : usuario?.avatar_url ? (
-                <img src={`http://localhost:5000${usuario.avatar_url}`} alt="Foto de perfil" className="imagen-perfil" />
+              ) : user?.avatar_url ? (
+                <img src={`http://localhost:5000${user.avatar_url}`} alt="Foto de perfil" className="imagen-perfil" />
               ) : (
                 <div className="imagen-perfil placeholder" />
               )}
@@ -198,7 +198,7 @@ export default function ConfiguracionUsuario() {
             <div className="info-section">
               <div className="info-group">
                 <label>Rol</label>
-                <div className="info-value">{usuario?.categoria}</div>
+                <div className="info-value">{user?.categoria}</div>
               </div>
 
               <div className="info-group">

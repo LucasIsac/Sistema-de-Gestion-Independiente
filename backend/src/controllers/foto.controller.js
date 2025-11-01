@@ -153,16 +153,25 @@ export const toggleVisibilidadFoto = async (req, res) => {
 export const deleteFoto = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.userId;
+    const { userId, user } = req; // Obtenemos el usuario completo desde verifyToken
 
-    // Verificar que la foto existe y pertenece al usuario
-    const fotoCheck = await pool.query(
-      `SELECT * FROM fotos WHERE id_foto = $1 AND fotografo_id = $2`,
-      [id, userId]
-    );
+    let fotoCheck;
+
+    // Si es admin, puede borrar cualquier foto. Si no, solo las suyas.
+    if (user.categoria === 'administrador' || user.categoria === 'admin') {
+      fotoCheck = await pool.query(
+        `SELECT * FROM fotos WHERE id_foto = $1`,
+        [id]
+      );
+    } else {
+      fotoCheck = await pool.query(
+        `SELECT * FROM fotos WHERE id_foto = $1 AND fotografo_id = $2`,
+        [id, userId]
+      );
+    }
 
     if (fotoCheck.rows.length === 0) {
-      return res.status(404).json({ message: "Foto no encontrada o no autorizada" });
+      return res.status(404).json({ message: "Foto no encontrada o no tienes permiso para eliminarla" });
     }
 
     const foto = fotoCheck.rows[0];
