@@ -17,29 +17,27 @@ export default function Navbar() {
   const linksPorCategoria = {
     periodista: [
       { to: '/notas', texto: 'Mis Artículos' },
-      { to: '/ArticulosEnRevision', texto: 'Enviados a Revisión' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/chat', texto: 'Chat' },
       { to: '/periodista-upload', texto: 'Subir Articulo' },
+      { to: '/ArticulosEnRevision', texto: 'Enviados a Revisión' },
       { to: '/galeria-global', texto: 'Galeria' },
-      
+      { to: '/chat', texto: 'Chat' },
+      { tipo: 'notificaciones', texto: 'Notificaciones' },
+    
     ],
     fotografo: [
-      { to: '/galeria', texto: 'Galería Personal' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/chat', texto: 'Chat' },
-      { to: '/ajustes', texto: 'Ajustes' },
-      { to: '/FotografoUpload', texto: 'Subir foto' },
       { to: '/galeria-global', texto: 'Galeria' },
-
+      { to: '/galeria', texto: 'Galería Personal' },
+      { to: '/FotografoUpload', texto: 'Subir foto' },
+      { to: '/chat', texto: 'Chat' },
+      { tipo: 'notificaciones', texto: 'Notificaciones' },
 
     ],
     editor: [
       { to: '/revisiones', texto: 'Revisiones' },
       { to: '/articulos-aprobados', texto: 'Aprobados' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/chat', texto: 'Chat' },
       { to: '/galeria-global', texto: 'Galeria' },
+      { to: '/chat', texto: 'Chat' },
+      { tipo: 'notificaciones', texto: 'Notificaciones' },
 
     ],
     administrador: [
@@ -47,10 +45,10 @@ export default function Navbar() {
       { to: '/gestion-usuario', texto: 'Gestión de Usuario' },
       { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
       { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
-      { to: '/chat', texto: 'Chat' },
+      { to: '/admin/dashboard', texto: 'Panel' },
       { to: '/galeria-global', texto: 'Galeria' },
-      { to: '/admin/dashboard', texto: 'dashboard' },
+      { to: '/chat', texto: 'Chat' },
+      { tipo: 'notificaciones', texto: 'Notificaciones' },
 
     ],
   };

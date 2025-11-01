@@ -1,0 +1,78 @@
+/* Contenedor principal */
+.articulos-revision-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #f4f9f4; /* fondo suave */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Título Artículos Aprobados */
+.articulos-revision-container h1 {
+  text-align: center;
+  color: #1b4d2c; /* verde más oscuro */
+  font-family: 'Georgia', 'Times New Roman', serif; /* tipografía elegante similar a la imagen */
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+
+/* Tabla */
+.articulos-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.articulos-table th,
+.articulos-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.articulos-table thead {
+  background-color: #2e7d32; /* verde oscuro */
+  color: #ffffff;
+}
+
+.articulos-table tbody tr {
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  transition: background 0.3s;
+}
+
+.articulos-table tbody tr:hover {
+  background-color: #e8f5e9; /* verde muy suave al pasar el mouse */
+}
+
+/* Botón descargar */
+.btn-download {
+  background-color: #43a047; /* verde */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-download:hover {
+  background-color: #2e7d32; /* verde más oscuro al pasar el mouse */
+}
+
+/* Mensajes de error o info */
+.error-message {
+  color: #d32f2f; /* rojo suave */
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.articulos-revision-container p {
+  text-align: center;
+  color: #555;
+  font-size: 1rem;
+}

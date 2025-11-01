@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import '../assets/styles/articulos-revision.css';
+import '../assets/styles/articulos-aprobado.css';
 
 const ArticulosAprobados = () => {
   const [articulos, setArticulos] = useState([]);
