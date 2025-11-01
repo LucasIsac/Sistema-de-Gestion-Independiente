@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import '../assets/styles/navbar.css';
 
 export default function UserDrawer({ isOpen, onClose }) {
-  const { usuario, logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const dropdownRef = useRef(null);
 
   // Cierra el dropdown al hacer clic fuera
@@ -24,8 +24,8 @@ export default function UserDrawer({ isOpen, onClose }) {
     <div className="dropdown-menu" ref={dropdownRef}>
       {/* Encabezado con info del usuario */}
       <div className="dropdown-header">
-        <p className="dropdown-name">{usuario.nombre} {usuario.apellido}</p>
-        <p className="dropdown-email">{usuario.email}</p>
+        <p className="dropdown-name">{user.nombre} {user.apellido}</p>
+        <p className="dropdown-email">{user.email}</p>
       </div>
 
       {/* Opciones */}

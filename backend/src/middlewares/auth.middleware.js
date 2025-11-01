@@ -36,7 +36,7 @@ export async function verifyToken(req, res, next) {
       apellido: user.apellido,
       usuario: user.usuario,
       email: user.email,
-      categoria: user.categoria.toLowerCase() // 👈 Esto es el ROL (admin, periodista, etc)
+      categoria: user.categoria.toLowerCase()
     };
 
     console.log(`✅ Token válido: ${req.user.usuario} (${req.user.categoria})`);

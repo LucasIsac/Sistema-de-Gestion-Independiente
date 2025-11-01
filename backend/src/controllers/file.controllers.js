@@ -262,7 +262,7 @@ export const updateArticle = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.userId;
-    const { titulo, estado } = req.body; // Quita categoria_id
+    const { titulo, estado } = req.body; 
 
     const articleCheck = await pool.query(
       "SELECT * FROM articulos WHERE id_articulo = $1 AND periodista_id = $2",
@@ -275,7 +275,7 @@ export const updateArticle = async (req, res) => {
 
     const updateQuery = `
       UPDATE articulos 
-      SET titulo = $1, estado = $2, fecha_modificacion = $3  // Quita categoria_id
+      SET titulo = $1, estado = $2, fecha_modificacion = $3  
       WHERE id_articulo = $4
       RETURNING *
     `;
