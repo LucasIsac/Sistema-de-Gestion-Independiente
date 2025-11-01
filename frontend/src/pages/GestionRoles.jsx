@@ -11,7 +11,7 @@ export default function GestionRoles() {
 
   useEffect(() => {
     cargarDatos();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const cargarDatos = async () => {
@@ -44,7 +44,7 @@ export default function GestionRoles() {
     }
   };
 
-  // 🔹 FUNCIÓN ÚTIL: Reasignar rol a usuario
+  // 🔹 FUNCIÓN PARA REASIGNAR ROL
   const reasignarRol = async (usuarioId, nuevoRolId) => {
     try {
       const response = await fetch(`http://localhost:5000/api/usuarios/${usuarioId}/rol`, {
@@ -81,13 +81,19 @@ export default function GestionRoles() {
           {roles.map(rol => (
             <div key={rol.id_rol} className="rol-card">
               <h3>
-                {rol.nombre === 'Administrador' && '👑 '}
+                {rol.nombre === 'administrador' && '👑 '}
                 {rol.nombre === 'Editor' && '📝 '}
                 {rol.nombre === 'Periodista' && '✍️ '}
                 {rol.nombre === 'Fotografo' && '📸 '}
                 {rol.nombre}
               </h3>
-              <p>{rol.descripcion || 'Descripción no disponible'}</p>
+              <p>
+                {rol.nombre === 'administrador' && 'Responsable de la gestión general del sistema, asignación de roles, control de usuarios y mantenimiento de la plataforma.'}
+                {rol.nombre === 'Editor' && 'Encargado de revisar, corregir y aprobar los contenidos antes de su publicación en el sistema.'}
+                {rol.nombre === 'Periodista' && 'Se dedica a la redacción y publicación de noticias, artículos e informes periodísticos dentro del sistema.'}
+                {rol.nombre === 'Fotografo' && 'Responsable de capturar, subir y administrar las imágenes utilizadas en las publicaciones y galerías del medio.'}
+                {!['Administrador','Editor','Periodista','Fotografo'].includes(rol.nombre) && (rol.descripcion || 'Descripción no disponible')}
+              </p>
               <small>
                 {usuarios.filter(u => u.rol_id === rol.id_rol).length} usuarios
               </small>
@@ -115,7 +121,7 @@ export default function GestionRoles() {
             <tbody>
               {usuarios.map(usuario => (
                 <UsuarioFila 
-                  key={usuario.id_usuario} 
+                  key={usuario.id} 
                   usuario={usuario} 
                   roles={roles} 
                   onReasignar={reasignarRol}
@@ -146,21 +152,26 @@ export default function GestionRoles() {
   );
 }
 
-// 🔹 COMPONENTE SEPARADO PARA CADA FILA DE USUARIO
+// 🔹 COMPONENTE DE FILA DE USUARIO
 function UsuarioFila({ usuario, roles, onReasignar }) {
-  const [nuevoRolId, setNuevoRolId] = useState(usuario.rol_id);
+  const [nuevoRolId, setNuevoRolId] = useState('');
 
   const handleReasignar = () => {
-    if (nuevoRolId !== usuario.rol_id) {
-      onReasignar(usuario.id_usuario, nuevoRolId);
-    } else {
-      alert('⚠️ El usuario ya tiene ese rol asignado');
+    if (!nuevoRolId) {
+      alert('⚠️ Debes seleccionar un nuevo rol antes de actualizar');
+      return;
     }
+    if (parseInt(nuevoRolId) === usuario.rol_id) {
+      alert('⚠️ El usuario ya tiene ese rol asignado');
+      return;
+    }
+    onReasignar(usuario.id, parseInt(nuevoRolId));
   };
 
+  // ✅ Obtener el nombre del rol actual
   const getRolNombre = (rolId) => {
     const rol = roles.find(r => r.id_rol === rolId);
-    return rol ? rol.nombre : 'Desconocido';
+    return rol ? rol.nombre : 'Sin rol asignado';
   };
 
   return (
@@ -168,16 +179,17 @@ function UsuarioFila({ usuario, roles, onReasignar }) {
       <td>{usuario.nombre} {usuario.apellido}</td>
       <td>{usuario.email}</td>
       <td>
-        <span className={`badge rol-${getRolNombre(usuario.rol_id).toLowerCase()}`}>
+        <span className="badge">
           {getRolNombre(usuario.rol_id)}
         </span>
       </td>
       <td>
         <select 
           value={nuevoRolId}
-          onChange={(e) => setNuevoRolId(parseInt(e.target.value))}
+          onChange={(e) => setNuevoRolId(e.target.value)}
           className="rol-select"
         >
+          <option value="">Seleccionar nuevo rol</option>
           {roles.map(rol => (
             <option key={rol.id_rol} value={rol.id_rol}>
               {rol.nombre}
@@ -189,9 +201,9 @@ function UsuarioFila({ usuario, roles, onReasignar }) {
         <button 
           onClick={handleReasignar}
           className="btn-actualizar"
-          disabled={nuevoRolId === usuario.rol_id}
+          disabled={!nuevoRolId}
         >
-          {nuevoRolId === usuario.rol_id ? '✓ Actual' : 'Actualizar'}
+          Actualizar
         </button>
       </td>
     </tr>
