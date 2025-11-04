@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 
 // =============================
-// SUBIR FOTO (Simplificado)
+// SUBIR FOTO 
 // =============================
 export const uploadFoto = async (req, res) => {
   try {
@@ -37,7 +37,7 @@ export const uploadFoto = async (req, res) => {
       req.file.mimetype,
       now,
       es_global === 'true' || es_global === true,
-      req.file.path,          // ruta_archivo (ESENCIAL)
+      path.join('uploads', 'fotos', req.file.filename).replace(/\\/g, '/'), // Guardar ruta relativa
       req.file.originalname   // nombre_original (ÚTIL)
     ];
 
@@ -70,7 +70,7 @@ export const getMyFotos = async (req, res) => {
     
     const fotosConUrl = result.rows.map(foto => ({
       ...foto,
-      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo}`
     }));
 
     res.json(fotosConUrl);
@@ -98,7 +98,7 @@ export const getFotosGlobales = async (req, res) => {
     
     const fotosConUrl = result.rows.map(foto => ({
       ...foto,
-      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo}`
     }));
 
     res.json(fotosConUrl);
@@ -223,7 +223,7 @@ export const getFotoById = async (req, res) => {
     const foto = result.rows[0];
     const fotoConUrl = {
       ...foto,
-      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo}`
     };
 
     res.json(fotoConUrl);
@@ -324,7 +324,7 @@ export const getFotosFiltradas = async (req, res) => {
     
     const fotosConUrl = result.rows.map(foto => ({
       ...foto,
-      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo}`
     }));
 
     res.json(fotosConUrl);

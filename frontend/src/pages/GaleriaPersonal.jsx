@@ -43,6 +43,26 @@ function GaleriaPersonal() {
   const cerrarLightbox = () => setSelectedFoto(null);
   const volverArriba = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
+  const handleDelete = async (fotoId) => {
+    if (window.confirm("¿Estás seguro de que quieres eliminar esta foto?")) {
+      try {
+        const res = await fetch(`http://localhost:5000/api/fotos/${fotoId}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) {
+          throw new Error("No se pudo eliminar la foto");
+        }
+
+        setFotos(fotos.filter((foto) => foto.id_foto !== fotoId));
+      } catch (err) {
+        console.error(err);
+        setError("Error al eliminar la foto.");
+      }
+    }
+  };
+
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -84,9 +104,17 @@ function GaleriaPersonal() {
             <div
               key={foto.id_foto}
               className="masonry-item-personal"
-              onClick={() => abrirLightbox(foto)}
             >
-              <div className="imagen-wrapper">
+              <div className="imagen-wrapper" onClick={() => abrirLightbox(foto)}>
+                <button
+                  className="delete-btn-personal eliminar"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Evita que se abra el lightbox
+                    handleDelete(foto.id_foto);
+                  }}
+                >
+                  🗑️
+                </button>
                 <img
                   src={
                     foto.url && foto.url.startsWith("http")

@@ -13,6 +13,7 @@ export async function verifyToken(req, res, next) {
   
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
+    // Corrección: El ID del usuario viene en la propiedad 'userId' del token
     req.userId = decoded.userId;
 
     // 🔹 Obtener datos del usuario CON SU ROL
@@ -21,7 +22,7 @@ export async function verifyToken(req, res, next) {
        FROM usuarios u
        JOIN roles r ON u.rol_id = r.id_rol
        WHERE u.id_usuario = $1`,
-      [decoded.userId]
+      [req.userId] // Usar el req.userId ya corregido
     );
 
     if (rows.length === 0) {
