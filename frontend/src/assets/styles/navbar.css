@@ -193,12 +193,10 @@
   align-items: center;
   gap: 0.8rem;
 }
-
 .user-dropdown-container {
   position: relative;
   display: inline-block;
 }
-
 /* Avatar con iniciales, sin imagen */
 .user-avatar {
   width: 40px;
@@ -219,46 +217,126 @@
 .user-avatar:hover { transform: scale(1.05); }
 
 /* Dropdown flotante */
+/* Dropdown menu - POSICIÓN CORREGIDA */
 .dropdown-menu {
   position: absolute;
-  top: 120%; /* debajo del avatar */
-  right: 0;  /* siempre alineado a la derecha del avatar */
-  width: 240px;
-  background: #fefefe;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-  padding: 12px;
-  border: 1px solid rgba(0,0,0,0.1);
+  top: 100%; /* Se posiciona justo debajo del avatar */
+  right: 0;
+  width: 280px;
+  background: #a6d8aa;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  border: 1px solid #e0e0e0;
   z-index: 1100;
-  animation: fadeIn 0.25s ease-out;
+  margin-top: 10px;
+  animation: fadeIn 0.2s ease-out;
+  overflow: hidden;
 }
 
+/* Header del dropdown */
 .dropdown-header {
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-  margin-bottom: 10px;
-  padding-bottom: 5px;
+  padding: 1.2rem;
+  border-bottom: 1px solid #f0f0f0;
+  background: #f8fff9;
 }
-.dropdown-name { font-weight: 600; color: #1a1a1a; }
-.dropdown-email { font-size: 0.85rem; color: #555; }
+
+.dropdown-name {
+  font-weight: 700;
+  color: #184d27;
+  margin: 0 0 0.3rem 0;
+  font-size: 1rem;
+}
+
+.dropdown-email {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Opciones del dropdown */
+.dropdown-options {
+  padding: 0.5rem;
+}
 
 .dropdown-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #274a2a;
-  background: transparent;
-  border: none;
+  gap: 0.8rem;
   width: 100%;
-  text-align: left;
+  padding: 0.8rem 1rem;
+  border: none;
+  background: none;
+  color: #c4d0e2;
+  text-decoration: none;
   font-size: 0.95rem;
-  padding: 8px;
-  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.25s ease, transform 0.15s ease;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
 }
+
 .dropdown-item:hover {
-  background: rgba(128, 159, 57, 0.1);
-  transform: translateX(3px);
+  background: #071107;
+  color: #184d27;
+  transform: translateX(5px);
+}
+
+/* Estilo específico para el link de configuración */
+.dropdown-item[href="/configuracion"] {
+  color: #00050c;
+  text-decoration: none;
+}
+
+.dropdown-item[href="/configuracion"]:hover {
+  color: #020804;
+  text-decoration: none;
+}
+
+/* Estilo para el botón de cerrar sesión */
+.dropdown-item:last-child {
+  color: #dc2626;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+}
+
+.dropdown-item:last-child:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* Asegurar que el dropdown esté por encima de todo */
+.user-dropdown-container {
+  z-index: 1100;
+}
+
+/* Responsive para el dropdown */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    position: fixed;
+    top: 70px;
+    right: 1rem;
+    width: calc(100vw - 2rem);
+    max-width: 300px;
+    margin-top: 0;
+  }
+  
+  .user-dropdown-container {
+    position: static;
+  }
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ------------------------ */
@@ -332,4 +410,41 @@
   .nav-user { flex-direction: column; gap: 0.5rem; align-items: flex-end; }
   .nav-logo img { height: 36px; }
   .user-avatar { width: 35px; height: 35px; font-size: 0.9rem; }
+}
+
+/* ===== BOTÓN INICIAR SESIÓN ===== */
+.nav-user a {
+  color: white !important;
+  text-decoration: none !important;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.nav-user a:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Eliminar estilos de visited y active por defecto */
+.nav-user a:visited {
+  color: white !important;
+}
+
+.nav-user a:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Eliminar cualquier estilo de focus por defecto */
+.nav-user a:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
 }

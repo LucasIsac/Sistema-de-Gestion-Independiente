@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { Send, Users, Search, Filter, X } from 'lucide-react';
 import "../assets/styles/notificaciones.css";
 
 export default function NotificacionesInternas() {
@@ -129,175 +130,211 @@ export default function NotificacionesInternas() {
   };
 
   return (
-    <div className="ni-container">
-      <h1 className="ni-title">Notificaciones Internas</h1>
-
-      <div className="ni-card">
-        {error && <div className="ni-error">❌ {error}</div>}
-
-        <div className="form-group">
-          <label>Título</label>
-          <input
-            className="form-input"
-            placeholder="Escribí el título..."
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-          />
+    <div className="notificaciones-container">
+      <div className="notificaciones-content">
+        
+        {/* Header */}
+        <div className="page-header">
+          <div className="header-content">
+            <h1>Notificaciones Internas</h1>
+            <p>Envía notificaciones a los usuarios del sistema</p>
+          </div>
         </div>
 
-        <div className="form-group">
-          <label>Descripción</label>
-          <textarea
-            className="form-textarea"
-            placeholder="Escribí el mensaje..."
-            rows="4"
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
-          />
-        </div>
+        {/* Tarjeta principal */}
+        <div className="notificacion-card">
+          {error && <div className="error-message">❌ {error}</div>}
 
-        <div className="form-group">
-          <label>Enviar a</label>
-          <select
-            className="form-select"
-            value={tipoDestino}
-            onChange={(e) => {
-              setTipoDestino(e.target.value);
-              if (e.target.value === "todos") {
-                setUsuariosSeleccionados([]);
-                setMostrarSelector(false);
-              }
-            }}
-          >
-            <option value="usuarios">Usuarios específicos</option>
-            <option value="todos">Todos los usuarios</option>
-          </select>
-        </div>
-
-        {tipoDestino === "usuarios" && (
-          <div className="selector-card">
-            <div className="selector-header">Seleccionar destinatarios</div>
-
-            <div className="tags-container">
-              {usuariosSeleccionados.length === 0 ? (
-                <span className="placeholder-tag">
-                  Ningún usuario seleccionado
-                </span>
-              ) : (
-                usuariosSeleccionados.map((u) => (
-                  <div key={u.id} className="usuario-tag">
-                    <span>{u.nombre} {u.apellido}</span>
-                    <button
-                      type="button"
-                      className="tag-eliminar"
-                      onClick={() => eliminarUsuario(u.id)}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))
-              )}
+          {/* Información de la notificación */}
+          <div className="form-section">
+            <h3 className="section-title">Información de la Notificación</h3>
+            
+            <div className="form-group">
+              <label>Título</label>
+              <input
+                className="form-input"
+                placeholder="Escribí el título de la notificación..."
+                value={titulo}
+                onChange={(e) => setTitulo(e.target.value)}
+              />
             </div>
 
-            <button
-              type="button"
-              className="btn-abrir-selector"
-              onClick={() => setMostrarSelector(!mostrarSelector)}
-            >
-              {mostrarSelector ? "Ocultar selector" : "Seleccionar usuarios"}
-            </button>
+            <div className="form-group">
+              <label>Mensaje</label>
+              <textarea
+                className="form-textarea"
+                placeholder="Escribí el mensaje de la notificación..."
+                rows="4"
+                value={descripcion}
+                onChange={(e) => setDescripcion(e.target.value)}
+              />
+            </div>
+          </div>
 
-            {mostrarSelector && (
-              <>
-                <input
-                  className="busqueda-input"
-                  placeholder="Buscar por nombre o email..."
-                  value={busqueda}
-                  onChange={(e) => setBusqueda(e.target.value)}
-                />
+          {/* Destinatarios */}
+          <div className="form-section">
+            <h3 className="section-title">Destinatarios</h3>
+            
+            <div className="form-group">
+              <label>Tipo de envío</label>
+              <select
+                className="form-select"
+                value={tipoDestino}
+                onChange={(e) => {
+                  setTipoDestino(e.target.value);
+                  if (e.target.value === "todos") {
+                    setUsuariosSeleccionados([]);
+                    setMostrarSelector(false);
+                  }
+                }}
+              >
+                <option value="usuarios">Usuarios específicos</option>
+                <option value="todos">Todos los usuarios</option>
+              </select>
+            </div>
 
-                <select
-                  className="filtro-rol"
-                  value={filtroRol}
-                  onChange={(e) => setFiltroRol(e.target.value)}
-                >
-                  <option value="">Todos los roles</option>
-                  {roles.map((rol) => (
-                    <option key={rol.id_rol || rol.id} value={rol.nombre}>
-                      {rol.nombre}
-                    </option>
-                  ))}
-                </select>
+            {tipoDestino === "usuarios" && (
+              <div className="selector-section">
+                <div className="selector-header">Usuarios seleccionados</div>
 
-                <div className="botones-rapidos">
-                  <span>Seleccionar por rol:</span>
-                  {roles.map((rol) => (
-                    <button
-                      key={rol.id_rol || rol.id}
-                      type="button"
-                      className="btn-rapido"
-                      onClick={() => seleccionarPorRol(rol.nombre)}
-                    >
-                      + {rol.nombre}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="lista-usuarios">
-                  {cargando ? (
-                    <div className="cargando">Cargando usuarios…</div>
-                  ) : usuariosFiltrados.length === 0 ? (
-                    <div className="sin-resultados">
-                      {busqueda || filtroRol
-                        ? "No hay usuarios que coincidan"
-                        : "No hay más usuarios disponibles"}
-                    </div>
+                <div className="tags-container">
+                  {usuariosSeleccionados.length === 0 ? (
+                    <span className="placeholder-tag">
+                      Ningún usuario seleccionado
+                    </span>
                   ) : (
-                    usuariosFiltrados.map((u) => (
-                      <div
-                        key={u.id}
-                        className="item-usuario"
-                        onClick={() => agregarUsuario(u)}
-                      >
-                        <div className="avatar-usuario">
-                          {u.nombre?.[0]}
-                          {u.apellido?.[0]}
-                        </div>
-                        <div className="info-usuario">
-                          <div className="nombre-usuario">
-                            {u.nombre} {u.apellido}
-                          </div>
-                          <div className="detalle-usuario">
-                            {u.email} • {u.rol}
-                          </div>
-                        </div>
-                        <button type="button" className="btn-agregar">+</button>
+                    usuariosSeleccionados.map((u) => (
+                      <div key={u.id} className="usuario-tag">
+                        <span>{u.nombre} {u.apellido}</span>
+                        <button
+                          type="button"
+                          className="tag-eliminar"
+                          onClick={() => eliminarUsuario(u.id)}
+                        >
+                          <X size={14} />
+                        </button>
                       </div>
                     ))
                   )}
                 </div>
 
-                <div className="contador-selector">
-                  <strong>{usuariosSeleccionados.length}</strong> usuario(s) seleccionado(s)
-                </div>
-              </>
+                <button
+                  type="button"
+                  className="btn-abrir-selector"
+                  onClick={() => setMostrarSelector(!mostrarSelector)}
+                >
+                  <Users size={16} />
+                  {mostrarSelector ? "Ocultar selector" : "Seleccionar usuarios"}
+                </button>
+
+                {mostrarSelector && (
+                  <>
+                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                      <div style={{ flex: 1, position: 'relative' }}>
+                        <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280' }} />
+                        <input
+                          className="form-input"
+                          placeholder="Buscar por nombre o email..."
+                          value={busqueda}
+                          onChange={(e) => setBusqueda(e.target.value)}
+                          style={{ paddingLeft: '2.5rem' }}
+                        />
+                      </div>
+                      
+                      <div style={{ flex: 1 }}>
+                        <select
+                          className="form-select"
+                          value={filtroRol}
+                          onChange={(e) => setFiltroRol(e.target.value)}
+                        >
+                          <option value="">Todos los roles</option>
+                          {roles.map((rol) => (
+                            <option key={rol.id_rol || rol.id} value={rol.nombre}>
+                              {rol.nombre}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="botones-rapidos">
+                      <span>Seleccionar por rol:</span>
+                      {roles.map((rol) => (
+                        <button
+                          key={rol.id_rol || rol.id}
+                          type="button"
+                          className="btn-rapido"
+                          onClick={() => seleccionarPorRol(rol.nombre)}
+                        >
+                          + {rol.nombre}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="lista-usuarios">
+                      <div className="lista-header">
+                        Usuarios disponibles ({usuariosFiltrados.length})
+                      </div>
+                      {cargando ? (
+                        <div className="cargando">Cargando usuarios…</div>
+                      ) : usuariosFiltrados.length === 0 ? (
+                        <div className="sin-resultados">
+                          {busqueda || filtroRol
+                            ? "No hay usuarios que coincidan con la búsqueda"
+                            : "No hay más usuarios disponibles"}
+                        </div>
+                      ) : (
+                        usuariosFiltrados.map((u) => (
+                          <div
+                            key={u.id}
+                            className="item-usuario"
+                            onClick={() => agregarUsuario(u)}
+                          >
+                            <div className="usuario-info">
+                              <div className="avatar-usuario">
+                                {u.nombre?.[0]}{u.apellido?.[0]}
+                              </div>
+                              <div className="info-usuario">
+                                <div className="nombre-usuario">
+                                  {u.nombre} {u.apellido}
+                                </div>
+                                <div className="detalle-usuario">
+                                  {u.email} • {u.rol}
+                                </div>
+                              </div>
+                            </div>
+                            <button type="button" className="btn-agregar">+ Agregar</button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    <div className="contador-selector">
+                      <strong>{usuariosSeleccionados.length}</strong> usuario(s) seleccionado(s)
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
+            {tipoDestino === "todos" && (
+              <div className="info-message">
+                ℹ️ La notificación se enviará a <strong>TODOS</strong> los usuarios del sistema ({usuarios.length})
+              </div>
             )}
           </div>
-        )}
 
-        {tipoDestino === "todos" && (
-          <div className="ni-info">
-            ℹ️ La notificación se enviará a <strong>TODOS</strong> los usuarios ({usuarios.length})
-          </div>
-        )}
+          {/* Botón enviar */}
+          <button
+            className="btn-enviar"
+            onClick={generar}
+            disabled={cargando}
+          >
+            <Send size={18} />
+            Enviar Notificación
+          </button>
+        </div>
 
-        <button
-          className="btn-enviar"
-          onClick={generar}
-          disabled={cargando}
-        >
-          📩 Enviar notificación
-        </button>
       </div>
     </div>
   );

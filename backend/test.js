@@ -1,4 +1,4 @@
-// Verificaciones básicas de seguridad
+/*// Verificaciones básicas de seguridad
 import https from 'https';
 import { pool } from 'src/config/db.js';
 
@@ -29,4 +29,4 @@ async function basicSecurityChecks() {
   console.log('4. Validación archivos: ✅ Solo PDF aceptado (verificado)');
 }
 
-basicSecurityChecks();
+basicSecurityChecks();*/

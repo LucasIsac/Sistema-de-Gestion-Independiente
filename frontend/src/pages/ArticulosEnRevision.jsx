@@ -1,4 +1,3 @@
-//src/pages/ArticulosEnRevision.jsx
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext.js';
 import '../assets/styles/articulos-revision.css';
@@ -11,7 +10,6 @@ function ArticulosEnRevision() {
 
   useEffect(() => {
     fetchArticulosEnRevision();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const fetchArticulosEnRevision = async () => {
@@ -201,7 +199,7 @@ function ArticulosEnRevision() {
             <tbody>
               {articulos.map((articulo) => (
                 <tr key={articulo.id_articulo}>
-                  <td>{articulo.titulo}</td>
+                  <td className="titulo-columna">{articulo.titulo}</td>
                   <td>{articulo.categoria_nombre || 'Sin categoría'}</td>
                   <td>
                     <span className={`estado-badge ${getEstadoBadgeClass(articulo.estado)}`}>
@@ -213,15 +211,15 @@ function ArticulosEnRevision() {
                   <td className="acciones">
                     <button 
                       onClick={() => handleDownload(articulo.id_articulo, articulo)} 
-                      className="btn-accion"
+                      className="btn-accion descargar"
                     >
-                      Descargar
+                      📥 Descargar
                     </button>
                     <button 
                       onClick={() => handleView(articulo.id_articulo, articulo)} 
-                      className="btn-accion"
+                      className="btn-accion leer"
                     >
-                      Leer
+                      👁️ Leer
                     </button>
                     
                     {articulo.estado === 'rechazado' && (
@@ -229,7 +227,7 @@ function ArticulosEnRevision() {
                         onClick={() => handleReenviar(articulo.id_articulo, articulo.titulo)} 
                         className="btn-reenviar"
                       >
-                        Reenviar
+                        🔄 Reenviar
                       </button>
                     )}
                   </td>

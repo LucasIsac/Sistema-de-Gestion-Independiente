@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Tag, Plus, Trash2, List } from 'lucide-react'; // Importar íconos
+import { Tag, Plus, Trash2, List } from 'lucide-react';
 import "../assets/styles/gestionCategorias.css";
 
 export default function GestionCategorias() {
@@ -136,16 +136,16 @@ export default function GestionCategorias() {
           </div>
         </div>
 
-        {/* Formulario */}
-        <div className="form-container">
+        {/* Formulario - ESTRUCTURA SIMPLIFICADA */}
+        <div className="form-section">
           <div className="section-header">
             <Plus size={20} />
             <h2>Agregar Nueva Categoría</h2>
           </div>
           
-          <form className="categoria-form" onSubmit={agregar}>
-            <div className="form-grid">
-              <div className="form-group">
+          <form onSubmit={agregar} className="form-main">
+            <div className="form-fields">
+              <div className="field-group">
                 <label>Nombre de la categoría</label>
                 <input
                   value={nombre}
@@ -155,7 +155,7 @@ export default function GestionCategorias() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="field-group">
                 <label>Descripción</label>
                 <input
                   value={descripcion}
@@ -165,7 +165,7 @@ export default function GestionCategorias() {
                 />
               </div>
 
-              <div className="form-actions">
+              <div className="form-action">
                 <button type="submit" className="btn-primary">
                   <Plus size={16} />
                   Agregar categoría
@@ -176,7 +176,7 @@ export default function GestionCategorias() {
         </div>
 
         {/* Lista de Categorías */}
-        <div className="table-container">
+        <div className="table-section">
           <div className="section-header">
             <List size={20} />
             <h2>Categorías Existentes</h2>
@@ -189,40 +189,28 @@ export default function GestionCategorias() {
               <p>Comienza agregando tu primera categoría</p>
             </div>
           ) : (
-            <div className="categorias-table-container">
-              <table className="categorias-table">
+            <div className="table-container">
+              <table className="data-table">
                 <thead>
                   <tr>
-                    <th style={{ width: '80px' }}>#</th>
+                    <th>#</th>
                     <th>Nombre</th>
                     <th>Descripción</th>
-                    <th style={{ width: '120px' }}>Acciones</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {categorias.map((categoria, index) => (
                     <tr key={categoria.id_categoria}>
-                      <td>
-                        <div className="categoria-index">
-                          {index + 1}
-                        </div>
+                      <td className="index-cell">{index + 1}</td>
+                      <td className="name-cell">{categoria.nombre}</td>
+                      <td className="desc-cell">
+                        {categoria.descripcion || <span className="no-desc">—</span>}
                       </td>
-                      <td>
-                        <div className="categoria-nombre">
-                          {categoria.nombre}
-                        </div>
-                      </td>
-                      <td>
-                        <div className="categoria-descripcion">
-                          {categoria.descripcion || (
-                            <span className="text-muted">—</span>
-                          )}
-                        </div>
-                      </td>
-                      <td>
+                      <td className="action-cell">
                         <button
                           type="button"
-                          className="btn-danger"
+                          className="btn-delete"
                           onClick={() => eliminar(categoria.id_categoria, categoria.nombre)}
                         >
                           <Trash2 size={16} />

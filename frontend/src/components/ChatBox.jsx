@@ -1,7 +1,7 @@
+// ChatBox.jsx - Actualizado
 import React, { useState, useRef, useEffect } from "react";
 import { useChat } from "../context/chatContext.jsx";
 import { Send } from "lucide-react";
-import "../assets/styles/chat-page.css"; // asegúrate de tenerlo importado
 
 const ChatBox = ({ receptor, userId }) => {
   const { mensajes, enviarMensaje } = useChat();
@@ -26,19 +26,27 @@ const ChatBox = ({ receptor, userId }) => {
   }, [mensajesFiltrados]);
 
   return (
-    <div className="chat-box-container">
-      {/* HEADER */}
+    <>
+      {/* Header del chat */}
       <div className="chat-header">
-        <h2>💬 {receptor.nombre}</h2>
-        <span className="chat-status">en línea</span>
+        <div className="chat-header-info">
+          <h3 className="chat-partner-name">{receptor.nombre}</h3>
+          <span className="chat-status">
+            <span className="status-dot"></span>
+            En línea
+          </span>
+        </div>
       </div>
 
-      {/* MENSAJES */}
+      {/* Área de mensajes */}
       <div className="chat-messages">
         {mensajesFiltrados.length === 0 ? (
           <div className="chat-placeholder">
-            <h3>🌱 No hay mensajes todavía</h3>
-            <p>Comenzá la conversación con {receptor.nombre}</p>
+            <div className="placeholder-icon">🌱</div>
+            <h3 className="placeholder-title">No hay mensajes todavía</h3>
+            <p className="placeholder-text">
+              Comienza la conversación con {receptor.nombre}
+            </p>
           </div>
         ) : (
           mensajesFiltrados.map((m) => {
@@ -50,17 +58,20 @@ const ChatBox = ({ receptor, userId }) => {
                   esPropio ? "message-sent" : "message-received"
                 }`}
               >
-                {/* Nombre del otro usuario */}
+                {/* Nombre del remitente (solo para mensajes recibidos) */}
                 {!esPropio && (
                   <div className="message-sender">{receptor.nombre}</div>
                 )}
 
-                {/* Contenido */}
+                {/* Contenido del mensaje */}
                 <div className="message-text">{m.contenido}</div>
 
-                {/* Etiqueta inferior */}
-                <div className="message-label">
-                  {esPropio ? "Tú" : receptor.nombre}
+                {/* Hora del mensaje */}
+                <div className="message-time">
+                  {new Date(m.fecha_envio).toLocaleTimeString('es-AR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
                 </div>
               </div>
             );
@@ -69,28 +80,26 @@ const ChatBox = ({ receptor, userId }) => {
         <div ref={chatEndRef} />
       </div>
 
-      {/* INPUT */}
+      {/* Input de mensaje */}
       <div className="chat-input-container">
         <input
           type="text"
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
-          placeholder="Escribí un mensaje..."
+          placeholder="Escribe un mensaje..."
           onKeyDown={(e) => e.key === "Enter" && handleEnviar()}
           className="chat-input"
         />
         <button
           onClick={handleEnviar}
           disabled={!texto.trim()}
-          className={`chat-send-btn ${
-            texto.trim() ? "active" : "inactive"
-          }`}
+          className={`chat-send-btn ${!texto.trim() ? "inactive" : ""}`}
         >
-          <Send className="w-4 h-4" />
-          <span className="hidden sm:inline">Enviar</span>
+          <Send size={18} />
+          <span>Enviar</span>
         </button>
       </div>
-    </div>
+    </>
   );
 };
 
