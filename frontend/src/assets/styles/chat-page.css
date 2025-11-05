@@ -1,110 +1,215 @@
-/* Estilo general */
+/* 🌿 ESTILO GENERAL */
 .chat-page {
-  display: flex;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
-  font-family: "Segoe UI", "Poppins", sans-serif;
-  color: #1b5e20;
+display: flex;
+min-height: 100vh;
+background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+font-family: "Poppins", "Segoe UI", sans-serif;
+color: #1b5e20;
+transition: all 0.3s ease;
 }
 
-/* Sidebar (lista de usuarios) */
+/* 🧭 SIDEBAR (lista de usuarios) */
 .chat-sidebar {
-  width: 280px;
-  background-color: #ffffff; /* Fondo blanco */
-  color: #1b5e20;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  border-right: 2px solid #1c3d1c;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
-  transition: 0.3s ease;
+width: 280px;
+background-color: #ffffff;
+color: #1b5e20;
+padding: 20px;
+display: flex;
+flex-direction: column;
+border-right: 2px solid #1c3d1c;
+box-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
+transition: all 0.3s ease;
 }
 
 .sidebar-title {
-  font-size: 1.4rem;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 15px;
-  border-bottom: 2px solid #46664a;
-  padding-bottom: 8px;
-  letter-spacing: 0.5px;
+font-size: 1.4rem;
+font-weight: 600;
+text-align: center;
+margin-bottom: 15px;
+border-bottom: 2px solid #4caf50;
+padding-bottom: 8px;
+letter-spacing: 0.5px;
 }
 
-/* Estilo de cada usuario */
+/* 👤 USUARIO DE LA SIDEBAR */
 .sidebar-user {
-  background-color: #4caf50; /* Verde */
-  color: white;
-  padding: 12px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 80, 0, 0.15);
-  transition: transform 0.2s ease, background 0.2s ease;
+background: linear-gradient(135deg, #43a047, #2e7d32);
+color: #fff;
+padding: 12px;
+border-radius: 12px;
+margin-bottom: 10px;
+cursor: pointer;
+box-shadow: 0 3px 8px rgba(0, 80, 0, 0.1);
+transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .sidebar-user:hover {
-  background-color: #388e3c; /* Verde más oscuro */
-  transform: scale(1.03);
+transform: scale(1.03);
+background: linear-gradient(135deg, #388e3c, #2e7d32);
 }
 
-/* Panel de chat */
+/* 💬 PANEL DE CHAT */
 .chat-content {
-  flex: 1;
-  background-color: #fefefe;
-  border-radius: 16px 0 0 16px;
-  margin: 20px;
-  padding: 20px;
-  box-shadow: inset 0 0 8px rgba(0, 80, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
+flex: 1;
+background-color: #ffffff;
+border-radius: 20px;
+margin: 20px;
+padding: 20px;
+box-shadow: inset 0 0 8px rgba(0, 80, 0, 0.06);
+display: flex;
+flex-direction: column;
+overflow: hidden;
+transition: all 0.3s ease;
 }
 
-/* Placeholder (cuando no hay chat seleccionado) */
+/* 🕊️ PLACEHOLDER */
 .chat-placeholder {
-  margin: auto;
-  text-align: center;
-  color: #2e7d32;
-  background-color: #f1f8e9;
-  padding: 40px 60px;
-  border-radius: 16px;
-  border: 1px solid #a5d6a7;
-  box-shadow: 0 4px 15px rgba(0, 100, 0, 0.1);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+margin: auto;
+text-align: center;
+color: #2e7d32;
+background-color: #f1f8e9;
+padding: 40px 60px;
+border-radius: 18px;
+border: 1px solid #a5d6a7;
+box-shadow: 0 6px 18px rgba(0, 100, 0, 0.1);
+transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .chat-placeholder:hover {
-  transform: scale(1.03);
-  box-shadow: 0 6px 18px rgba(30, 102, 30, 0.2);
+transform: scale(1.03);
+box-shadow: 0 8px 22px rgba(30, 102, 30, 0.15);
 }
 
 .chat-placeholder h3 {
-  font-size: 1.5rem;
-  color: #1b5e20;
-  margin-bottom: 8px;
+font-size: 1.5rem;
+color: #1b5e20;
+margin-bottom: 8px;
 }
 
 .chat-placeholder p {
-  color: #388e3c;
-  font-size: 1rem;
-  line-height: 1.5;
+color: #388e3c;
+font-size: 1rem;
+line-height: 1.5;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .chat-page {
-    flex-direction: column;
-  }
+/* 💌 BURBUJAS DE MENSAJE */
+.message-bubble {
+position: relative;
+max-width: 70%;
+padding: 12px 16px;
+font-size: 0.9rem;
+border-radius: 18px;
+word-wrap: break-word;
+animation: fadeIn 0.25s ease-in;
+transition: transform 0.2s ease, background 0.2s ease;
+box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
 
-  .chat-sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 2px solid #81c784;
-    border-radius: 0;
-  }
+/* 🟢 MENSAJE ENVIADO */
+.message-sent {
+align-self: flex-end;
+background: linear-gradient(135deg, #43a047, #2e7d32);
+color: #fff;
+border-bottom-right-radius: 6px;
+margin-left: auto;
+}
 
-  .chat-content {
-    margin: 10px;
-    border-radius: 12px;
-  }
+.message-sent:hover {
+transform: scale(1.02);
+}
+
+/* ⚪ MENSAJE RECIBIDO */
+.message-received {
+align-self: flex-start;
+background-color: #f1f8e9;
+color: #2e7d32;
+border-bottom-left-radius: 6px;
+}
+
+.message-received:hover {
+background-color: #e8f5e9;
+transform: scale(1.02);
+}
+
+/* ✍️ NOMBRE Y ETIQUETAS */
+.message-sender {
+font-size: 0.75rem;
+font-weight: 600;
+color: #1b5e20;
+margin-bottom: 3px;
+margin-left: 4px;
+}
+
+.message-label {
+font-size: 0.7rem;
+color: #9e9e9e;
+margin-top: 3px;
+margin-right: 6px;
+}
+
+/* 🕒 HORA DEL MENSAJE */
+.message-time {
+font-size: 0.7rem;
+opacity: 0.7;
+position: absolute;
+bottom: -14px;
+right: 8px;
+}
+
+/* ✨ ANIMACIÓN DE ENTRADA */
+@keyframes fadeIn {
+from {
+opacity: 0;
+transform: translateY(4px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 992px) {
+.chat-page {
+flex-direction: column;
+}
+
+.chat-sidebar {
+width: 100%;
+border-right: none;
+border-bottom: 2px solid #81c784;
+box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.chat-content {
+margin: 10px;
+border-radius: 14px;
+padding: 16px;
+}
+
+.message-bubble {
+max-width: 85%;
+}
+}
+
+@media (max-width: 576px) {
+.sidebar-user {
+font-size: 0.9rem;
+padding: 10px;
+}
+
+.chat-placeholder {
+padding: 30px 20px;
+}
+
+.message-bubble {
+font-size: 0.85rem;
+padding: 10px 12px;
+max-width: 90%;
+}
+
+.chat-content {
+margin: 6px;
+padding: 12px;
+}
 }

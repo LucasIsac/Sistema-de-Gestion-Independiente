@@ -1,267 +1,348 @@
 /* ---------- CONTENEDOR GENERAL ---------- */
-.articulos-revision-container {
+.revisiones-container {
   padding: 2rem;
   background: linear-gradient(180deg, #f7fff8, #e8f5ec);
   box-shadow: inset 0 60px 80px rgba(0, 0, 0, 0.03);
   min-height: 100vh;
   font-family: "Poppins", sans-serif;
   color: #184d27;
+  transition: all 0.3s ease;
 }
 
 /* ---------- ENCABEZADO ---------- */
-.revision-header {
+.encabezado {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  animation: fadeIn 0.8s ease;
 }
 
-.revision-header h1 {
+.titulo-seccion {
   font-size: 2rem;
   font-family: "Playfair Display", serif;
   font-weight: 700;
   color: #184d27;
-  margin-bottom: 0.5rem;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.revision-header p {
-  font-size: 1rem;
-  color: #2e7d32;
-  font-weight: 500;
+/* ---------- FILTROS ---------- */
+.filtros {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 2rem;
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
 }
 
-/* ---------- LOADING Y ERROR ---------- */
+.campo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 220px;
+}
+
+.campo label {
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.campo select,
+.campo input {
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  border: 1.5px solid #b7d6b7;
+  width: 100%;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  color: #184d27;
+  background: #fff;
+}
+
+.campo input:focus,
+.campo select:focus {
+  outline: none;
+  border-color: #2e8b57;
+  box-shadow: 0 0 8px rgba(46, 139, 87, 0.3);
+}
+
+/* ---------- CARRUSEL ---------- */
+.carrusel-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  max-width: 1300px;
+}
+
+.carrusel-flechas {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  scrollbar-width: thin;
+}
+
+/* ---------- FLECHAS ---------- */
+.flecha {
+  background: #2e8b57;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  margin: 0 10px;
+  transition: background 0.3s;
+  flex-shrink: 0;
+  z-index: 5;
+}
+
+.flecha:hover {
+  background: #1b5e20;
+}
+
+/* ---------- TARJETAS ---------- */
+.tarjeta {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  width: 320px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeIn 0.6s ease;
+  border: 1px solid #dbe9dc;
+}
+
+.tarjeta:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(27, 94, 32, 0.25);
+}
+
+/* ---------- TEXTO EN TARJETA ---------- */
+.tarjeta h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #184d27;
+  margin-bottom: 0.3rem;
+}
+
+.autor,
+.fecha {
+  font-size: 0.9rem;
+  color: #2e7d32;
+  margin: 0.2rem 0;
+}
+
+/* ---------- TEXTAREA ---------- */
+textarea {
+  width: 100%;
+  height: 70px;
+  margin-top: 0.6rem;
+  border: 1.5px solid #b7d6b7;
+  border-radius: 8px;
+  padding: 0.6rem;
+  font-size: 0.9rem;
+  resize: none;
+  transition: all 0.3s ease;
+  color: #184d27;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #2e8b57;
+  box-shadow: 0 0 6px rgba(46, 139, 87, 0.3);
+}
+
+/* ---------- BOTONES ---------- */
+.acciones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.8rem;
+  gap: 0.5rem;
+}
+
+.btn {
+  flex: 1;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn.aprobar {
+  background: #2e8b57;
+  color: white;
+}
+
+.btn.aprobar:hover {
+  background: #1b5e20;
+  box-shadow: 0 4px 10px rgba(27, 94, 32, 0.35);
+}
+
+.btn.rechazar {
+  background: #e53e3e;
+  color: white;
+}
+
+.btn.rechazar:hover {
+  background: #c53030;
+  box-shadow: 0 4px 10px rgba(197, 48, 48, 0.35);
+}
+
+.archivos {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.8rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.archivos button {
+  background: #fff;
+  color: #2e8b57;
+  border: 1.5px solid #2e8b57;
+  border-radius: 10px;
+  padding: 0.4rem 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.archivos button:hover {
+  background: #2e8b57;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ---------- ESTADOS ---------- */
 .loading,
 .error {
   text-align: center;
   padding: 3rem;
   font-size: 1.2rem;
-  color: #184d27;
 }
 
 .error {
-  color: #c0392b;
-  background-color: #f8d7da;
-  border-radius: 8px;
+  color: #a33a2f;
+  background-color: #fcebea;
+  border-radius: 10px;
   margin: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* ---------- TABLA WRAPPER ---------- */
-.tabla-wrapper {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  margin: 0 auto;
-  max-width: 1400px;
+/* ---------- ANIMACIONES ---------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* ---------- TABLA DE ARTÍCULOS ---------- */
-.revision-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #fff;
-}
-
-.revision-table th,
-.revision-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.revision-table th {
-  background-color: #f7f7f7;
-  font-weight: 600;
-  color: #184d27;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.5px;
-}
-
-.revision-table tbody tr {
-  transition: background-color 0.2s ease;
-}
-
-.revision-table tbody tr:hover {
-  background-color: #f9fdf9;
-}
-
-.revision-table tr:last-child td {
-  border-bottom: none;
-}
-
-/* ---------- BADGES DE ESTADO ---------- */
-.estado-badge {
-  display: inline-block;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-align: center;
-}
-
-.estado-revision {
-  background-color: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeaa7;
-}
-
-.estado-rechazado {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-.estado-aprobado {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.estado-default {
-  background-color: #e2e3e5;
-  color: #383d41;
-  border: 1px solid #d6d8db;
-}
-
-/* ---------- ACCIONES ---------- */
-.acciones {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.btn-accion {
-  background: transparent;
-  border: 1.5px solid #1b5e20;
-  color: #1b5e20;
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  font-family: "Poppins", sans-serif;
-}
-
-.btn-accion:hover {
-  background: #1b5e20;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(27, 94, 32, 0.3);
-}
-
-.btn-accion:active {
-  transform: translateY(0);
-}
-
-.btn-reenviar {
-  background: #2e8b57;
-  border: none;
-  color: white;
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  font-family: "Poppins", sans-serif;
-}
-
-.btn-reenviar:hover {
-  background: #1b5e20;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(27, 94, 32, 0.3);
-}
-
-.btn-reenviar:active {
-  transform: translateY(0);
-}
-
-/* ---------- MENSAJE SIN ARTÍCULOS ---------- */
-.no-articulos {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  margin: 2rem auto;
-  max-width: 600px;
-}
-
-.no-articulos p {
-  font-size: 1.1rem;
-  color: #456b54;
-  margin-bottom: 0.5rem;
-}
-
-.no-articulos p:first-child {
-  font-weight: 600;
-  color: #184d27;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-}
-
-/* ---------- RESPONSIVE ---------- */
+/* ---------- RESPONSIVE DESIGN ---------- */
 @media (max-width: 1200px) {
-  .tabla-wrapper {
+  .titulo-seccion {
+    font-size: 1.8rem;
+  }
+  .carrusel-container {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 900px) {
+  .revisiones-container {
+    padding: 1.5rem;
+  }
+
+  .filtros {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+
+  .carrusel-flechas {
+    gap: 1rem;
     overflow-x: auto;
   }
-  
-  .revision-table {
-    min-width: 900px;
-  }
-}
 
-@media (max-width: 768px) {
-  .articulos-revision-container {
-    padding: 1rem;
+  .tarjeta {
+    width: 90%;
+    margin: 0 auto;
   }
-  
-  .revision-header h1 {
-    font-size: 1.5rem;
-  }
-  
-  .revision-table th,
-  .revision-table td {
-    padding: 0.75rem 0.5rem;
-    font-size: 0.85rem;
-  }
-  
+
   .acciones {
     flex-direction: column;
   }
-  
-  .btn-accion,
-  .btn-reenviar {
+
+  .btn {
     width: 100%;
-    padding: 0.6rem;
-  }
-  
-  .estado-badge {
-    font-size: 0.75rem;
-    padding: 0.3rem 0.6rem;
   }
 }
 
-@media (max-width: 480px) {
-  .revision-header h1 {
-    font-size: 1.3rem;
+@media (max-width: 600px) {
+  .titulo-seccion {
+    font-size: 1.5rem;
   }
-  
-  .revision-header p {
+
+  .filtros {
+    padding: 1rem;
+    gap: 0.8rem;
+  }
+
+  .campo label {
     font-size: 0.9rem;
   }
-  
-  .no-articulos {
-    padding: 2rem 1rem;
+
+  .campo select,
+  .campo input {
+    width: 100%;
+    font-size: 0.85rem;
   }
-  
-  .no-articulos p:first-child {
-    font-size: 1.1rem;
+
+  .tarjeta {
+    width: 100%;
+    padding: 1rem;
   }
-  
-  .no-articulos p {
-    font-size: 0.95rem;
+
+  textarea {
+    height: 60px;
+  }
+
+  .flecha {
+    display: none; /* flechas ocultas en pantallas pequeñas */
+  }
+
+  .carrusel-flechas {
+    gap: 0.8rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .titulo-seccion {
+    font-size: 1.3rem;
+  }
+
+  .revisiones-container {
+    padding: 1rem;
+  }
+
+  .btn {
+    font-size: 0.85rem;
   }
 }

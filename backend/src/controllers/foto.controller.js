@@ -87,18 +87,19 @@ export const getFotosGlobales = async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT f.*, 
-              u.nombre as fotografo_nombre, 
-              u.apellido as fotografo_apellido,
-              c.nombre as categoria_nombre 
+              u.nombre AS fotografo_nombre, 
+              u.apellido AS fotografo_apellido,
+              c.nombre AS categoria_nombre 
        FROM fotos f 
        LEFT JOIN usuarios u ON f.fotografo_id = u.id_usuario
        LEFT JOIN categorias c ON f.categoria_id = c.id_categoria
+       WHERE f.es_global = true -- ✅ filtro clave
        ORDER BY f.fecha DESC`
     );
-    
+
     const fotosConUrl = result.rows.map(foto => ({
       ...foto,
-      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo}`
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo}`,
     }));
 
     res.json(fotosConUrl);
@@ -107,6 +108,7 @@ export const getFotosGlobales = async (req, res) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
+
 
 // =============================
 // CAMBIAR VISIBILIDAD (Personal ↔ Global)
