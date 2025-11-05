@@ -17,6 +17,8 @@ import fotoRoutes from './routes/foto.routes.js';
 import categoriaRoutes from './routes/categoria.routes.js';
 import onlineUsersRoutes from './routes/onlineUsers.routes.js';
 import fileRoutes from './routes/file.routes.js';
+import logsRoutes from "./routes/logs.routes.js";
+
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -78,6 +80,7 @@ app.use("/api/notificaciones", notificacionesRoutes);
 app.use('/api', fileRoutes);
 app.use('/api/categorias', categoriaRoutes);
 app.use('/api/admin', onlineUsersRoutes);
+app.use("/api/logs", logsRoutes); 
 
 // 📂 Ruta estática unificada para todos los archivos subidos
 // Sirve el contenido de la carpeta `backend/uploads` en la ruta `/uploads`

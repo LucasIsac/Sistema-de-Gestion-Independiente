@@ -19,6 +19,7 @@ import ArticulosEnRevision from './pages/ArticulosEnRevision.jsx';
 import ArticulosAprobados from './pages/ArticulosAprobados.jsx';
 import ConfiguracionUsuario from './pages/ConfiguracionUsuario';
 import RevisionEditor from './pages/RevisionEditor';
+import AdminLogs from './pages/AdminLogs.jsx';
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { DashboardAdmin } from './pages/DashboardAdmin.jsx';
 import ChatPage from './pages/ChatPage.jsx'; // Importar ChatPage
@@ -75,6 +76,10 @@ function AppContent() {
         <Route element={<ProtectedRoute allow={['administrador']} />}>
           <Route path="/gestion-roles" element={<GestionRoles />} />
         </Route>
+
+        <Route element={<ProtectedRoute allow={['administrador']} />}>
+          <Route path="/admin/logs" element={<AdminLogs />} />
+          </Route>
 
         <Route element={<ProtectedRoute allow={['administrador']} />}>
           <Route path="/gestion-categorias" element={<GestionCategorias />} />

@@ -1,4 +1,4 @@
-// 📁 middlewares/auth.middleware.js - SIMPLIFICAR
+// 📁 middlewares/auth.middleware.js - COMPLETO
 import jwt from 'jsonwebtoken';
 import { pool } from '../config/db.js';
 
@@ -13,7 +13,6 @@ export async function verifyToken(req, res, next) {
   
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    // Corrección: El ID del usuario viene en la propiedad 'userId' del token
     req.userId = decoded.userId;
 
     // 🔹 Obtener datos del usuario CON SU ROL
@@ -22,7 +21,7 @@ export async function verifyToken(req, res, next) {
        FROM usuarios u
        JOIN roles r ON u.rol_id = r.id_rol
        WHERE u.id_usuario = $1`,
-      [req.userId] // Usar el req.userId ya corregido
+      [req.userId]
     );
 
     if (rows.length === 0) {
@@ -100,4 +99,39 @@ export async function checkEditorRole(req, res, next) {
     console.error("🔴 Error en checkEditorRole:", err);
     res.status(500).json({ message: "Error al verificar rol" });
   }
+}
+
+// 🆕 NUEVO: Middleware genérico para múltiples roles
+export function checkRole(rolesPermitidos) {
+  return (req, res, next) => {
+    try {
+      const categoria = req.user?.categoria?.toLowerCase();
+
+      if (!categoria) {
+        return res.status(403).json({ 
+          message: "No se pudo verificar el rol del usuario" 
+        });
+      }
+
+      // Normalizar roles permitidos
+      const rolesNormalizados = rolesPermitidos.map(rol => rol.toLowerCase());
+      
+      // Verificar si el usuario tiene uno de los roles permitidos
+      if (rolesNormalizados.includes(categoria)) {
+        console.log(`✅ Rol verificado: ${req.user.usuario} (${categoria})`);
+        return next();
+      }
+
+      console.log(`❌ Acceso denegado: ${req.user.usuario} es ${categoria}, se requiere: ${rolesPermitidos.join(' o ')}`);
+      return res.status(403).json({ 
+        message: `Acceso denegado: se requiere rol de ${rolesPermitidos.join(' o ')}`,
+        tuCategoria: req.user.categoria,
+        rolesRequeridos: rolesPermitidos
+      });
+
+    } catch (err) {
+      console.error("🔴 Error en checkRole:", err);
+      res.status(500).json({ message: "Error al verificar permisos" });
+    }
+  };
 }

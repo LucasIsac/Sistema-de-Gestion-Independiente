@@ -45,9 +45,11 @@ export default function Navbar() {
       { to: "/gestion-categorias", texto: "Gestión de Categorías" },
       { to: "/notificaciones-internas", texto: "Notificaciones Internas" },
       { to: "/admin/dashboard", texto: "Panel" },
+      {to: "/admin/logs", texto: "Logs del Sistema"},
       { to: "/galeria-global", texto: "Galería" },
       { to: "/chat", texto: "Chat" },
       { tipo: "notificaciones", texto: "Notificaciones" },
+
     ],
   };
 

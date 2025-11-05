@@ -1,6 +1,8 @@
 import { pool } from "../config/db.js";
 import path from "path";
 import fs from "fs";
+import { logAction } from "../helpers/logAction.js";
+
 
 // =============================
 // SUBIR FOTO 
@@ -45,6 +47,12 @@ export const uploadFoto = async (req, res) => {
     console.log("✅ Foto subida con éxito");
 
     res.status(201).json(result.rows[0]);
+
+    await logAction({
+  usuario_id: req.userId,
+  accion: 'crear',
+  descripcion: `Subió foto "${titulo}"${categoria_id ? ` en categoría ${categoria_id}` : ''}${es_global ? ' (global)' : ' (personal)'}`
+});
 
   } catch (error) {
     console.error("❌ Error en uploadFoto:", error);
@@ -143,6 +151,12 @@ export const toggleVisibilidadFoto = async (req, res) => {
       es_global: !foto.es_global
     });
 
+    await logAction({
+  usuario_id: userId,
+  accion: 'actualizar',
+  descripcion: `Cambió visibilidad de foto ID ${id} a ${!foto.es_global ? 'global' : 'personal'}`
+});
+
   } catch (error) {
     console.error("❌ Error al cambiar visibilidad:", error);
     res.status(500).json({ message: "Error interno del servidor" });
@@ -192,6 +206,12 @@ export const deleteFoto = async (req, res) => {
     await pool.query(`DELETE FROM fotos WHERE id_foto = $1`, [id]);
 
     res.json({ success: true, message: "Foto eliminada correctamente" });
+
+    await logAction({
+  usuario_id: userId,
+  accion: 'eliminar',
+  descripcion: `Eliminó foto ID ${id} ("${foto.titulo}")`
+});
 
   } catch (error) {
     console.error("❌ Error al eliminar foto:", error);
@@ -289,6 +309,18 @@ export const viewFoto = async (req, res) => {
     // Enviar la imagen directamente
     res.setHeader('Content-Type', tipo_archivo);
     res.sendFile(path.resolve(ruta_archivo));
+
+    await logAction({
+  usuario_id: req.userId,
+  accion: 'descargar',
+  descripcion: `Descargó foto ID ${id}`
+});
+
+await logAction({
+  usuario_id: req.userId,
+  accion: 'visualizar',
+  descripcion: `Visualizó foto ID ${id}`
+});
 
   } catch (error) {
     console.error("❌ Error al visualizar foto:", error);
