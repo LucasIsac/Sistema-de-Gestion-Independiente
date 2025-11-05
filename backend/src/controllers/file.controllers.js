@@ -471,7 +471,7 @@ export const getArticlesForReview = async (req, res) => {
        FROM usuarios u 
        JOIN roles r ON u.rol_id = r.id_rol 
        WHERE u.id_usuario = $1`,
-      [req.userId]
+      [req.userId] // ✅ Usar req.userId
     );
 
     if (userCheck.rows.length === 0 || userCheck.rows[0].rol !== 'Editor') {
@@ -486,11 +486,12 @@ export const getArticlesForReview = async (req, res) => {
        ORDER BY a.fecha_modificacion DESC`
     );
 
+    // ✅ CORREGIDO: Usar req.userId en lugar de userId
     await logAction({
-  usuario_id: userId,
-  accion: 'enviar_revision',
-  descripcion: `Envió artículo ID ${id} ("${article.titulo}") a revisión`
-});
+      usuario_id: req.userId, // ✅ Cambiado de userId a req.userId
+      accion: 'visualizar',
+      descripcion: `Revisó artículos en revisión como editor`
+    });
     
     res.json(result.rows);
   } catch (error) {
