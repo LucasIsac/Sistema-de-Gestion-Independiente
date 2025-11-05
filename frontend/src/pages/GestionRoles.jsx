@@ -152,7 +152,6 @@ export default function GestionRoles() {
   );
 }
 
-// 🔹 COMPONENTE DE FILA DE USUARIO
 function UsuarioFila({ usuario, roles, onReasignar }) {
   const [nuevoRolId, setNuevoRolId] = useState('');
 
@@ -168,19 +167,35 @@ function UsuarioFila({ usuario, roles, onReasignar }) {
     onReasignar(usuario.id, parseInt(nuevoRolId));
   };
 
-  // ✅ Obtener el nombre del rol actual
-  const getRolNombre = (rolId) => {
-    const rol = roles.find(r => r.id_rol === rolId);
+
+  // ✅ FUNCIÓN MEJORADA para obtener el nombre del rol actual
+  const getRolNombre = (usuario) => {
+    if (usuario.rol_nombre) return usuario.rol_nombre;        // caso: backend devuelve rol_nombre
+    if (usuario.rol?.nombre) return usuario.rol.nombre;        // caso: backend devuelve objeto rol
+    const rol = roles.find(r => r.id_rol === usuario.rol_id);  // caso: backend devuelve solo rol_id
     return rol ? rol.nombre : 'Sin rol asignado';
   };
+
+  // ✅ FUNCIÓN para aplicar clases de color según el rol
+  const getBadgeClass = (rolNombre) => {
+    if (!rolNombre) return 'badge';
+    const nombre = rolNombre.toLowerCase();
+    if (nombre.includes('admin')) return 'badge rol-administrador';
+    if (nombre.includes('editor')) return 'badge rol-editor';
+    if (nombre.includes('periodista')) return 'badge rol-periodista';
+    if (nombre.includes('fotografo')) return 'badge rol-fotografo';
+    return 'badge';
+  };
+
+  const rolActual = getRolNombre(usuario);
 
   return (
     <tr>
       <td>{usuario.nombre} {usuario.apellido}</td>
       <td>{usuario.email}</td>
       <td>
-        <span className="badge">
-          {getRolNombre(usuario.rol_id)}
+        <span className={getBadgeClass(rolActual)}>
+          {rolActual}
         </span>
       </td>
       <td>
@@ -209,3 +224,4 @@ function UsuarioFila({ usuario, roles, onReasignar }) {
     </tr>
   );
 }
+

@@ -1,31 +1,35 @@
-/* ===== CONTENEDOR GENERAL ===== */
+/* =========================================================
+   🌿 ESTILOS GENERALES Y CONTENEDOR
+   ========================================================= */
 .ni-container {
   max-width: 900px;
   margin: 30px auto;
   padding: 0 15px;
+  font-family: "Times New Roman", serif;
 }
 
 .ni-title {
-  font-size: 35px; /* +2px */
+  font-size: 30px;
   font-weight: 700;
-  color: #064420; /* Verde oscuro */
+  color: #064420;
   margin-bottom: 20px;
   text-align: left;
-  font-family: "Times New Roman", serif;
 }
 
-
-/* ===== TARJETA GENERAL ===== */
+/* =========================================================
+   🧾 TARJETA PRINCIPAL
+   ========================================================= */
 .ni-card {
-  background: white;
+  background: #ffffff;
   padding: 25px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid #dce3ed;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-  font-family: "Times New Roman", serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* ===== FORMULARIO ===== */
+/* =========================================================
+   🖋️ FORMULARIO
+   ========================================================= */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -33,7 +37,7 @@
 }
 
 .form-group label {
-  font-size: 25px; /* +1px */
+  font-size: 20px;
   font-weight: 600;
   margin-bottom: 6px;
   color: #1e2a38;
@@ -48,9 +52,9 @@
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid #cfd8e3;
-  font-size: 25px; /* +1px */
-  outline: none;
+  font-size: 18px;
   background: #fafbfc;
+  outline: none;
 }
 
 .form-input:focus,
@@ -59,20 +63,22 @@
 .busqueda-input:focus,
 .filtro-rol:focus {
   border-color: #0b5234;
-  background: white;
+  background: #ffffff;
 }
 
-/* ===== SELECTOR DE USUARIOS ===== */
+/* =========================================================
+   👥 SELECTOR DE USUARIOS
+   ========================================================= */
 .selector-card {
   background: #f7f9fc;
   border: 1px solid #dce3ed;
   border-radius: 10px;
   padding: 18px;
-  margin-top: 12px;
+  margin-top: 15px;
 }
 
 .selector-header {
-  font-size: 20px; /* +1px */
+  font-size: 20px;
   font-weight: 600;
   margin-bottom: 14px;
   color: #1e2a38;
@@ -82,9 +88,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  align-items: center;
   margin-bottom: 12px;
   min-height: 38px;
-  align-items: center;
 }
 
 .usuario-tag {
@@ -95,7 +101,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 20px; /* +1px */
+  font-size: 18px;
   border: 1px solid #c8d8ff;
 }
 
@@ -103,29 +109,35 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 20px; /* +1px */
+  font-size: 18px;
   color: #094226;
   font-weight: bold;
 }
 
 .placeholder-tag {
   color: #64748b;
-  font-size: 20px; /* +1px */
+  font-size: 18px;
   opacity: 0.9;
 }
 
 .btn-abrir-selector {
   margin-top: 10px;
   padding: 8px 12px;
-  background: white;
+  background: #ffffff;
   border: 1px solid #cfd8e3;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 20px; /* +1px */
+  font-size: 18px;
   font-weight: 600;
 }
 
-/* ===== LISTA DE USUARIOS ===== */
+.btn-abrir-selector:hover {
+  background: #f1f5f9;
+}
+
+/* =========================================================
+   🧍 LISTA DE USUARIOS
+   ========================================================= */
 .lista-usuarios {
   margin-top: 20px;
   max-height: 250px;
@@ -133,7 +145,7 @@
   border: 1px solid #dce3ed;
   border-radius: 8px;
   padding: 10px;
-  background: white;
+  background: #ffffff;
 }
 
 .item-usuario {
@@ -143,6 +155,7 @@
   border-bottom: 1px solid #eef2f6;
   padding: 8px 6px;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .item-usuario:last-child {
@@ -171,13 +184,13 @@
 }
 
 .nombre-usuario {
-  font-size: 20px; /* +1px */
+  font-size: 18px;
   font-weight: 600;
   color: #1e2a38;
 }
 
 .detalle-usuario {
-  font-size: 20px; /* +1px */
+  font-size: 16px;
   color: #64748b;
 }
 
@@ -185,10 +198,10 @@
   background: #e8f0fe;
   color: #08472d;
   border: 1px solid #c8d8ff;
-  padding: 5px 9px;
+  padding: 5px 10px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 20px; /* +1px */
+  font-size: 16px;
   font-weight: bold;
 }
 
@@ -196,12 +209,14 @@
   background: #dbe6ff;
 }
 
+/* =========================================================
+   ⚡ BOTONES RÁPIDOS
+   ========================================================= */
 .botones-rapidos {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 15px;
-  font-size: 20px; /* +1px */
   align-items: center;
 }
 
@@ -211,43 +226,50 @@
   padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 16px;
 }
 
 .btn-rapido:hover {
   background: #e5ecf5;
 }
 
+/* =========================================================
+   ⏳ ESTADOS Y CONTADORES
+   ========================================================= */
 .cargando,
 .sin-resultados {
   padding: 12px;
   text-align: center;
   color: #64748b;
-  font-size: 20px; /* +1px */
+  font-size: 16px;
 }
 
 .contador-selector {
   margin-top: 10px;
   text-align: right;
-  font-size: 20px; /* +1px */
+  font-size: 16px;
   color: #1e2a38;
 }
 
-/* ===== ENVIAR ===== */
+/* =========================================================
+   🚀 BOTÓN ENVIAR
+   ========================================================= */
 .btn-enviar {
   margin-top: 20px;
   width: 100%;
   background: #064d26;
-  color: white;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   padding: 12px;
-  font-size: 20px; /* +1px */
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .btn-enviar:hover {
-  background: #094e18;
+  background: #0a6c3a;
 }
 
 .btn-enviar:disabled {
@@ -255,7 +277,9 @@
   cursor: not-allowed;
 }
 
-/* ===== EXTRA ===== */
+/* =========================================================
+   🔔 MENSAJES
+   ========================================================= */
 .ni-error {
   background: #ffe6e6;
   border: 1px solid #ffb3b3;
@@ -263,6 +287,7 @@
   padding: 10px;
   border-radius: 8px;
   margin-bottom: 12px;
+  font-size: 16px;
 }
 
 .ni-info {
@@ -272,5 +297,71 @@
   padding: 10px;
   border-radius: 8px;
   margin-top: 12px;
-  font-size: 20px; /* +1px */
+  font-size: 16px;
+}
+
+/* =========================================================
+   📱 RESPONSIVE DESIGN
+   ========================================================= */
+@media (max-width: 768px) {
+  .ni-container {
+    padding: 0 10px;
+  }
+
+  .ni-card {
+    padding: 18px;
+  }
+
+  .ni-title {
+    font-size: 26px;
+    text-align: center;
+  }
+
+  .form-group label {
+    font-size: 18px;
+  }
+
+  .form-input,
+  .form-textarea,
+  .form-select {
+    font-size: 16px;
+  }
+
+  .selector-header,
+  .usuario-tag,
+  .btn-abrir-selector,
+  .nombre-usuario,
+  .btn-enviar {
+    font-size: 16px;
+  }
+
+  .btn-agregar,
+  .detalle-usuario,
+  .contador-selector {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ni-container {
+    margin: 20px auto;
+  }
+
+  .ni-title {
+    font-size: 22px;
+  }
+
+  .btn-enviar {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .usuario-tag {
+    padding: 4px 10px;
+  }
+
+  .avatar-usuario {
+    width: 30px;
+    height: 30px;
+  }
 }

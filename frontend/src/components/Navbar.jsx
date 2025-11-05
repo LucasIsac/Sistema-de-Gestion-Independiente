@@ -17,28 +17,25 @@ export default function Navbar() {
   const linksPorCategoria = {
     periodista: [
       { to: '/notas', texto: 'Mis Artículos' },
-      { to: '/periodista-upload', texto: 'Subir Articulo' },
+      { to: '/periodista-upload', texto: 'Subir Artículo' },
       { to: '/ArticulosEnRevision', texto: 'Enviados a Revisión' },
-      { to: '/galeria-global', texto: 'Galeria' },
+      { to: '/galeria-global', texto: 'Galería' },
       { to: '/chat', texto: 'Chat' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
-    
     ],
     fotografo: [
-      { to: '/galeria-global', texto: 'Galeria' },
+      { to: '/galeria-global', texto: 'Galería' },
       { to: '/galeria', texto: 'Galería Personal' },
-      { to: '/FotografoUpload', texto: 'Subir foto' },
+      { to: '/FotografoUpload', texto: 'Subir Foto' },
       { to: '/chat', texto: 'Chat' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
-
     ],
     editor: [
       { to: '/revisiones', texto: 'Revisiones' },
       { to: '/articulos-aprobados', texto: 'Aprobados' },
-      { to: '/galeria-global', texto: 'Galeria' },
+      { to: '/galeria-global', texto: 'Galería' },
       { to: '/chat', texto: 'Chat' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
-
     ],
     administrador: [
       { to: '/gestion-roles', texto: 'Gestión de Roles' },
@@ -46,10 +43,9 @@ export default function Navbar() {
       { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
       { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
       { to: '/admin/dashboard', texto: 'Panel' },
-      { to: '/galeria-global', texto: 'Galeria' },
+      { to: '/galeria-global', texto: 'Galería' },
       { to: '/chat', texto: 'Chat' },
       { tipo: 'notificaciones', texto: 'Notificaciones' },
-
     ],
   };
 
@@ -71,12 +67,10 @@ export default function Navbar() {
           console.error("❌ Error al obtener notificaciones:", err);
         }
       };
-
       cargarNotificaciones();
     }
   }, [user, token]);
 
-  // Marcar notificación como leída
   const marcarComoLeida = async (id) => {
     try {
       await fetch("http://localhost:5000/api/notificaciones/marcar-leida", {
@@ -84,7 +78,6 @@ export default function Navbar() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_notificacion: id })
       });
-
       setNotificaciones((prev) =>
         prev.map((n) =>
           n.id_notificacion === id ? { ...n, leido: true } : n
@@ -95,7 +88,6 @@ export default function Navbar() {
     }
   };
 
-  // Cerrar menús al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -109,66 +101,58 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Componente UserDrawer
-  const UserDrawer = ({ isOpen, onClose }) => {
-    return (
-      <>
-        <div className={`user-drawer-overlay ${isOpen ? 'open' : ''}`} onClick={onClose} />
-        
-        <div className={`user-drawer ${isOpen ? 'open' : ''}`}>
-          <div className="user-drawer-header">
-            {user?.foto ? (
-              <img 
-                src={user.foto}
-                alt="Avatar"
-                className="user-drawer-avatar"
-              />
-            ) : (
-              <div className="user-drawer-avatar">
-                {user?.nombre.charAt(0)}
-                {user?.apellido.charAt(0)}
-              </div>
-            )}
-            <div className="user-drawer-info">
-              <h3>{user?.nombre} {user?.apellido}</h3>
-              <p>{user?.email}</p>
+  const UserDrawer = ({ isOpen, onClose }) => (
+    <>
+      <div className={`user-drawer-overlay ${isOpen ? 'open' : ''}`} onClick={onClose} />
+      <div className={`user-drawer ${isOpen ? 'open' : ''}`}>
+        <div className="user-drawer-header">
+          {user?.foto ? (
+            <img src={user.foto} alt="Avatar" className="user-drawer-avatar" />
+          ) : (
+            <div className="user-drawer-avatar">
+              {user?.nombre.charAt(0)}
+              {user?.apellido.charAt(0)}
             </div>
+          )}
+          <div className="user-drawer-info">
+            <h3>{user?.nombre} {user?.apellido}</h3>
+            <p>{user?.email}</p>
           </div>
+        </div>
 
-          <div className="user-drawer-options">
-            <Link to="/perfil" className="user-drawer-item" onClick={onClose}>
-              <span>👤</span> Mi perfil
-            </Link>
-            <Link to="/configuracion" className="user-drawer-item" onClick={onClose}>
-              <span>⚙️</span> Configuración
-            </Link>
-          </div>
+        <div className="user-drawer-options">
+          <Link to="/perfil" className="user-drawer-item" onClick={onClose}>
+            👤 Mi perfil
+          </Link>
+          <Link to="/configuracion" className="user-drawer-item" onClick={onClose}>
+            ⚙️ Configuración
+          </Link>
+        </div>
 
-          <button className="user-drawer-logout" onClick={() => {
+        <button
+          className="user-drawer-logout"
+          onClick={() => {
             logout();
             onClose();
-          }}>
-            Cerrar sesión
-          </button>
-        </div>
-      </>
-    );
-  };
+          }}
+        >
+          Cerrar sesión
+        </button>
+      </div>
+    </>
+  );
 
-  // Función para alternar el menú hamburguesa
-  const toggleMenu = () => {
-    setMenuAbierto((prev) => !prev);
-  };
+  const toggleMenu = () => setMenuAbierto((prev) => !prev);
 
   return (
     <nav className="navbar" ref={navbarRef}>
-      {/* Botón de menú hamburguesa para móviles */}
-      <button className="menu-toggle" onClick={toggleMenu}>
-        ☰
-      </button>
-
-      <div className="nav-logo">
-        <img src={logo} alt="Logo" />
+      <div className="navbar-left">
+        <button className="menu-toggle" onClick={toggleMenu} aria-label="Abrir menú">
+          ☰
+        </button>
+        <div className="nav-logo">
+          <img src={logo} alt="Logo" />
+        </div>
       </div>
 
       <ul className={`nav-links ${menuAbierto ? 'active' : ''}`}>
@@ -220,7 +204,9 @@ export default function Navbar() {
             </li>
           ) : (
             <li key={l.to}>
-              <Link to={l.to} onClick={() => setMenuAbierto(false)}>{l.texto}</Link>
+              <Link to={l.to} onClick={() => setMenuAbierto(false)}>
+                {l.texto}
+              </Link>
             </li>
           )
         )}
@@ -232,14 +218,10 @@ export default function Navbar() {
             <div
               className="user-avatar"
               onClick={() => setDrawerOpen(true)}
-              title="Abrir/cerrar menú usuario"
+              title="Abrir menú usuario"
             >
               {user?.foto ? (
-                <img
-                  src={user.foto}
-                  alt="Avatar"
-                  className="avatar-image"
-                />
+                <img src={user.foto} alt="Avatar" className="avatar-image" />
               ) : (
                 <div className="avatar-initials">
                   {user?.nombre.charAt(0)}
@@ -247,14 +229,10 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-
-            <UserDrawer
-              isOpen={drawerOpen}
-              onClose={() => setDrawerOpen(false)}
-            />
+            <UserDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
           </div>
         ) : (
-          <Link to="/login">Iniciar sesión</Link>
+          <Link to="/login" className="btn-login">Iniciar sesión</Link>
         )}
       </div>
     </nav>
