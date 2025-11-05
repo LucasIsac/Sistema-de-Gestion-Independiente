@@ -52,23 +52,23 @@ app.use(
   })
 );
 
-// 🔐 3. RATE LIMITING PARA LOGIN (Protección contra fuerza bruta)
+/*// 🔐 3. RATE LIMITING PARA LOGIN (Protección contra fuerza bruta)
 const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 5, // máximo 5 intentos de login cada 15 minutos
+  windowMs: 1 * 60 * 1000, // 15 minutos
+  max: 100, // máximo 5 intentos de login cada 15 minutos
   message: {
     error: 'Demasiados intentos de login. Por seguridad, espera 15 minutos.',
   },
   standardHeaders: true,
   legacyHeaders: false,
-});
+});*/
 
 // 🧩 Middlewares básicos
 app.use(express.json());
 
 // 🛣️ RUTAS CON SEGURIDAD APLICADA
 // Login con rate limiting ESPECÍFICO
-app.use('/api/auth/login', loginLimiter); // Limita solo /login
+//app.use('/api/auth/login', loginLimiter); // Limita solo /login
 app.use('/api/auth', authRoutes); // Rutas normales de auth
 
 // Resto de rutas

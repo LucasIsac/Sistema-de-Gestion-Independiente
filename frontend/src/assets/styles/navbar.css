@@ -67,7 +67,10 @@
 /* ------------------------ */
 /* NOTIFICACIONES           */
 /* ------------------------ */
-.notificaciones-wrapper { position: relative; }
+
+.notificaciones-wrapper { 
+  position: relative; 
+}
 
 .btn-notificaciones {
   background: none;
@@ -80,27 +83,42 @@
   gap: 0.3rem;
   padding: 0.5rem;
   transition: all 0.3s ease;
+  position: relative;
 }
+
 .btn-notificaciones:hover {
   color: #297c3e;
   transform: translateY(-1px);
 }
 
+/* DROPDOWN CORREGIDO */
 .dropdown-notificaciones {
-  position: fixed;
-  top: 100%;
+  position: absolute; /* Cambiado de fixed a absolute */
+  top: 100%; /* Se posiciona justo debajo del botón */
   right: 0;
   background-color: #ffffff;
   color: #000000;
   border: 1px solid #ccc;
   border-radius: 6px;
-  width: 280px;
+  width: 320px; /* Un poco más ancho */
   max-height: 70vh;
   overflow-y: auto;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+  z-index: 1001; /* Mayor z-index para estar por encima */
   transform-origin: top right;
   animation: fadeIn 0.2s ease-out;
+  margin-top: 5px; /* Pequeño espacio del botón */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .notificacion-item {
@@ -111,15 +129,21 @@
   flex-direction: column;
   transition: background-color 0.2s ease;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
 }
-.notificacion-item:last-child { border-bottom: none; }
+
+.notificacion-item:last-child { 
+  border-bottom: none; 
+}
 
 .notificacion-item.no-leida {
   background-color: #eef7ee;
   font-weight: bold;
 }
 
-.notificacion-item:hover { background: #f5f5f5; }
+.notificacion-item:hover { 
+  background: #f5f5f5; 
+}
 
 .notificacion-contenido {
   margin-top: 8px;
@@ -134,14 +158,15 @@
   margin: 0 0 8px 0;
   font-size: 0.85rem;
   color: #333;
+  line-height: 1.4;
 }
+
 .notificacion-contenido small {
   font-size: 0.75rem;
   color: #777;
   display: block;
   text-align: right;
 }
-
 /* Badge de notificaciones no leídas */
 .badge {
   position: absolute;
@@ -154,8 +179,12 @@
   padding: 2px 6px;
   border-radius: 50%;
   transform: translate(30%, -30%);
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 /* ------------------------ */
 /* USUARIO / DROPDOWN       */
 /* ------------------------ */
