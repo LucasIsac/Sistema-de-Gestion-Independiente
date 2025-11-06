@@ -46,7 +46,9 @@ export const ChatProvider = ({ children, userId }) => {
 
   return (
     <ChatContext.Provider value={{ mensajes, enviarMensaje, solicitarHistorial }}>
+     <div key="chat-provider-wrapper"> {}
       {children}
+      </div>    
     </ChatContext.Provider>
   );
 };
