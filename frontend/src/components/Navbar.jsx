@@ -77,7 +77,6 @@ export default function Navbar() {
     }
   }, [user, token]);
 
-  // Marcar notificación como leída
   const marcarComoLeida = async (id) => {
     try {
       await fetch("http://localhost:5000/api/notificaciones/marcar-leida", {
@@ -95,7 +94,6 @@ export default function Navbar() {
     }
   };
 
-  // Cerrar menús al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -208,7 +206,7 @@ export default function Navbar() {
             />
           </div>
         ) : (
-          <Link to="/login">Iniciar sesión</Link>
+          <Link to="/login" className="btn-login">Iniciar sesión</Link>
         )}
       </div>
     </nav>

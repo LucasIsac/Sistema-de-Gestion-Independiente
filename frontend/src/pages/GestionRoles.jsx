@@ -210,7 +210,6 @@ export default function GestionRoles() {
   );
 }
 
-// 🔹 COMPONENTE DE FILA DE USUARIO
 function UsuarioFila({ usuario, roles, onReasignar }) {
   const [nuevoRolId, setNuevoRolId] = useState('');
 
@@ -226,9 +225,12 @@ function UsuarioFila({ usuario, roles, onReasignar }) {
     onReasignar(usuario.id, parseInt(nuevoRolId));
   };
 
-  // ✅ Obtener el nombre del rol actual
-  const getRolNombre = (rolId) => {
-    const rol = roles.find(r => r.id_rol === rolId);
+
+  // ✅ FUNCIÓN MEJORADA para obtener el nombre del rol actual
+  const getRolNombre = (usuario) => {
+    if (usuario.rol_nombre) return usuario.rol_nombre;        // caso: backend devuelve rol_nombre
+    if (usuario.rol?.nombre) return usuario.rol.nombre;        // caso: backend devuelve objeto rol
+    const rol = roles.find(r => r.id_rol === usuario.rol_id);  // caso: backend devuelve solo rol_id
     return rol ? rol.nombre : 'Sin rol asignado';
   };
 
