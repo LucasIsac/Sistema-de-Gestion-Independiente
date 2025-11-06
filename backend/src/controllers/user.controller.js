@@ -13,7 +13,7 @@ import {
   deleteUser,
   findRoles ,
 } from '../models/user.model.js';
-
+import { pool } from '../config/db.js';
 const saltRounds = 10;
 
 export async function registrarUsuario(req, res) {
@@ -75,110 +75,126 @@ export async function registrarUsuario(req, res) {
   }
 }
 
-// Agrega estos nuevos métodos al final, sin modificar lo existente:
-
-import { pool } from '../config/db.js';
-
 export async function obtenerUsuario(req, res) {
   const { id } = req.params;
 
   try {
     const { rows } = await pool.query(
-      `SELECT id_usuario, nombre, apellido, email, telefono 
-       FROM usuarios WHERE id_usuario = $1`,
+      `SELECT 
+         u.id_usuario AS id,
+         u.nombre,
+         u.apellido,
+         u.email,
+         u.telefono,
+         u.usuario,
+         u.rol_id,
+         r.nombre AS rol_nombre
+       FROM usuarios u
+       JOIN roles r ON u.rol_id = r.id_rol
+       WHERE u.id_usuario = $1`,
       [id]
     );
 
     if (rows.length === 0) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
     res.json({ usuario: rows[0] });
   } catch (err) {
-    console.error('💥 obtenerUsuario:', err);
-    res.status(500).json({ message: 'Error al obtener usuario' });
+    console.error("💥 obtenerUsuario:", err);
+    res.status(500).json({ message: "Error al obtener usuario" });
   }
 }
 
 export async function actualizarUsuario(req, res) {
   const { id } = req.params;
-  
-  // Validación robusta del ID
+
   if (!id || isNaN(parseInt(id))) {
-    return res.status(400).json({ message: 'ID de usuario inválido' });
+    return res.status(400).json({ message: "ID de usuario inválido" });
   }
 
-  const { nombre, apellido, email, telefono, rol, usuario } = req.body; // ✅ Agregar rol y usuario
+  // 🔧 Usar rol_id en vez de rol
+  const { nombre, apellido, email, telefono, rol_id, usuario } = req.body;
 
   try {
-    // 1. Verificar usuario existe
     const userCheck = await pool.query(
-      'SELECT id_usuario, usuario, email FROM usuarios WHERE id_usuario = $1',
+      "SELECT id_usuario, usuario, email FROM usuarios WHERE id_usuario = $1",
       [id]
     );
-    
+
     if (userCheck.rows.length === 0) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    // 2. Verificar que el NUEVO usuario no exista (excluyendo el actual)
     if (usuario && usuario !== userCheck.rows[0].usuario) {
       const usuarioExistente = await pool.query(
-        'SELECT id_usuario FROM usuarios WHERE usuario = $1 AND id_usuario != $2',
+        "SELECT id_usuario FROM usuarios WHERE usuario = $1 AND id_usuario != $2",
         [usuario, id]
       );
       if (usuarioExistente.rows.length > 0) {
-        return res.status(409).json({ message: 'Nombre de usuario ya existe' });
+        return res
+          .status(409)
+          .json({ message: "Nombre de usuario ya existe" });
       }
     }
 
-    // 3. Verificar que el NUEVO email no exista (excluyendo el actual)
     if (email && email !== userCheck.rows[0].email) {
       const emailExistente = await pool.query(
-        'SELECT id_usuario FROM usuarios WHERE email = $1 AND id_usuario != $2',
+        "SELECT id_usuario FROM usuarios WHERE email = $1 AND id_usuario != $2",
         [email, id]
       );
       if (emailExistente.rows.length > 0) {
-        return res.status(409).json({ message: 'El email ya existe' });
+        return res.status(409).json({ message: "El email ya existe" });
       }
     }
 
-    // 4. Actualizar
+    // ✅ Actualizar con rol_id
     const { rows } = await pool.query(
       `UPDATE usuarios 
        SET nombre = $1, apellido = $2, email = $3, telefono = $4, rol_id = $5, usuario = $6
        WHERE id_usuario = $7
        RETURNING id_usuario, nombre, apellido, email, telefono, rol_id, usuario`,
-      [nombre, apellido, email, telefono, rol, usuario, id]
+      [nombre, apellido, email, telefono, rol_id, usuario, id]
     );
 
-    res.json({ 
-      message: 'Usuario actualizado correctamente',
-      usuario: rows[0] 
+    res.json({
+      message: "Usuario actualizado correctamente",
+      usuario: rows[0],
     });
   } catch (err) {
-    console.error('💥 actualizarUsuario:', err);
-    res.status(500).json({ 
-      message: 'Error al actualizar usuario',
-      error: err.message
+    console.error("💥 actualizarUsuario:", err);
+    res.status(500).json({
+      message: "Error al actualizar usuario",
+      error: err.message,
     });
   }
 }
+
 
 export async function obtenerUsuarios(req, res) {
   try {
     const { rows } = await pool.query(
-      `SELECT id_usuario as id, nombre, apellido, email, usuario, telefono, rol_id 
-       FROM usuarios 
-       WHERE activo = true
-       ORDER BY nombre, apellido`
+      `SELECT 
+         u.id_usuario AS id,
+         u.nombre,
+         u.apellido,
+         u.email,
+         u.usuario,
+         u.telefono,
+         u.rol_id,
+         r.nombre AS rol_nombre
+       FROM usuarios u
+       JOIN roles r ON u.rol_id = r.id_rol
+       WHERE u.activo = true
+       ORDER BY u.nombre, u.apellido`
     );
     res.json(rows);
   } catch (err) {
-    console.error('💥 obtenerUsuarios:', err);
-    res.status(500).json({ message: 'Error al obtener usuarios' });
+    console.error("💥 obtenerUsuarios:", err);
+    res.status(500).json({ message: "Error al obtener usuarios" });
   }
 }
+
 
 export async function eliminarUsuario(req, res) {
   const { id } = req.params;

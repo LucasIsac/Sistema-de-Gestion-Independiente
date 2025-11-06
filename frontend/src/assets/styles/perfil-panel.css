@@ -1,0 +1,118 @@
+/* ========================== */
+/* PERFIL DE USUARIO - PANEL */
+/* ========================== */
+
+.perfil-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  width: 380px;
+  max-width: 90%;
+  padding: 1.8rem;
+  z-index: 2000;
+  animation: aparecer 0.3s ease-in-out;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ====== ENCABEZADO ====== */
+.perfil-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid #d6d6d6;
+  padding-bottom: 0.5rem;
+}
+
+.perfil-header h2 {
+  font-size: 1.3rem;
+  color: #1b4332;
+  margin: 0;
+}
+
+.perfil-cerrar {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.perfil-cerrar:hover {
+  color: #1b4332;
+}
+
+/* ====== CONTENIDO ====== */
+.perfil-contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.perfil-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #74c69d;
+  margin-bottom: 1rem;
+}
+
+.perfil-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ====== INFORMACIÓN ====== */
+.perfil-info {
+  background: #f8faf8;
+  border-radius: 12px;
+  padding: 1rem;
+  width: 100%;
+}
+
+.perfil-info p {
+  margin: 0.4rem 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.perfil-info strong {
+  color: #1b4332;
+}
+
+/* ====== ANIMACIÓN ====== */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* ====== RESPONSIVO ====== */
+@media (max-width: 480px) {
+  .perfil-panel {
+    width: 90%;
+    padding: 1.2rem;
+  }
+
+  .perfil-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .perfil-avatar {
+    width: 100px;
+    height: 100px;
+  }
+}
