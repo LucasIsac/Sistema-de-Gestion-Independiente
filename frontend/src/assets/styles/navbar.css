@@ -447,3 +447,31 @@
   outline: none;
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
 }
+
+/* Centrar completamente la campanita dentro de su espacio */
+.notificaciones-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 💡 esto la centra horizontalmente */
+}
+
+/* Asegura que el botón no altere la alineación */
+.btn-notificaciones {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 💡 centra el emoji dentro del botón */
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #d9dde0;
+  font-size: 1.3rem; /* opcional: hacelo un poco más grande si querés */
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+.nav-links li.notificaciones-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
