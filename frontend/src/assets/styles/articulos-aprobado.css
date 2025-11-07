@@ -1,78 +1,149 @@
-/* Contenedor principal */
-.articulos-revision-container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #f4f9f4; /* fondo suave */
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* ---------- CONTENEDOR PRINCIPAL ---------- */
+.revisiones-container {
+  padding: 2rem;
+  background: linear-gradient(180deg, #f7fff8, #eaf6ec);
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: #184d27;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
 }
 
-/* Título Artículos Aprobados */
-.articulos-revision-container h1 {
+/* ---------- TÍTULO ---------- */
+.titulo-seccion {
   text-align: center;
-  color: #1b4d2c; /* verde más oscuro */
-  font-family: 'Georgia', 'Times New Roman', serif; /* tipografía elegante similar a la imagen */
   font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 25px;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  color: #184d27;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-
-/* Tabla */
+/* ---------- TABLA ---------- */
 .articulos-table {
   width: 100%;
+  max-width: 1100px;
   border-collapse: collapse;
-  margin-top: 10px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: fadeIn 0.6s ease;
+}
+
+.articulos-table thead {
+  background: #2e8b57;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .articulos-table th,
 .articulos-table td {
-  padding: 12px 15px;
+  padding: 14px 18px;
   text-align: left;
-}
-
-.articulos-table thead {
-  background-color: #2e7d32; /* verde oscuro */
-  color: #ffffff;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .articulos-table tbody tr {
-  background-color: #ffffff;
-  border-bottom: 1px solid #ddd;
-  transition: background 0.3s;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .articulos-table tbody tr:hover {
-  background-color: #e8f5e9; /* verde muy suave al pasar el mouse */
+  background-color: #e8f5e9;
+  transform: scale(1.01);
 }
 
-/* Botón descargar */
+/* ---------- BOTÓN DESCARGAR ---------- */
 .btn-download {
-  background-color: #43a047; /* verde */
+  background: #2e8b57;
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .btn-download:hover {
-  background-color: #2e7d32; /* verde más oscuro al pasar el mouse */
+  background: #1c5b3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(28, 92, 49, 0.25);
 }
 
-/* Mensajes de error o info */
-.error-message {
-  color: #d32f2f; /* rojo suave */
+/* ---------- MENSAJES ---------- */
+.error-message,
+.revisiones-container p {
   text-align: center;
-  margin-top: 20px;
-  font-weight: bold;
-}
-
-.articulos-revision-container p {
-  text-align: center;
-  color: #555;
   font-size: 1rem;
+  margin-top: 1.5rem;
+}
+
+.error-message {
+  color: #a33a2f;
+  font-weight: 600;
+}
+
+.revisiones-container p {
+  color: #456b54;
+}
+
+/* ---------- ANIMACIONES ---------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .articulos-table th,
+  .articulos-table td {
+    padding: 12px 10px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .articulos-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .btn-download {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .titulo-seccion {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .revisiones-container {
+    padding: 1.2rem;
+  }
+
+  .articulos-table th,
+  .articulos-table td {
+    font-size: 0.85rem;
+  }
+
+  .btn-download {
+    width: 100%;
+    text-align: center;
+  }
 }

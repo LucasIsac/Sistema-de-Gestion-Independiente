@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { Users, Shield } from 'lucide-react'; // Importar íconos
 import '../assets/styles/gestionRoles.css';
 
 export default function GestionRoles() {
@@ -65,88 +66,145 @@ export default function GestionRoles() {
     }
   };
 
-  if (loading) return <div className="loading">Cargando datos...</div>;
-  if (error) return <div className="error-message">Error: {error}</div>;
+  if (loading) return (
+    <div className="gestion-roles-container">
+      <div className="loading-container">
+        <div className="spin">⟳</div>
+        <p>Cargando datos...</p>
+      </div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="gestion-roles-container">
+      <div className="error-message">{error}</div>
+    </div>
+  );
 
   return (
     <div className="gestion-roles-container">
-      <h1>Gestión de Roles del Sistema</h1>
-      
-      {error && <div className="error-message">{error}</div>}
-      
-      {/* 🔹 RESUMEN DE ROLES EXISTENTES */}
-      <div className="roles-resumen">
-        <h2>Roles Disponibles</h2>
-        <div className="roles-grid">
-          {roles.map(rol => (
-            <div key={rol.id_rol} className="rol-card">
-              <h3>
-                {rol.nombre === 'administrador' && '👑 '}
-                {rol.nombre === 'Editor' && '📝 '}
-                {rol.nombre === 'Periodista' && '✍️ '}
-                {rol.nombre === 'Fotografo' && '📸 '}
-                {rol.nombre}
-              </h3>
-              <p>
-                {rol.nombre === 'administrador' && 'Responsable de la gestión general del sistema, asignación de roles, control de usuarios y mantenimiento de la plataforma.'}
-                {rol.nombre === 'Editor' && 'Encargado de revisar, corregir y aprobar los contenidos antes de su publicación en el sistema.'}
-                {rol.nombre === 'Periodista' && 'Se dedica a la redacción y publicación de noticias, artículos e informes periodísticos dentro del sistema.'}
-                {rol.nombre === 'Fotografo' && 'Responsable de capturar, subir y administrar las imágenes utilizadas en las publicaciones y galerías del medio.'}
-                {!['Administrador','Editor','Periodista','Fotografo'].includes(rol.nombre) && (rol.descripcion || 'Descripción no disponible')}
-              </p>
-              <small>
-                {usuarios.filter(u => u.rol_id === rol.id_rol).length} usuarios
-              </small>
-            </div>
-          ))}
+      <div className="gestion-roles-content">
+        
+        {/* Header */}
+        <div className="page-header">
+          <div className="header-content">
+            <h1>Gestión de Roles del Sistema</h1>
+            <p>Administra y asigna roles a los usuarios del sistema</p>
+          </div>
         </div>
-      </div>
 
-      {/* 🔹 REASIGNACIÓN DE ROLES */}
-      <div className="reasignacion-roles">
-        <h2>Reasignar Roles a Usuarios</h2>
-        {usuarios.length === 0 ? (
-          <p>No hay usuarios para mostrar</p>
-        ) : (
-          <table className="usuarios-table">
-            <thead>
-              <tr>
-                <th>Usuario</th>
-                <th>Email</th>
-                <th>Rol Actual</th>
-                <th>Nuevo Rol</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usuarios.map(usuario => (
-                <UsuarioFila 
-                  key={usuario.id} 
-                  usuario={usuario} 
-                  roles={roles} 
-                  onReasignar={reasignarRol}
-                />
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-
-      {/* 🔹 ESTADÍSTICAS */}
-      <div className="roles-estadisticas">
-        <h2>Estadísticas por Rol</h2>
+        {/* 🔹 ESTADÍSTICAS */}
         <div className="stats-grid">
           {roles.map(rol => {
             const cantidad = usuarios.filter(u => u.rol_id === rol.id_rol).length;
+            const totalUsuarios = usuarios.length;
+            const porcentaje = totalUsuarios > 0 ? (cantidad / totalUsuarios) * 100 : 0;
+            
             return (
               <div key={rol.id_rol} className="stat-card">
-                <h4>{rol.nombre}</h4>
-                <p className="stat-number">{cantidad}</p>
-                <small>usuarios</small>
+                <div className="stat-header">
+                  <h3 className="stat-title">{rol.nombre}</h3>
+                  <Users className="stat-icon" size={24} />
+                </div>
+                <p className="stat-value">{cantidad}</p>
+                <p className="stat-description">usuarios asignados</p>
+                <div className="stat-meta">
+                  <span>{porcentaje.toFixed(1)}% del total</span>
+                </div>
               </div>
             );
           })}
+          {/* Estadística total */}
+          <div className="stat-card">
+            <div className="stat-header">
+              <h3 className="stat-title">Total Usuarios</h3>
+              <Users className="stat-icon" size={24} />
+            </div>
+            <p className="stat-value">{usuarios.length}</p>
+            <p className="stat-description">usuarios registrados</p>
+          </div>
         </div>
+
+        {/* 🔹 RESUMEN DE ROLES EXISTENTES */}
+        <div className="roles-resumen">
+          <div className="section-header">
+            <Shield size={20} />
+            <h2>Roles Disponibles</h2>
+          </div>
+          <div className="roles-grid">
+            {roles.map(rol => {
+              const cantidadUsuarios = usuarios.filter(u => u.rol_id === rol.id_rol).length;
+              const getIcon = (nombre) => {
+                switch(nombre) {
+                  case 'administrador': return '👑';
+                  case 'Editor': return '📝';
+                  case 'Periodista': return '✍️';
+                  case 'Fotografo': return '📸';
+                  default: return '👤';
+                }
+              };
+
+              const getDescripcion = (nombre) => {
+                switch(nombre) {
+                  case 'administrador': return 'Responsable de la gestión general del sistema, asignación de roles, control de usuarios y mantenimiento de la plataforma.';
+                  case 'Editor': return 'Encargado de revisar, corregir y aprobar los contenidos antes de su publicación en el sistema.';
+                  case 'Periodista': return 'Se dedica a la redacción y publicación de noticias, artículos e informes periodísticos dentro del sistema.';
+                  case 'Fotografo': return 'Responsable de capturar, subir y administrar las imágenes utilizadas en las publicaciones y galerías del medio.';
+                  default: return rol.descripcion || 'Descripción no disponible';
+                }
+              };
+
+              return (
+                <div key={rol.id_rol} className={`rol-card ${rol.nombre.toLowerCase()}`}>
+                  <h3>
+                    {getIcon(rol.nombre)} {rol.nombre}
+                  </h3>
+                  <p>{getDescripcion(rol.nombre)}</p>
+                  <small>{cantidadUsuarios} usuarios asignados</small>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 🔹 REASIGNACIÓN DE ROLES */}
+        <div className="reasignacion-roles">
+          <div className="section-header">
+            <Users size={20} />
+            <h2>Reasignar Roles a Usuarios</h2>
+          </div>
+          
+          {usuarios.length === 0 ? (
+            <div className="no-results">
+              <p>No hay usuarios para mostrar</p>
+            </div>
+          ) : (
+            <div className="usuarios-table-container">
+              <table className="usuarios-table">
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Rol Actual</th>
+                    <th>Nuevo Rol</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {usuarios.map(usuario => (
+                    <UsuarioFila 
+                      key={usuario.id} 
+                      usuario={usuario} 
+                      roles={roles} 
+                      onReasignar={reasignarRol}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );
@@ -189,13 +247,34 @@ function UsuarioFila({ usuario, roles, onReasignar }) {
 
   const rolActual = getRolNombre(usuario);
 
+  const getRolClass = (rolId) => {
+    const rol = roles.find(r => r.id_rol === rolId);
+    return rol ? `rol-${rol.nombre.toLowerCase()}` : '';
+  };
+
   return (
     <tr>
-      <td>{usuario.nombre} {usuario.apellido}</td>
+      <td>
+        <div className="user-cell">
+          <div className="user-avatar">
+            {usuario.nombre?.[0]}{usuario.apellido?.[0]}
+          </div>
+          <div className="user-info">
+            <div className="user-name">
+              {usuario.nombre} {usuario.apellido}
+            </div>
+            <div className="user-details">
+              ID: {usuario.id}
+            </div>
+          </div>
+        </div>
+      </td>
       <td>{usuario.email}</td>
       <td>
-        <span className={getBadgeClass(rolActual)}>
+        <span className={getBadgeClass(rolActual)}></span>
           {rolActual}
+        <span className={`badge ${getRolClass(usuario.rol_id)}`}>
+          {getRolNombre(usuario.rol_id)}
         </span>
       </td>
       <td>

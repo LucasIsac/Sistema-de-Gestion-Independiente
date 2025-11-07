@@ -23,7 +23,7 @@ router.get('/my', verifyToken, getMyFotos);
 // Rutas para fotógrafos
 router.post('/upload', verifyToken, uploadMiddleware.single('archivo'), uploadFoto);
 router.put('/:id/toggle-visibility', verifyToken, toggleVisibilidadFoto);
-router.delete('/:id', verifyToken, checkAdminRole, deleteFoto);
+router.delete('/:id', verifyToken, deleteFoto);
 router.get('/view/:id', verifyToken, viewFoto);
 router.get('/global', getFotosGlobales);
 

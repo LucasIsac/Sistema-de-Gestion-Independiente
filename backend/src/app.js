@@ -17,6 +17,8 @@ import fotoRoutes from './routes/foto.routes.js';
 import categoriaRoutes from './routes/categoria.routes.js';
 import onlineUsersRoutes from './routes/onlineUsers.routes.js';
 import fileRoutes from './routes/file.routes.js';
+import logsRoutes from "./routes/logs.routes.js";
+
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -34,21 +36,13 @@ const allowedOrigins = [
   'http://localhost:5174'
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.warn('❌ Bloqueado por CORS:', origin);
-        callback(new Error('CORS not allowed'));
-      }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
-);
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['*'], // Permite todos los headers temporalmente
+  optionsSuccessStatus: 200
+}));
 
 // 🔐 3. RATE LIMITING PARA LOGIN (Protección contra fuerza bruta)
 const loginLimiter = rateLimit({
@@ -78,6 +72,7 @@ app.use("/api/notificaciones", notificacionesRoutes);
 app.use('/api', fileRoutes);
 app.use('/api/categorias', categoriaRoutes);
 app.use('/api/admin', onlineUsersRoutes);
+app.use("/api/logs", logsRoutes); 
 
 // 📂 Ruta estática unificada para todos los archivos subidos
 // Sirve el contenido de la carpeta `backend/uploads` en la ruta `/uploads`
@@ -89,5 +84,7 @@ app.get('/test', (req, res) => res.json({ message: 'Test OK' }));
 
 // 🧯 Middleware de errores
 app.use(errorHandler);
+
+
 
 export default app;

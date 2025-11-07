@@ -2,102 +2,151 @@
 .articulos-revision-container {
   padding: 2rem;
   background: linear-gradient(180deg, #f7fff8, #e8f5ec);
-  box-shadow: inset 0 60px 80px rgba(0, 0, 0, 0.03);
   min-height: 100vh;
   font-family: "Poppins", sans-serif;
   color: #184d27;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* ---------- ENCABEZADO ---------- */
 .revision-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  animation: fadeIn 0.8s ease;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .revision-header h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-family: "Playfair Display", serif;
   font-weight: 700;
   color: #184d27;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 0 0.5rem 0;
 }
 
 .revision-header p {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #2e7d32;
-  font-weight: 500;
+  margin: 0;
 }
 
-/* ---------- LOADING Y ERROR ---------- */
-.loading,
-.error {
-  text-align: center;
-  padding: 3rem;
-  font-size: 1.2rem;
-  color: #184d27;
-}
-
-.error {
-  color: #c0392b;
-  background-color: #f8d7da;
-  border-radius: 8px;
-  margin: 2rem;
-}
-
-/* ---------- TABLA WRAPPER ---------- */
-.tabla-wrapper {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+/* ---------- CONTENEDOR DE TABLA ---------- */
+.tabla-container {
+  max-width: 1200px;
   margin: 0 auto;
-  max-width: 1400px;
 }
 
-/* ---------- TABLA DE ARTÍCULOS ---------- */
+.tabla-wrapper {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* ---------- TABLA ---------- */
 .revision-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;
+  font-size: 0.95rem;
+  min-width: 800px; /* Ancho mínimo para mantener legibilidad */
 }
 
-.revision-table th,
-.revision-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+.revision-table thead {
+  background: linear-gradient(135deg, #2e8b57, #1b5e20);
+  color: white;
 }
 
 .revision-table th {
-  background-color: #f7f7f7;
+  padding: 1rem 0.75rem;
+  text-align: left;
   font-weight: 600;
-  color: #184d27;
+  font-size: 0.9rem;
   text-transform: uppercase;
-  font-size: 0.85rem;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .revision-table tbody tr {
-  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.3s ease;
 }
 
 .revision-table tbody tr:hover {
-  background-color: #f9fdf9;
+  background-color: #f8f9fa;
 }
 
-.revision-table tr:last-child td {
-  border-bottom: none;
+.revision-table td {
+  padding: 1rem 0.75rem;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.revision-table .titulo-columna {
+  font-weight: 600;
+  color: #184d27;
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Columnas específicas con anchos controlados */
+.revision-table th:nth-child(1), /* Título */
+.revision-table td:nth-child(1) {
+  max-width: 250px;
+  min-width: 200px;
+}
+
+.revision-table th:nth-child(2), /* Categoría */
+.revision-table td:nth-child(2) {
+  max-width: 150px;
+  min-width: 120px;
+}
+
+.revision-table th:nth-child(3), /* Estado */
+.revision-table td:nth-child(3) {
+  max-width: 120px;
+  min-width: 100px;
+}
+
+.revision-table th:nth-child(4), /* Fecha envío */
+.revision-table td:nth-child(4) {
+  max-width: 180px;
+  min-width: 150px;
+}
+
+.revision-table th:nth-child(5), /* Fecha modificación */
+.revision-table td:nth-child(5) {
+  max-width: 180px;
+  min-width: 150px;
+}
+
+.revision-table th:nth-child(6), /* Acciones */
+.revision-table td:nth-child(6) {
+  max-width: 300px;
+  min-width: 250px;
+  white-space: normal;
 }
 
 /* ---------- BADGES DE ESTADO ---------- */
 .estado-badge {
-  display: inline-block;
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
   text-align: center;
+  min-width: 100px;
 }
 
 .estado-revision {
@@ -113,103 +162,185 @@
 }
 
 .estado-aprobado {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background-color: #d1edff;
+  color: #004085;
+  border: 1px solid #b3d7ff;
 }
 
 .estado-default {
-  background-color: #e2e3e5;
-  color: #383d41;
-  border: 1px solid #d6d8db;
+  background-color: #e9ecef;
+  color: #495057;
+  border: 1px solid #dee2e6;
 }
 
-/* ---------- ACCIONES ---------- */
+/* ---------- BOTONES DE ACCIÓN ---------- */
 .acciones {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .btn-accion {
-  background: transparent;
-  border: 1.5px solid #1b5e20;
-  color: #1b5e20;
+  padding: 0.5rem 0.8rem;
+  border: none;
   border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
-  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 80px;
+  justify-content: center;
 }
 
-.btn-accion:hover {
-  background: #1b5e20;
-  color: #fff;
+.btn-accion.descargar {
+  background-color: #2e8b57;
+  color: white;
+}
+
+.btn-accion.descargar:hover {
+  background-color: #1b5e20;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(27, 94, 32, 0.3);
 }
 
-.btn-accion:active {
-  transform: translateY(0);
+.btn-accion.leer {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn-accion.leer:hover {
+  background-color: #138496;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(19, 132, 150, 0.3);
 }
 
 .btn-reenviar {
-  background: #2e8b57;
+  padding: 0.5rem 0.8rem;
   border: none;
-  color: white;
   border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  transition: all 0.3s ease;
   cursor: pointer;
-  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+  background-color: #ffc107;
+  color: #212529;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 80px;
+  justify-content: center;
 }
 
 .btn-reenviar:hover {
-  background: #1b5e20;
+  background-color: #e0a800;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(27, 94, 32, 0.3);
+  box-shadow: 0 4px 8px rgba(224, 168, 0, 0.3);
 }
 
-.btn-reenviar:active {
-  transform: translateY(0);
-}
-
-/* ---------- MENSAJE SIN ARTÍCULOS ---------- */
-.no-articulos {
+/* ---------- ESTADOS DE CARGA Y ERROR ---------- */
+.loading, .error {
   text-align: center;
-  padding: 4rem 2rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 3rem;
+  font-size: 1.2rem;
+  background: white;
+  border-radius: 16px;
   margin: 2rem auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   max-width: 600px;
 }
 
+.error {
+  color: #a33a2f;
+  background-color: #fcebea;
+  border: 1px solid #f5c6cb;
+}
+
+/* ---------- SIN ARTÍCULOS ---------- */
+.no-articulos {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  color: #6c757d;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .no-articulos p {
+  margin: 0.5rem 0;
   font-size: 1.1rem;
-  color: #456b54;
-  margin-bottom: 0.5rem;
 }
 
-.no-articulos p:first-child {
-  font-weight: 600;
-  color: #184d27;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
+/* ---------- SCROLLBAR PERSONALIZADO ---------- */
+.tabla-wrapper::-webkit-scrollbar {
+  height: 8px;
 }
 
-/* ---------- RESPONSIVE ---------- */
+.tabla-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.tabla-wrapper::-webkit-scrollbar-thumb {
+  background: #2e8b57;
+  border-radius: 4px;
+}
+
+.tabla-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #1b5e20;
+}
+
+/* ---------- ANIMACIONES ---------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- RESPONSIVE DESIGN ---------- */
 @media (max-width: 1200px) {
-  .tabla-wrapper {
-    overflow-x: auto;
+  .articulos-revision-container {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .revision-header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .tabla-container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .revision-header h1 {
+    font-size: 2rem;
   }
   
   .revision-table {
-    min-width: 900px;
+    min-width: 700px;
+  }
+  
+  .revision-table th:nth-child(1),
+  .revision-table td:nth-child(1) {
+    max-width: 200px;
+    min-width: 150px;
   }
 }
 
@@ -217,51 +348,119 @@
   .articulos-revision-container {
     padding: 1rem;
   }
-  
-  .revision-header h1 {
-    font-size: 1.5rem;
+
+  .revision-header {
+    margin-bottom: 1.5rem;
   }
-  
+
+  .revision-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .revision-header p {
+    font-size: 1rem;
+  }
+
+  .tabla-wrapper {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .revision-table {
+    min-width: 600px;
+    font-size: 0.9rem;
+  }
+
   .revision-table th,
   .revision-table td {
     padding: 0.75rem 0.5rem;
-    font-size: 0.85rem;
   }
-  
+
   .acciones {
     flex-direction: column;
+    gap: 0.3rem;
   }
-  
+
   .btn-accion,
   .btn-reenviar {
     width: 100%;
-    padding: 0.6rem;
+    min-width: auto;
   }
-  
+}
+
+@media (max-width: 600px) {
+  .revision-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .tabla-wrapper {
+    padding: 0.75rem;
+    margin: 0 -0.5rem;
+    border-radius: 8px;
+  }
+
+  .revision-table {
+    min-width: 500px;
+  }
+
+  .revision-table th,
+  .revision-table td {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.85rem;
+  }
+
   .estado-badge {
-    font-size: 0.75rem;
     padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    min-width: 80px;
+  }
+
+  .btn-accion,
+  .btn-reenviar {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
+  .articulos-revision-container {
+    padding: 0.5rem;
+  }
+
   .revision-header h1 {
     font-size: 1.3rem;
   }
-  
+
   .revision-header p {
     font-size: 0.9rem;
   }
-  
+
   .no-articulos {
     padding: 2rem 1rem;
+    margin: 0 0.5rem;
   }
-  
-  .no-articulos p:first-child {
-    font-size: 1.1rem;
-  }
-  
+
   .no-articulos p {
-    font-size: 0.95rem;
+    font-size: 1rem;
+  }
+
+  .loading, .error {
+    padding: 2rem 1rem;
+    margin: 1rem 0.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Para pantallas muy pequeñas, ocultar algunas columnas */
+@media (max-width: 400px) {
+  .revision-table th:nth-child(4), /* Ocultar fecha envío */
+  .revision-table td:nth-child(4),
+  .revision-table th:nth-child(5), /* Ocultar fecha modificación */
+  .revision-table td:nth-child(5) {
+    display: none;
+  }
+  
+  .revision-table {
+    min-width: 400px;
   }
 }

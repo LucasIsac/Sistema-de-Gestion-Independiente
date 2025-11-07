@@ -1,66 +1,72 @@
-import { useContext, useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext.js';
-import logo from '../assets/imagenes/logo.png';
-import '../assets/styles/navbar.css';
+import { useContext, useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext.js";
+import UserDrawer from "./UserDrawer";
+import logo from "../assets/imagenes/logo.png";
+import "../assets/styles/navbar.css";
 
 export default function Navbar() {
-  const { user, logout, token } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const [notificaciones, setNotificaciones] = useState([]);
   const [expandedNotificationId, setExpandedNotificationId] = useState(null);
   const [menuAbierto, setMenuAbierto] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const menuRef = useRef(null);
   const navbarRef = useRef(null);
 
   const linksPorCategoria = {
     periodista: [
-      { to: '/notas', texto: 'Mis Artículos' },
-      { to: '/periodista-upload', texto: 'Subir Artículo' },
-      { to: '/ArticulosEnRevision', texto: 'Enviados a Revisión' },
-      { to: '/galeria-global', texto: 'Galería' },
-      { to: '/chat', texto: 'Chat' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
+      { to: "/notas", texto: "Mis Artículos" },
+      { to: "/periodista-upload", texto: "Subir Artículo" },
+      { to: "/ArticulosEnRevision", texto: "Enviados a Revisión" },
+      { to: "/galeria-global", texto: "Galería" },
+      { to: "/chat", texto: "Chat" },
+      { tipo: "notificaciones", texto: "Notificaciones" },
     ],
     fotografo: [
-      { to: '/galeria-global', texto: 'Galería' },
-      { to: '/galeria', texto: 'Galería Personal' },
-      { to: '/FotografoUpload', texto: 'Subir Foto' },
-      { to: '/chat', texto: 'Chat' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
+      { to: "/galeria-global", texto: "Galería" },
+      { to: "/galeria", texto: "Galería Personal" },
+      { to: "/FotografoUpload", texto: "Subir Foto" },
+      { to: "/chat", texto: "Chat" },
+      { tipo: "notificaciones", texto: "Notificaciones" },
     ],
     editor: [
-      { to: '/revisiones', texto: 'Revisiones' },
-      { to: '/articulos-aprobados', texto: 'Aprobados' },
-      { to: '/galeria-global', texto: 'Galería' },
-      { to: '/chat', texto: 'Chat' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
+      { to: "/revisiones", texto: "Revisiones" },
+      { to: "/articulos-aprobados", texto: "Aprobados" },
+      { to: "/galeria-global", texto: "Galería" },
+      { to: "/chat", texto: "Chat" },
+      { tipo: "notificaciones", texto: "Notificaciones" },
     ],
     administrador: [
-      { to: '/gestion-roles', texto: 'Gestión de Roles' },
-      { to: '/gestion-usuario', texto: 'Gestión de Usuario' },
-      { to: '/gestion-categorias', texto: 'Gestión de Categorías' },
-      { to: '/notificaciones-internas', texto: 'Notificaciones Internas' },
-      { to: '/admin/dashboard', texto: 'Panel' },
-      { to: '/galeria-global', texto: 'Galería' },
-      { to: '/chat', texto: 'Chat' },
-      { tipo: 'notificaciones', texto: 'Notificaciones' },
+      { to: "/gestion-roles", texto: "Gestión de Roles" },
+      { to: "/gestion-usuario", texto: "Gestión de Usuario" },
+      { to: "/gestion-categorias", texto: "Gestión de Categorías" },
+      { to: "/notificaciones-internas", texto: "Notificaciones Internas" },
+      { to: "/admin/dashboard", texto: "Panel" },
+      {to: "/admin/logs", texto: "Logs del Sistema"},
+      { to: "/galeria-global", texto: "Galería" },
+      { to: "/chat", texto: "Chat" },
+      { tipo: "notificaciones", texto: "Notificaciones" },
+
     ],
   };
 
   const links = user ? linksPorCategoria[user.categoria] ?? [] : [];
 
+  // Cargar notificaciones
   useEffect(() => {
     if (user && token) {
       const cargarNotificaciones = async () => {
         try {
-          const res = await fetch(`http://localhost:5000/api/notificaciones/${user.id_usuario}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
+          const res = await fetch(
+            `http://localhost:5000/api/notificaciones/${user.id_usuario}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
             }
-          });
-          if (!res.ok) throw new Error('Error al cargar notificaciones');
+          );
+          if (!res.ok) throw new Error("Error al cargar notificaciones");
           const data = await res.json();
           setNotificaciones(data);
         } catch (err) {
@@ -76,7 +82,7 @@ export default function Navbar() {
       await fetch("http://localhost:5000/api/notificaciones/marcar-leida", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_notificacion: id })
+        body: JSON.stringify({ id_notificacion: id }),
       });
       setNotificaciones((prev) =>
         prev.map((n) =>
@@ -94,79 +100,43 @@ export default function Navbar() {
         setMostrarNotificaciones(false);
       }
       if (navbarRef.current && !navbarRef.current.contains(event.target)) {
-        setDrawerOpen(false);
+        setIsDrawerOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const UserDrawer = ({ isOpen, onClose }) => (
-    <>
-      <div className={`user-drawer-overlay ${isOpen ? 'open' : ''}`} onClick={onClose} />
-      <div className={`user-drawer ${isOpen ? 'open' : ''}`}>
-        <div className="user-drawer-header">
-          {user?.foto ? (
-            <img src={user.foto} alt="Avatar" className="user-drawer-avatar" />
-          ) : (
-            <div className="user-drawer-avatar">
-              {user?.nombre.charAt(0)}
-              {user?.apellido.charAt(0)}
-            </div>
-          )}
-          <div className="user-drawer-info">
-            <h3>{user?.nombre} {user?.apellido}</h3>
-            <p>{user?.email}</p>
-          </div>
-        </div>
-
-        <div className="user-drawer-options">
-          <Link to="/perfil" className="user-drawer-item" onClick={onClose}>
-            👤 Mi perfil
-          </Link>
-          <Link to="/configuracion" className="user-drawer-item" onClick={onClose}>
-            ⚙️ Configuración
-          </Link>
-        </div>
-
-        <button
-          className="user-drawer-logout"
-          onClick={() => {
-            logout();
-            onClose();
-          }}
-        >
-          Cerrar sesión
-        </button>
-      </div>
-    </>
-  );
 
   const toggleMenu = () => setMenuAbierto((prev) => !prev);
 
   return (
     <nav className="navbar" ref={navbarRef}>
-      <div className="navbar-left">
-        <button className="menu-toggle" onClick={toggleMenu} aria-label="Abrir menú">
-          ☰
-        </button>
-        <div className="nav-logo">
-          <img src={logo} alt="Logo" />
-        </div>
+      {/* Botón hamburguesa */}
+      <button className="menu-toggle" onClick={toggleMenu}>
+        ☰
+      </button>
+
+      <div className="nav-logo">
+        <img src={logo} alt="Logo" />
       </div>
 
-      <ul className={`nav-links ${menuAbierto ? 'active' : ''}`}>
+      {/* LINKS SEGÚN ROL */}
+      <ul className={`nav-links ${menuAbierto ? "active" : ""}`}>
         {links.map((l) =>
-          l.tipo === 'notificaciones' ? (
-            <li key="notificaciones" className="notificaciones-wrapper" ref={menuRef}>
+          l.tipo === "notificaciones" ? (
+            <li
+              key="notificaciones"
+              className="notificaciones-wrapper"
+              ref={menuRef}
+            >
               <button
                 className="btn-notificaciones"
                 onClick={() => setMostrarNotificaciones(!mostrarNotificaciones)}
               >
                 🔔
-                {notificaciones.filter(n => !n.leido).length > 0 && (
+                {notificaciones.filter((n) => !n.leido).length > 0 && (
                   <span className="badge">
-                    {notificaciones.filter(n => !n.leido).length}
+                    {notificaciones.filter((n) => !n.leido).length}
                   </span>
                 )}
               </button>
@@ -175,15 +145,20 @@ export default function Navbar() {
                 <div className="dropdown-notificaciones">
                   {notificaciones.length > 0 ? (
                     notificaciones.map((n) => (
-                      <div key={n.id_notificacion} className={`notificacion-item ${!n.leido ? 'no-leida' : ''}`}>
+                      <div
+                        key={n.id_notificacion}
+                        className={`notificacion-item ${
+                          !n.leido ? "no-leida" : ""
+                        }`}
+                      >
                         <strong
                           onClick={() => {
                             setExpandedNotificationId(
-                              expandedNotificationId === n.id_notificacion ? null : n.id_notificacion
+                              expandedNotificationId === n.id_notificacion
+                                ? null
+                                : n.id_notificacion
                             );
-                            if (!n.leido) {
-                              marcarComoLeida(n.id_notificacion);
-                            }
+                            if (!n.leido) marcarComoLeida(n.id_notificacion);
                           }}
                         >
                           {n.titulo}
@@ -212,24 +187,23 @@ export default function Navbar() {
         )}
       </ul>
 
+      {/* DRAWER DE USUARIO */}
       <div className="nav-user">
         {user ? (
           <div className="user-dropdown-container">
             <div
               className="user-avatar"
-              onClick={() => setDrawerOpen(true)}
-              title="Abrir menú usuario"
+              onClick={() => setIsDrawerOpen(true)}
+              title="Abrir/cerrar menú usuario"
             >
-              {user?.foto ? (
-                <img src={user.foto} alt="Avatar" className="avatar-image" />
-              ) : (
-                <div className="avatar-initials">
-                  {user?.nombre.charAt(0)}
-                  {user?.apellido.charAt(0)}
-                </div>
-              )}
+              {/* Solo iniciales */}
+              {user?.nombre?.charAt(0) || ""}{user?.apellido?.charAt(0) || ""}
             </div>
-            <UserDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
+
+            <UserDrawer
+              isOpen={isDrawerOpen}
+              onClose={() => setIsDrawerOpen(false)}
+            />
           </div>
         ) : (
           <Link to="/login" className="btn-login">Iniciar sesión</Link>
@@ -237,4 +211,4 @@ export default function Navbar() {
       </div>
     </nav>
   );
-}
+} 

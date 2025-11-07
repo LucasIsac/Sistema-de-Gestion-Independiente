@@ -1,9 +1,11 @@
 import { pool } from "../config/db.js";
 import path from "path";
 import fs from "fs";
+import { logAction } from "../helpers/logAction.js";
+
 
 // =============================
-// SUBIR FOTO (Simplificado)
+// SUBIR FOTO 
 // =============================
 export const uploadFoto = async (req, res) => {
   try {
@@ -37,7 +39,7 @@ export const uploadFoto = async (req, res) => {
       req.file.mimetype,
       now,
       es_global === 'true' || es_global === true,
-      req.file.path,          // ruta_archivo (ESENCIAL)
+      path.join('uploads', 'fotos', req.file.filename).replace(/\\/g, '/'), // Guardar ruta relativa
       req.file.originalname   // nombre_original (ÚTIL)
     ];
 
@@ -45,6 +47,12 @@ export const uploadFoto = async (req, res) => {
     console.log("✅ Foto subida con éxito");
 
     res.status(201).json(result.rows[0]);
+
+    await logAction({
+  usuario_id: req.userId,
+  accion: 'crear',
+  descripcion: `Subió foto "${titulo}"${categoria_id ? ` en categoría ${categoria_id}` : ''}${es_global ? ' (global)' : ' (personal)'}`
+});
 
   } catch (error) {
     console.error("❌ Error en uploadFoto:", error);
@@ -70,7 +78,7 @@ export const getMyFotos = async (req, res) => {
     
     const fotosConUrl = result.rows.map(foto => ({
       ...foto,
-      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo}`
     }));
 
     res.json(fotosConUrl);
@@ -87,18 +95,19 @@ export const getFotosGlobales = async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT f.*, 
-              u.nombre as fotografo_nombre, 
-              u.apellido as fotografo_apellido,
-              c.nombre as categoria_nombre 
+              u.nombre AS fotografo_nombre, 
+              u.apellido AS fotografo_apellido,
+              c.nombre AS categoria_nombre 
        FROM fotos f 
        LEFT JOIN usuarios u ON f.fotografo_id = u.id_usuario
        LEFT JOIN categorias c ON f.categoria_id = c.id_categoria
+       WHERE f.es_global = true -- ✅ filtro clave
        ORDER BY f.fecha DESC`
     );
-    
+
     const fotosConUrl = result.rows.map(foto => ({
       ...foto,
-      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo}`,
     }));
 
     res.json(fotosConUrl);
@@ -107,6 +116,7 @@ export const getFotosGlobales = async (req, res) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
+
 
 // =============================
 // CAMBIAR VISIBILIDAD (Personal ↔ Global)
@@ -140,6 +150,12 @@ export const toggleVisibilidadFoto = async (req, res) => {
       message: `Foto ${!foto.es_global ? 'compartida globalmente' : 'movida a galería personal'}`,
       es_global: !foto.es_global
     });
+
+    await logAction({
+  usuario_id: userId,
+  accion: 'actualizar',
+  descripcion: `Cambió visibilidad de foto ID ${id} a ${!foto.es_global ? 'global' : 'personal'}`
+});
 
   } catch (error) {
     console.error("❌ Error al cambiar visibilidad:", error);
@@ -191,6 +207,12 @@ export const deleteFoto = async (req, res) => {
 
     res.json({ success: true, message: "Foto eliminada correctamente" });
 
+    await logAction({
+  usuario_id: userId,
+  accion: 'eliminar',
+  descripcion: `Eliminó foto ID ${id} ("${foto.titulo}")`
+});
+
   } catch (error) {
     console.error("❌ Error al eliminar foto:", error);
     res.status(500).json({ message: "Error interno del servidor" });
@@ -223,7 +245,7 @@ export const getFotoById = async (req, res) => {
     const foto = result.rows[0];
     const fotoConUrl = {
       ...foto,
-      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo}`
     };
 
     res.json(fotoConUrl);
@@ -288,6 +310,18 @@ export const viewFoto = async (req, res) => {
     res.setHeader('Content-Type', tipo_archivo);
     res.sendFile(path.resolve(ruta_archivo));
 
+    await logAction({
+  usuario_id: req.userId,
+  accion: 'descargar',
+  descripcion: `Descargó foto ID ${id}`
+});
+
+await logAction({
+  usuario_id: req.userId,
+  accion: 'visualizar',
+  descripcion: `Visualizó foto ID ${id}`
+});
+
   } catch (error) {
     console.error("❌ Error al visualizar foto:", error);
     res.status(500).json({ message: "Error interno del servidor" });
@@ -324,7 +358,7 @@ export const getFotosFiltradas = async (req, res) => {
     
     const fotosConUrl = result.rows.map(foto => ({
       ...foto,
-      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo.replace(/\\/g, '/')}`
+      url: `${req.protocol}://${req.get('host')}/${foto.ruta_archivo}`
     }));
 
     res.json(fotosConUrl);

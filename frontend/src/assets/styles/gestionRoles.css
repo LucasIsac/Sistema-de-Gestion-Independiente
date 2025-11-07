@@ -1,283 +1,495 @@
-/* ---------- CONTENEDOR PRINCIPAL ---------- */
+/* ============================= */
+/* GESTIÓN DE ROLES - DISEÑO MODERNO */
+/* ============================= */
+
+/* ------------------ */
+/* Variables y base */
+/* ------------------ */
+:root {
+  --verde-oscuro: #14532d;
+  --verde-medio: #166534;
+  --verde-claro: #22c55e;
+  --verde-brillante: #16a34a;
+  --fondo-base: #f8faf8;
+  --blanco: #ffffff;
+  --gris-claro: #f9fafb;
+  --gris-medio: #6b7280;
+  --gris-oscuro: #1f2937;
+  --sombra-suave: 0 2px 6px rgba(0, 0, 0, 0.05);
+  --sombra-media: 0 4px 10px rgba(0, 0, 0, 0.08);
+  --sombra-fuerte: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ------------------ */
+/* Contenedor principal */
+/* ------------------ */
 .gestion-roles-container {
-  padding: 2rem;
-  background: linear-gradient(180deg, #f7fff8, #e8f5ec);
   min-height: 100vh;
-  font-family: "Poppins", sans-serif;
-  color: #184d27;
+  background: linear-gradient(180deg, #f9fff9, #ecf6ef);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--gris-oscuro);
+  padding: 2rem 1rem;
 }
 
-/* ---------- TÍTULO PRINCIPAL ---------- */
-.gestion-roles-container h1 {
-  text-align: center;
-  font-size: 2.3rem;
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
-  color: #184d27;
+.gestion-roles-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ------------------ */
+/* Header de página */
+/* ------------------ */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
-  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  background: var(--blanco);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: var(--sombra-suave);
+  border-left: 5px solid var(--verde-medio);
 }
 
-/* ---------- SUBTÍTULOS DE SECCIÓN ---------- */
-.gestion-roles-container h2 {
-  font-size: 1.4rem;
-  color: #184d27;
-  font-weight: 700;
-  border-left: 6px solid #2e8b57;
-  padding-left: 0.7rem;
+.header-content h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--verde-oscuro);
+  margin-bottom: 0.5rem;
+  font-family: "Times New Roman", serif;
+  letter-spacing: 0.5px;
+}
+
+.header-content p {
+  color: var(--gris-medio);
+  font-size: 0.95rem;
+}
+
+/* ------------------ */
+/* Grid de estadísticas */
+/* ------------------ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--blanco);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  border-left: 5px solid var(--verde-medio);
+  transition: all 0.3s ease;
+  box-shadow: var(--sombra-suave);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sombra-fuerte);
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
-  font-family: "Poppins", sans-serif;
 }
 
-/* ---------- CARDS DE ROLES DISPONIBLES ---------- */
+.stat-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gris-medio);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-icon {
+  color: var(--verde-brillante);
+  opacity: 0.8;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--verde-oscuro);
+  margin-bottom: 0.5rem;
+  font-family: "Times New Roman", serif;
+}
+
+.stat-description {
+  font-size: 0.85rem;
+  color: var(--gris-medio);
+}
+
+.stat-meta {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--gris-medio);
+  margin-top: 0.5rem;
+}
+
+/* ------------------ */
+/* Cards de roles */
+/* ------------------ */
 .roles-resumen {
   margin-bottom: 2.5rem;
 }
 
 .roles-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
 .rol-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 1.5rem 1.2rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  border: 1.5px solid #cce0cc;
-  text-align: center;
+  background: var(--blanco);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  border-left: 5px solid;
   transition: all 0.3s ease;
+  box-shadow: var(--sombra-suave);
 }
 
 .rol-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(28, 92, 49, 0.25);
+  transform: translateY(-4px);
+  box-shadow: var(--sombra-fuerte);
 }
 
+.rol-card.administrador { border-color: #dc2626; }
+.rol-card.editor { border-color: #ea580c; }
+.rol-card.periodista { border-color: var(--verde-medio); }
+.rol-card.fotografo { border-color: #7c3aed; }
+
 .rol-card h3 {
-  margin-bottom: 0.4rem;
-  font-weight: 700;
-  color: #184d27;
   font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--verde-oscuro);
+  margin-bottom: 0.5rem;
 }
 
 .rol-card p {
   font-size: 0.9rem;
-  color: #456b54;
-  margin-bottom: 0.6rem;
+  color: var(--gris-medio);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
 }
 
 .rol-card small {
-  color: #2e8b57;
+  color: var(--verde-brillante);
   font-weight: 600;
   font-size: 0.85rem;
 }
 
-/* ---------- TABLA DE REASIGNACIÓN ---------- */
+/* ------------------ */
+/* Tabla de usuarios */
+/* ------------------ */
 .reasignacion-roles {
   margin-bottom: 3rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  color: var(--verde-oscuro);
+}
+
+.section-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.usuarios-table-container {
+  background: var(--blanco);
+  border-radius: 1rem;
+  box-shadow: var(--sombra-suave);
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
 }
 
 .usuarios-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.usuarios-table th,
-.usuarios-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-  font-size: 0.95rem;
+.usuarios-table thead {
+  background: var(--gris-claro);
+  border-bottom: 2px solid #e5e7eb;
 }
 
 .usuarios-table th {
-  background: #f3faf5;
+  padding: 1rem 1.25rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  color: #184d27;
+  text-transform: uppercase;
+  color: var(--verde-oscuro);
+  text-align: left;
+  letter-spacing: 0.5px;
 }
 
-.usuarios-table tr:hover {
-  background-color: #f7fff8;
+.usuarios-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.2s ease;
 }
 
-/* ---------- SELECTS Y BOTONES ---------- */
-.rol-select {
-  padding: 0.5rem 0.8rem;
-  border: 1.5px solid #b7d6b7;
-  border-radius: 10px;
+.usuarios-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.usuarios-table td {
+  padding: 1rem 1.25rem;
   font-size: 0.9rem;
-  color: #184d27;
+  color: var(--gris-oscuro);
+  vertical-align: middle;
+}
+
+/* ------------------ */
+/* Celda de usuario */
+/* ------------------ */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--blanco);
+  background: linear-gradient(135deg, var(--verde-medio), var(--verde-brillante));
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--verde-oscuro);
+  font-size: 0.9rem;
+}
+
+.user-details {
+  font-size: 0.75rem;
+  color: var(--gris-medio);
+}
+
+/* ------------------ */
+/* Badges de rol */
+/* ------------------ */
+.badge {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+  border: 1.5px solid;
+  text-transform: capitalize;
+}
+
+.badge.rol-administrador {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.badge.rol-editor {
+  background: #fff7ed;
+  color: #ea580c;
+  border-color: #fed7aa;
+}
+
+.badge.rol-periodista {
+  background: #f0fdf4;
+  color: var(--verde-medio);
+  border-color: #bbf7d0;
+}
+
+.badge.rol-fotografo {
+  background: #faf5ff;
+  color: #7c3aed;
+  border-color: #ddd6fe;
+}
+
+/* ------------------ */
+/* Selects y botones */
+/* ------------------ */
+.rol-select {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--gris-oscuro);
+  background: var(--blanco);
   transition: all 0.3s ease;
+  outline: none;
+  cursor: pointer;
 }
 
 .rol-select:focus {
-  outline: none;
-  border-color: #2e8b57;
-  box-shadow: 0 0 6px rgba(46, 139, 87, 0.3);
+  border-color: var(--verde-medio);
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.1);
 }
 
 .btn-actualizar {
-  background: #2e8b57;
-  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--verde-medio);
+  color: var(--blanco);
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  cursor: pointer;
+  border-radius: 0.75rem;
+  padding: 0.65rem 1.25rem;
   font-weight: 600;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: var(--sombra-suave);
 }
 
 .btn-actualizar:hover:not(:disabled) {
-  background: #184d27;
+  background: var(--verde-claro);
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(22, 101, 52, 0.4);
 }
 
 .btn-actualizar:disabled {
   background: #9bb89b;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-/* ---------- BADGES DE ROL ---------- */
-.badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: white;
-  text-transform: capitalize;
+/* ------------------ */
+/* Estados de carga y error */
+/* ------------------ */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: var(--verde-medio);
 }
 
-.badge.rol-administrador { background: #b22222; }
-.badge.rol-editor { background: #ff9800; }
-.badge.rol-periodista { background: #2e8b57; }
-.badge.rol-fotografo { background: #6f42c1; }
-
-/* ---------- ESTADÍSTICAS ---------- */
-.roles-estadisticas {
-  margin-top: 2rem;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1.5rem;
+.loading-container p {
   margin-top: 1rem;
-}
-
-.stat-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-  border: 1px solid #cce0cc;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(28, 92, 49, 0.25);
-}
-
-.stat-card h4 {
-  color: #184d27;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.stat-number {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2e8b57;
-  margin-bottom: 0.2rem;
-}
-
-.stat-card small {
-  color: #456b54;
-  font-size: 0.85rem;
-}
-
-/* ---------- ERRORES Y CARGA ---------- */
-.loading {
-  text-align: center;
-  color: #184d27;
-  padding: 2rem;
   font-weight: 600;
+  font-size: 1.1rem;
 }
 
 .error-message {
-  background: #fdecea;
-  color: #a33a2f;
-  padding: 1rem;
-  border-radius: 10px;
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
   margin-bottom: 1.5rem;
-  border: 1px solid #f5c6cb;
-  text-align: center;
+  border: 1px solid #fecaca;
   font-weight: 500;
+  text-align: center;
 }
 
-/* ---------- RESPONSIVE ---------- */
-@media (max-width: 768px) {
-  .usuarios-table th, .usuarios-table td {
-    font-size: 0.85rem;
-    padding: 0.8rem;
+/* ------------------ */
+/* Animación spin */
+/* ------------------ */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ------------------ */
+/* RESPONSIVE DESIGN */
+/* ------------------ */
+@media (max-width: 1024px) {
+  .stats-grid,
+  .roles-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 }
-/* --- Stats mejoradas --- */
-.stats-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 
-.stat-card {
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
+@media (max-width: 768px) {
+  .gestion-roles-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 1.5rem;
+  }
+
+  .header-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .stats-grid,
+  .roles-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card,
+  .rol-card {
+    padding: 1.5rem;
+  }
+
+  .usuarios-table-container {
+    overflow-x: auto;
+  }
+
+  .usuarios-table {
+    min-width: 700px;
+  }
+
+  .usuarios-table th,
+  .usuarios-table td {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .user-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }
 
-.stat-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+@media (max-width: 480px) {
+  .header-content h1 {
+    font-size: 1.25rem;
+  }
 
-.stat-pill {
-  background: #f0faf3;
-  color: #2e8b57;
-  font-weight: 700;
-  font-size: .9rem;
-  padding: .2rem .6rem;
-  border-radius: 999px;
-  border: 1px solid #c6e5d1;
-}
+  .stat-value {
+    font-size: 2rem;
+  }
 
-.stat-meta {
-  display: flex;
-  gap: .5rem;
-  font-size: .85rem;
-  color: #456b54;
-}
+  .section-header h2 {
+    font-size: 1.1rem;
+  }
 
-.progress {
-  height: 8px;
-  width: 100%;
-  background: #e8f5ec;
-  border-radius: 999px;
-  overflow: hidden;
-  border: 1px solid #d6eadb;
-}
-
-.progress > span {
-  display: block;
-  height: 100%;
-  background: #2e8b57;
-  border-radius: 999px;
-  transition: width .4s ease;
-}
-
-.stat-note {
-  font-size: .8rem;
-  color: #6a8a73;
+  .badge {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.7rem;
+  }
 }

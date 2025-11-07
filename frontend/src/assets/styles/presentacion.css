@@ -1,34 +1,68 @@
+/* --- PRESENTACIÓN --- */
 .presentacion-container {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center; /* centrado vertical */
   padding: 5rem 1rem;
   min-height: calc(100vh - 80px); /* resta altura del navbar */
-  background-color: #d9dde0; /* fondo claro corporativo */
+  background: linear-gradient(180deg, #f7fff8, #e8f5ec); /* fondo blanco puro */
   color: #1e311b;
 }
 
+/* --- CONTENIDO PRINCIPAL --- */
 .contenido {
   text-align: center;
-  max-width: 600px;
+  max-width: 650px;
   background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 3rem 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.contenido:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* --- LOGO --- */
 .logo-presentacion {
-  width: 350px;
-  margin-bottom: 1rem;
+  width: 320px;
+  max-width: 100%;
+  margin-bottom: 1.5rem;
 }
 
+/* --- TITULO --- */
 h1 {
   margin-bottom: 1rem;
   color: #274a2a;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
+/* --- PÁRRAFOS --- */
 p {
-  margin-bottom: 1rem;
-  font-size: 1.05rem;
-  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #333333;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .contenido {
+    padding: 2rem 1.5rem;
+  }
+
+  .logo-presentacion {
+    width: 250px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
 }

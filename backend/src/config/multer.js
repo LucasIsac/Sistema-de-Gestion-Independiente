@@ -7,8 +7,8 @@ import { fileURLToPath } from 'url';
 // --- RUTA DE SUBIDA CENTRALIZADA ---
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// Apunta a la carpeta `backend/src/uploads`
-export const UPLOADS_PATH = path.resolve(__dirname, '..', 'uploads');
+// Apunta a la carpeta `backend/uploads`
+export const UPLOADS_PATH = path.resolve(__dirname, '../..', 'uploads');
 
 const ensureUploadsDir = (subfolder) => {
   const fullPath = path.join(UPLOADS_PATH, subfolder);
