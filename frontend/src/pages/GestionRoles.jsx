@@ -234,19 +234,6 @@ function UsuarioFila({ usuario, roles, onReasignar }) {
     return rol ? rol.nombre : 'Sin rol asignado';
   };
 
-  // ✅ FUNCIÓN para aplicar clases de color según el rol
-  const getBadgeClass = (rolNombre) => {
-    if (!rolNombre) return 'badge';
-    const nombre = rolNombre.toLowerCase();
-    if (nombre.includes('admin')) return 'badge rol-administrador';
-    if (nombre.includes('editor')) return 'badge rol-editor';
-    if (nombre.includes('periodista')) return 'badge rol-periodista';
-    if (nombre.includes('fotografo')) return 'badge rol-fotografo';
-    return 'badge';
-  };
-
-  const rolActual = getRolNombre(usuario);
-
   const getRolClass = (rolId) => {
     const rol = roles.find(r => r.id_rol === rolId);
     return rol ? `rol-${rol.nombre.toLowerCase()}` : '';
@@ -271,8 +258,6 @@ function UsuarioFila({ usuario, roles, onReasignar }) {
       </td>
       <td>{usuario.email}</td>
       <td>
-        <span className={getBadgeClass(rolActual)}></span>
-          {rolActual}
         <span className={`badge ${getRolClass(usuario.rol_id)}`}>
           {getRolNombre(usuario.rol_id)}
         </span>
@@ -303,4 +288,3 @@ function UsuarioFila({ usuario, roles, onReasignar }) {
     </tr>
   );
 }
-

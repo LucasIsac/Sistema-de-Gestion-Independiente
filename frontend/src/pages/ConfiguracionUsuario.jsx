@@ -37,6 +37,7 @@ export default function ConfiguracionUsuario() {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
+          
         });
 
         if (response.status === 401) {
@@ -55,8 +56,10 @@ export default function ConfiguracionUsuario() {
             nombre: data.usuario.nombre || '',
             apellido: data.usuario.apellido || '',
             telefono: data.usuario.telefono || '',
-            email: data.usuario.email || ''
+            email: data.usuario.email || '',
+            rol_id: data.usuario.rol_id
           });
+
         }
       } catch (err) {
         setError(err.message || 'Error al cargar información del usuario');
@@ -127,7 +130,8 @@ export default function ConfiguracionUsuario() {
         },
         body: JSON.stringify({
           ...formData,
-          password
+          password,
+          rol: formData.rol_id
         })
       });
 
@@ -177,7 +181,12 @@ export default function ConfiguracionUsuario() {
               {preview ? (
                 <img src={preview} alt="Foto de perfil" className="imagen-perfil" />
               ) : user?.avatar_url ? (
-                <img src={`http://localhost:5000${user.avatar_url}`} alt="Foto de perfil" className="imagen-perfil" />
+                <img
+                  src={preview ? preview : user?.avatar_url ? `http://localhost:5000/uploads${user.avatar_url}` : "/default-avatar.png"}
+                  alt="Foto de perfil"
+                  className="imagen-perfil"
+                />
+
               ) : (
                 <div className="imagen-perfil placeholder" />
               )}

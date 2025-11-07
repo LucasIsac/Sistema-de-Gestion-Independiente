@@ -1,16 +1,27 @@
-// src/chat/chatController.js
+// src/chat/chatController.js - CORREGIDO
 import { pool } from "../config/db.js";
 
 export async function guardarMensaje(emisorId, receptorId, contenido) {
   try {
     const result = await pool.query(
-      `INSERT INTO mensajes (emisor_id, receptor_id, contenido) VALUES ($1, $2, $3) RETURNING *`,
+      `INSERT INTO mensajes (emisor_id, receptor_id, contenido) 
+       VALUES ($1, $2, $3) 
+       RETURNING *`,
       [emisorId, receptorId, contenido]
     );
-    return result.rows[0]; // Devolver el mensaje guardado
+    
+    const mensajeGuardado = result.rows[0];
+    
+    // Renombrar 'fecha' a 'fecha_envio' para el frontend
+    return {
+      ...mensajeGuardado,
+      fecha_envio: mensajeGuardado.fecha, // ← CLAVE: renombrar aquí
+      id_mensaje: mensajeGuardado.id
+    };
+    
   } catch (err) {
     console.error("❌ Error guardando mensaje:", err.message);
-    return null; // Devolver null en caso de error
+    return null;
   }
 }
 
@@ -23,7 +34,15 @@ export async function obtenerMensajes(emisorId, receptorId) {
        ORDER BY fecha ASC`,
       [emisorId, receptorId]
     );
-    return result.rows;
+    
+    // Renombrar 'fecha' a 'fecha_envio' para todos los mensajes
+    const mensajes = result.rows.map(mensaje => ({
+      ...mensaje,
+      fecha_envio: mensaje.fecha, // ← CLAVE: renombrar aquí
+      id_mensaje: mensaje.id
+    }));
+    
+    return mensajes;
   } catch (err) {
     console.error("❌ Error obteniendo mensajes:", err.message);
     return [];
